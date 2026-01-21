@@ -38,6 +38,7 @@ final class BasketViewController: UIViewController {
             target: self,
             action: #selector(didTapSort)
         )
+        item.tintColor = UIColor(resource: .blackApp)
         return item
     }()
 
