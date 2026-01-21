@@ -25,6 +25,7 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
     private let deleteButton = UIButton(type: .system)
     
     private let textStack = UIStackView()
+    private let titleRatingStack = UIStackView()
     private let priceStack = UIStackView()
     
     override init(frame: CGRect) {
@@ -77,10 +78,14 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
         priceStack.addArrangedSubview(priceTitleLabel)
         priceStack.addArrangedSubview(priceValueLabel)
         
+        titleRatingStack.axis = .vertical
+        titleRatingStack.spacing = 6
+        titleRatingStack.addArrangedSubview(titleLabel)
+        titleRatingStack.addArrangedSubview(ratingView)
+
         textStack.axis = .vertical
-        textStack.spacing = 6
-        textStack.addArrangedSubview(titleLabel)
-        textStack.addArrangedSubview(ratingView)
+        textStack.spacing = 12
+        textStack.addArrangedSubview(titleRatingStack)
         textStack.addArrangedSubview(priceStack)
         
         deleteButton.setImage(UIImage(resource: .basketDel), for: .normal)
@@ -113,8 +118,8 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
             
             deleteButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             deleteButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            deleteButton.widthAnchor.constraint(equalToConstant: 24),
-            deleteButton.heightAnchor.constraint(equalToConstant: 24),
+            deleteButton.widthAnchor.constraint(equalToConstant: 40),
+            deleteButton.heightAnchor.constraint(equalToConstant: 40),
             
             textStack.leadingAnchor.constraint(equalTo: previewImageView.trailingAnchor, constant: 12),
             textStack.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -12),
@@ -130,7 +135,7 @@ final class StarRatingView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         stack.axis = .horizontal
-        stack.spacing = 4
+        stack.spacing = 2
         stack.alignment = .center
         addSubview(stack)
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -155,7 +160,7 @@ final class StarRatingView: UIView {
     func setRating(_ rating: Int) {
         let clamped = min(max(rating, 0), 5)
         for (index, iv) in stars.enumerated() {
-            iv.image = UIImage(systemName: "star.fill")
+            iv.image = UIImage(resource: .star)
             iv.tintColor = index < clamped ? .systemYellow : .lightGray
         }
     }
