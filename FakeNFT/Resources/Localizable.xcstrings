@@ -73,6 +73,17 @@
         }
       }
     },
+    "Корзина пуста" : {
+      "comment" : "basket is empty state",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "basket is empty state"
+          }
+        }
+      }
+    },
     "Профиль" : {
       "comment" : "tab title for profile",
       "localizations" : {
