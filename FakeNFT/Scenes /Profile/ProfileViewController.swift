@@ -2,10 +2,12 @@
 //  ProfileViewController.swift
 //  FakeNFT
 //
-//  Created by Artem Kuzmenko on 21.01.2026.
+//  Created by Андрей Пермяков on 21.01.2026.
 //
 
 import UIKit
+import Kingfisher
+
 
 final class ProfileViewController: UIViewController{
     
@@ -15,8 +17,196 @@ final class ProfileViewController: UIViewController{
         self.servicesAssembly = servicesAssembly
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    let descriptionText = "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям."
+    let sait = "google.com"
+    
+    private var profileCellName: [ProfileItem] = [
+        ProfileItem(type: .myNFT, count: 0),
+        ProfileItem(type: .myFavorites, count: 0)
+    ]
+    
+    private lazy var editButton: UIBarButtonItem = {
+        let image = UIImage(resource: .squareAndPencil)
+        let button = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(tapEditButton))
+        button.tintColor = .blackApp
+        return button
+    }()
+    
+    private lazy var avatarImage: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(resource: .joaquinPhoenix)
+        image.layer.cornerRadius = 35
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
+        return image
+    }()
+    
+    private lazy var avatarName: UILabel = {
+        let label = UILabel()
+        label.text = "Joaquin Phoenix"
+        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.textColor = .blackApp
+        return label
+    }()
+    
+    private lazy var personStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [avatarImage, avatarName])
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.spacing = 16
+        return stack
+    }()
+    
+    private lazy var descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .left
+        label.textColor = .blackApp
+        label.text = descriptionText
+        return label
+    }()
+    
+    private lazy var webSiteLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.textColor = .blueUniversal
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapWebSiteLabel))
+        label.addGestureRecognizer(tap)
+        label.isUserInteractionEnabled = true
+        label.text = sait
+        return label
+    }()
+    
+    private lazy var bigStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [personStack, descriptionLabel, webSiteLabel])
+        stack.axis = .vertical
+        stack.alignment = .leading
+        stack.spacing = 20
+        stack.setCustomSpacing(8, after: descriptionLabel)
+        return stack
+    }()
+    
+    private lazy var profileTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(ProfileCell.self, forCellReuseIdentifier: ProfileCell.reuseIdentifier)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.separatorStyle = .none
+        return tableView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupNavigationBar()
+        addSubviews()
+        setupConstraints()
+        navigationItem.title = nil
+    }
+    
+    private func setupNavigationBar(){
+        navigationItem.rightBarButtonItem = editButton
+    }
+    
+    private func addSubviews(){
+        [bigStack, profileTableView].forEach{view.addSubview($0)}
+        
+    }
+    
+    private func setupConstraints(){
+        [bigStack, profileTableView].forEach{$0.translatesAutoresizingMaskIntoConstraints = false }
+        
+        NSLayoutConstraint.activate([
+            avatarImage.widthAnchor.constraint(equalToConstant: 70),
+            avatarImage.heightAnchor.constraint(equalToConstant: 70),
+            
+            bigStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            bigStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            bigStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            bigStack.heightAnchor.constraint(equalToConstant: 198), //70+20+72+8+28
+            
+            personStack.topAnchor.constraint(equalTo: bigStack.topAnchor),
+            personStack.leadingAnchor.constraint(equalTo: bigStack.leadingAnchor),
+            personStack.trailingAnchor.constraint(equalTo: bigStack.trailingAnchor),
+            personStack.heightAnchor.constraint(equalToConstant: 70),
+            
+            profileTableView.topAnchor.constraint(equalTo: bigStack.bottomAnchor, constant: 40),
+            profileTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            profileTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            profileTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    
+    
+    @objc private func tapEditButton(){
+        print("переход к экрану редактирования профиля")
+    }
+    
+    @objc private func tapWebSiteLabel(){
+        print("переход к Веб Вью")
+    }
+    
+    
+}
+
+extension ProfileViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return profileCellName.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell( withIdentifier: ProfileCell.reuseIdentifier, for: indexPath
+        ) as? ProfileCell else {
+            return UITableViewCell()
+        }
+        let item = profileCellName[indexPath.row]
+        cell.configure( title: item.type.title, count: "\(item.count)")
+        
+        return cell
+    }
+    
+    
+}
+
+extension ProfileViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = profileCellName[indexPath.row]
+        
+        switch item.type {
+        case .myNFT:
+            print("Переход к экрану Мои NFT")
+        case .myFavorites:
+            print("Переход к экрану Избранные NFT")
+        }
+    }
+}
+
+
+
+
+enum ProfileItemType {
+    case myNFT
+    case myFavorites
+
+    var title: String {
+        switch self {
+        case .myNFT:
+            return "Мои NFT"
+        case .myFavorites:
+            return "Избранные NFT"
+        }
+    }
+}
+
+struct ProfileItem {
+    let type: ProfileItemType
+    let count: Int
 }
