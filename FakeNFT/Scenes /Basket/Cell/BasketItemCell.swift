@@ -60,18 +60,18 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
     private func setupViews() {
         previewImageView.contentMode = .scaleAspectFill
         previewImageView.clipsToBounds = true
-        previewImageView.layer.cornerRadius = 8
+        previewImageView.layer.cornerRadius = 12
         
         titleLabel.font = .systemFont(ofSize: 17, weight: .bold)
-        titleLabel.textColor = .label
+        titleLabel.textColor = UIColor(resource: .blackApp)
         titleLabel.numberOfLines = 1
         
         priceTitleLabel.text = NSLocalizedString("Цена", comment: "price title")
         priceTitleLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        priceTitleLabel.textColor = .secondaryLabel
+        priceTitleLabel.textColor = UIColor(resource: .blackApp)
         
-        priceValueLabel.font = .systemFont(ofSize: 15, weight: .bold)
-        priceValueLabel.textColor = .label
+        priceValueLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        priceValueLabel.textColor = UIColor(resource: .blackApp)
         
         priceStack.axis = .vertical
         priceStack.spacing = 2
@@ -79,7 +79,7 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
         priceStack.addArrangedSubview(priceValueLabel)
         
         titleRatingStack.axis = .vertical
-        titleRatingStack.spacing = 6
+        titleRatingStack.spacing = 4
         titleRatingStack.addArrangedSubview(titleLabel)
         titleRatingStack.addArrangedSubview(ratingView)
 
@@ -121,9 +121,9 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
             deleteButton.widthAnchor.constraint(equalToConstant: 40),
             deleteButton.heightAnchor.constraint(equalToConstant: 40),
             
-            textStack.leadingAnchor.constraint(equalTo: previewImageView.trailingAnchor, constant: 12),
-            textStack.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -12),
-            textStack.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+            textStack.leadingAnchor.constraint(equalTo: previewImageView.trailingAnchor, constant: 20),
+            textStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
+            textStack.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -8)
         ])
     }
 }
