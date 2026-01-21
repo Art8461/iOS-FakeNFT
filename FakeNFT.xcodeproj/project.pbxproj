@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -116,6 +116,10 @@
 		E1CD40D92A96BE7D00BE7FE8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		287AB25B2F210DE60064446E /* Cell */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cell; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		3F68069029CBBAF100B4F915 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -200,6 +204,7 @@
 		287AB19D2F20A8DF0064446E /* Basket */ = {
 			isa = PBXGroup;
 			children = (
+				287AB25B2F210DE60064446E /* Cell */,
 				287AB2592F21092C0064446E /* BasketPresenter.swift */,
 				287AB19C2F20A8DF0064446E /* BasketViewController.swift */,
 			);
@@ -407,6 +412,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				287AB25B2F210DE60064446E /* Cell */,
 			);
 			name = FakeNFT;
 			packageProductDependencies = (
