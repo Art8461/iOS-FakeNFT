@@ -42,7 +42,8 @@ final class BasketViewController: UIViewController {
     }()
 
     private lazy var collectionView: UICollectionView = {
-        let config = UICollectionLayoutListConfiguration(appearance: .plain)
+        var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.showsSeparators = false
         let layout = UICollectionViewCompositionalLayout.list(using: config)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.translatesAutoresizingMaskIntoConstraints = false
