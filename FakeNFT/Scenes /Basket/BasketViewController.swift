@@ -149,6 +149,20 @@ final class BasketViewController: UIViewController {
         navigationItem.rightBarButtonItem = isEmpty ? nil : sortButton
     }
     
+    private func presentDeleteConfirmation(for model: BasketItemCellModel) {
+        let vc = BasketDeleteConfirmationViewController()
+        vc.onDelete = { [weak self, weak vc] in
+            vc?.dismiss(animated: true)
+            self?.presenter.didTapDelete(id: model.id)
+        }
+        vc.onCancel = { [weak vc] in
+            vc?.dismiss(animated: true)
+        }
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        present(vc, animated: true)
+    }
+    
     @objc
     private func didTapSort() {
         presenter.didTapSort()
@@ -183,7 +197,7 @@ extension BasketViewController: UICollectionViewDataSource {
         let model = cellModels[indexPath.row]
         cell.configure(with: model)
         cell.onDelete = { [weak self] in
-            self?.presenter.didTapDelete(id: model.id)
+            self?.presentDeleteConfirmation(for: model)
         }
         return cell
     }
