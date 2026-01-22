@@ -97,8 +97,8 @@ final class BasketViewController: UIViewController {
             
             summaryLeftStack.leadingAnchor.constraint(equalTo: summaryContainer.leadingAnchor, constant: 16),
             summaryLeftStack.centerYAnchor.constraint(equalTo: summaryContainer.centerYAnchor),
-            summaryLeftStack.trailingAnchor.constraint(lessThanOrEqualTo: payButton.leadingAnchor, constant: -24),
-
+            
+            payButton.leadingAnchor.constraint(equalTo: summaryLeftStack.trailingAnchor, constant: 24),
             payButton.trailingAnchor.constraint(equalTo: summaryContainer.trailingAnchor, constant: -16),
             payButton.centerYAnchor.constraint(equalTo: summaryContainer.centerYAnchor),
             payButton.heightAnchor.constraint(equalToConstant: 44)
