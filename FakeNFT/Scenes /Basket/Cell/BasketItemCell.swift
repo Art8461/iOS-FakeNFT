@@ -6,13 +6,7 @@
 //
 
 import UIKit
-
-struct BasketItemCellModel {
-    let title: String
-    let priceText: String
-    let rating: Int   // 0...5
-    let image: UIImage?
-}
+import Kingfisher
 
 final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
     

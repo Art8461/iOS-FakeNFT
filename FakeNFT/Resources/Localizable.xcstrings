@@ -51,6 +51,28 @@
         }
       }
     },
+    "Вернуться" : {
+      "comment" : "cancel button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        }
+      }
+    },
+    "Вы уверены, что хотите удалить объект из корзины?" : {
+      "comment" : "Confirmation title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to remove the item from the Trash?"
+          }
+        }
+      }
+    },
     "К оплате" : {
       "comment" : "button for pay",
       "localizations" : {
@@ -113,6 +135,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Statistics"
+          }
+        }
+      }
+    },
+    "Удалить" : {
+      "comment" : "delete button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
           }
         }
       }
