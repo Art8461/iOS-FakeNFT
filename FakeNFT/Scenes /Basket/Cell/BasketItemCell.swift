@@ -137,13 +137,14 @@ final class StarRatingView: UIView {
         stack.axis = .horizontal
         stack.spacing = 2
         stack.alignment = .center
+        stack.setContentHuggingPriority(.required, for: .horizontal)
         addSubview(stack)
         stack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: topAnchor),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
             stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor)
+            stack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor)
         ])
         
         for _ in 0..<5 {
