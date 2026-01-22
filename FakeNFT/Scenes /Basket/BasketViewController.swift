@@ -166,6 +166,10 @@ extension BasketViewController: BasketView {
         updateEmptyState(isEmpty: isEmpty)
     }
     
+    func display(summary: BasketSummaryViewModel) {
+        countLabel.text = summary.countText
+        totalLabel.text = summary.totalText
+    }
 }
 
 extension BasketViewController: UICollectionViewDataSource {

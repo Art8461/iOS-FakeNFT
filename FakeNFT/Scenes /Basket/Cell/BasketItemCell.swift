@@ -8,14 +8,6 @@
 import UIKit
 import Kingfisher
 
-struct BasketItemCellModel {
-    let id: String
-    let title: String
-    let priceText: String
-    let rating: Int   // 0...5
-    let imageURL: URL?
-}
-
 final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
     
     private let containerView = UIView()

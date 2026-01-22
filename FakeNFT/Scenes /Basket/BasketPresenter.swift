@@ -10,6 +10,7 @@ import UIKit
 protocol BasketView: AnyObject {
     func display(isEmpty: Bool)
     func display(items: [BasketItemCellModel])
+    func display(summary: BasketSummaryViewModel)
 }
 
 protocol BasketPresenter {
@@ -20,8 +21,9 @@ protocol BasketPresenter {
 final class BasketPresenterImpl: BasketPresenter {
     weak var view: BasketView?
     private let basketService: BasketService
+    private let nftService: NftService
     
-    init(basketService: BasketService) {
+    init(basketService: BasketService, nftService: NftService) {
         self.basketService = basketService
         self.nftService = nftService
     }
@@ -30,8 +32,14 @@ final class BasketPresenterImpl: BasketPresenter {
         basketService.loadOrder { [weak self] result in
             switch result {
             case .success(let order):
-                self?.view?.display(isEmpty: order.nfts.isEmpty)
+                if order.nfts.isEmpty {
+                    self?.view?.display(isEmpty: true)
+                    self?.view?.display(items: [])
+                    return
+                }
+                self?.view?.display(isEmpty: false)
                 self?.loadNfts(ids: order.nfts)
+                
             case .failure:
                 self?.view?.display(isEmpty: true)
             }
@@ -79,6 +87,16 @@ final class BasketPresenterImpl: BasketPresenter {
                     imageURL: nft.images.first
                 )
             }
+            
+            let count = orderedNfts.count
+            let total = orderedNfts.reduce(0.0) { $0 + $1.price }
+
+            let summary = BasketSummaryViewModel(
+                countText: "\(count) NFT",
+                totalText: String(format: "%.2f ETH", total)
+            )
+
+            self.view?.display(summary: summary)
             
             self.view?.display(items: models)
             self.view?.display(isEmpty: models.isEmpty)
