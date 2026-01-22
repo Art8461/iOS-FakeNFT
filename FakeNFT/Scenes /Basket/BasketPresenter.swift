@@ -57,6 +57,7 @@ final class BasketPresenterImpl: BasketPresenter {
     }
     
     func viewDidLoad() {
+        view?.display(isEmpty: true)
         basketService.loadOrder { [weak self] result in
             switch result {
             case .success(let order):
@@ -78,6 +79,7 @@ final class BasketPresenterImpl: BasketPresenter {
     private func loadNfts(ids: [String]) {
         guard !ids.isEmpty else {
             view?.display(items: [])
+            view?.display(isEmpty: true)
             return
         }
         
