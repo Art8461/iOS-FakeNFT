@@ -84,6 +84,7 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
         
         deleteButton.setImage(UIImage(resource: .basketDel), for: .normal)
         deleteButton.tintColor = UIColor(resource: .blackApp)
+        deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
         
         contentView.addSubview(containerView)
         
@@ -120,6 +121,11 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
             textStack.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -8)
         ])
     }
+    
+    var onDelete: (() -> Void)?
+
+    @objc private func didTapDelete() { onDelete?() }
+    
 }
 
 final class StarRatingView: UIView {

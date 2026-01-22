@@ -9,6 +9,7 @@ typealias OrderCompletion = (Result<Order, Error>) -> Void
 
 protocol BasketService {
     func loadOrder(completion: @escaping OrderCompletion)
+    func updateOrder(nfts: [String], completion: @escaping OrderCompletion)
 }
 
 final class BasketServiceImpl: BasketService {
@@ -20,5 +21,11 @@ final class BasketServiceImpl: BasketService {
 
     func loadOrder(completion: @escaping OrderCompletion) {
         networkClient.send(request: OrderRequest(), type: Order.self, onResponse: completion)
+    }
+    
+    func updateOrder(nfts: [String], completion: @escaping OrderCompletion) {
+        let dto = UpdateOrderDto(nfts: nfts)
+        let request = UpdateOrderRequest(dto: dto)
+        networkClient.send(request: request, type: Order.self, onResponse: completion)
     }
 }

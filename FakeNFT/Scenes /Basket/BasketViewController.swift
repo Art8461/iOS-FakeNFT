@@ -180,7 +180,11 @@ extension BasketViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: BasketItemCell = collectionView.dequeueReusableCell(indexPath: indexPath)
-        cell.configure(with: cellModels[indexPath.row])
+        let model = cellModels[indexPath.row]
+        cell.configure(with: model)
+        cell.onDelete = { [weak self] in
+            self?.presenter.didTapDelete(id: model.id)
+        }
         return cell
     }
 }
