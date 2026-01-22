@@ -59,8 +59,13 @@ final class BasketViewController: UIViewController {
     private let totalLabel = UILabel()
     private let payButton = UIButton(type: .system)
     
+    private var cellModels: [BasketItemCellModel] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.register(BasketItemCell.self)
+
         view.backgroundColor = .systemBackground
         setupNavigation()
         setupSummary()
@@ -152,6 +157,11 @@ final class BasketViewController: UIViewController {
 }
 
 extension BasketViewController: BasketView {
+    func display(items: [BasketItemCellModel]) {
+        cellModels = items
+        collectionView.reloadData()
+    }
+    
     func display(isEmpty: Bool) {
         updateEmptyState(isEmpty: isEmpty)
     }
@@ -160,11 +170,13 @@ extension BasketViewController: BasketView {
 
 extension BasketViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        0
+        cellModels.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        UICollectionViewCell()
+        let cell: BasketItemCell = collectionView.dequeueReusableCell(indexPath: indexPath)
+        cell.configure(with: cellModels[indexPath.row])
+        return cell
     }
 }
