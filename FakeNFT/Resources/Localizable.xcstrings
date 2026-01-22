@@ -73,6 +73,9 @@
         }
       }
     },
+    "Закрыть" : {
+      "comment" : "cancel sort"
+    },
     "К оплате" : {
       "comment" : "button for pay",
       "localizations" : {
@@ -117,6 +120,15 @@
         }
       }
     },
+    "По названию" : {
+      "comment" : "sort by name"
+    },
+    "По рейтингу" : {
+      "comment" : "sort by rating"
+    },
+    "По цене" : {
+      "comment" : "sort by price"
+    },
     "Профиль" : {
       "comment" : "tab title for profile",
       "localizations" : {
@@ -127,6 +139,9 @@
           }
         }
       }
+    },
+    "Сортировка" : {
+      "comment" : "sort action sheet title"
     },
     "Статистика" : {
       "comment" : "tab title for statistics",

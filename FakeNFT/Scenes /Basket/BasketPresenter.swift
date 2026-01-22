@@ -16,13 +16,21 @@ protocol BasketView: AnyObject {
 protocol BasketPresenter {
     func viewDidLoad()
     func refresh()
-    func didTapSort()
+    func didSelectSort(option: BasketSortOption)
     func didTapDelete(id: String)
+}
+
+enum BasketSortOption {
+    case price
+    case rating
+    case name
 }
 
 final class BasketPresenterImpl: BasketPresenter {
     
     private var nftIds: [String] = []
+    private var currentNfts: [Nft] = []
+    private var sortOption: BasketSortOption?
 
     func didTapDelete(id: String) {
         nftIds.removeAll { $0 == id }
@@ -39,6 +47,7 @@ final class BasketPresenterImpl: BasketPresenter {
             case .success(let order):
                 self?.nftIds = order.nfts
                 if order.nfts.isEmpty {
+                    self?.currentNfts = []
                     self?.view?.display(isEmpty: true)
                     self?.view?.display(items: [])
                     return
@@ -46,6 +55,7 @@ final class BasketPresenterImpl: BasketPresenter {
                 self?.view?.display(isEmpty: false)
                 self?.loadNfts(ids: order.nfts)
             case .failure:
+                self?.currentNfts = []
                 self?.view?.display(isEmpty: true)
             }
         }
@@ -57,6 +67,7 @@ final class BasketPresenterImpl: BasketPresenter {
             case .success(let order):
                 self?.nftIds = order.nfts
                 if order.nfts.isEmpty {
+                    self?.currentNfts = []
                     self?.view?.display(isEmpty: true)
                     self?.view?.display(items: [])
                     return
@@ -85,6 +96,7 @@ final class BasketPresenterImpl: BasketPresenter {
     
     private func loadNfts(ids: [String]) {
         guard !ids.isEmpty else {
+            currentNfts = []
             view?.display(items: [])
             view?.display(isEmpty: true)
             return
@@ -111,37 +123,68 @@ final class BasketPresenterImpl: BasketPresenter {
             guard let self = self else { return }
             
             if let _ = firstError, nftsById.isEmpty {
+                self.currentNfts = []
                 self.view?.display(isEmpty: true)
                 return
             }
             
             let orderedNfts = ids.compactMap { nftsById[$0] }
-            let models = orderedNfts.map { nft in
-                BasketItemCellModel(
-                    id: nft.id,
-                    title: nft.name,
-                    priceText: String(format: "%.2f ETH", nft.price),
-                    rating: nft.rating,
-                    imageURL: nft.images.first
-                )
-            }
-            
-            let count = orderedNfts.count
-            let total = orderedNfts.reduce(0.0) { $0 + $1.price }
-
-            let summary = BasketSummaryViewModel(
-                countText: "\(count) NFT",
-                totalText: String(format: "%.2f ETH", total)
-            )
-
-            self.view?.display(summary: summary)
-            
-            self.view?.display(items: models)
-            self.view?.display(isEmpty: models.isEmpty)
+            self.currentNfts = orderedNfts
+            self.applySortAndDisplay()
         }
     }
     
-    func didTapSort() {
-        // TODO: сортировка позже
+    func didSelectSort(option: BasketSortOption) {
+        sortOption = option
+        applySortAndDisplay()
+    }
+    
+    private func applySortAndDisplay() {
+        let sortedNfts = sorted(currentNfts)
+        let models = sortedNfts.map { nft in
+            BasketItemCellModel(
+                id: nft.id,
+                title: nft.name,
+                priceText: String(format: "%.2f ETH", nft.price),
+                rating: nft.rating,
+                imageURL: nft.images.first
+            )
+        }
+        
+        let count = currentNfts.count
+        let total = currentNfts.reduce(0.0) { $0 + $1.price }
+        
+        let summary = BasketSummaryViewModel(
+            countText: "\(count) NFT",
+            totalText: String(format: "%.2f ETH", total)
+        )
+        
+        view?.display(summary: summary)
+        view?.display(items: models)
+        view?.display(isEmpty: models.isEmpty)
+    }
+    
+    private func sorted(_ nfts: [Nft]) -> [Nft] {
+        guard let sortOption = sortOption else { return nfts }
+        switch sortOption {
+        case .price:
+            return nfts.sorted { lhs, rhs in
+                if lhs.price == rhs.price {
+                    return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
+                }
+                return lhs.price > rhs.price
+            }
+        case .rating:
+            return nfts.sorted { lhs, rhs in
+                if lhs.rating == rhs.rating {
+                    return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
+                }
+                return lhs.rating > rhs.rating
+            }
+        case .name:
+            return nfts.sorted {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+            }
+        }
     }
 }

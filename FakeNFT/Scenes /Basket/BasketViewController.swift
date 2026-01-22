@@ -171,8 +171,43 @@ final class BasketViewController: UIViewController {
     
     @objc
     private func didTapSort() {
-        presenter.didTapSort()
-        // TODO: сортировка позже
+        let controller = UIAlertController(
+            title: NSLocalizedString("Сортировка", comment: "sort action sheet title"),
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        let sortByPrice = UIAlertAction(
+            title: NSLocalizedString("По цене", comment: "sort by price"),
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter.didSelectSort(option: .price)
+        }
+        let sortByRating = UIAlertAction(
+            title: NSLocalizedString("По рейтингу", comment: "sort by rating"),
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter.didSelectSort(option: .rating)
+        }
+        let sortByName = UIAlertAction(
+            title: NSLocalizedString("По названию", comment: "sort by name"),
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter.didSelectSort(option: .name)
+        }
+        let cancel = UIAlertAction(
+            title: NSLocalizedString("Закрыть", comment: "cancel sort"),
+            style: .cancel
+        )
+        
+        controller.addAction(sortByPrice)
+        controller.addAction(sortByRating)
+        controller.addAction(sortByName)
+        controller.addAction(cancel)
+        
+        if let popover = controller.popoverPresentationController {
+            popover.barButtonItem = sortButton
+        }
+        present(controller, animated: true)
     }
 }
 
