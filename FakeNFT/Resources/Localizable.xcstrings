@@ -51,6 +51,17 @@
         }
       }
     },
+    "К оплате" : {
+      "comment" : "button for pay",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For payment"
+          }
+        }
+      }
+    },
     "Каталог" : {
       "comment" : "tab title for catalog",
       "localizations" : {

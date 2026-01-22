@@ -54,6 +54,7 @@ final class BasketViewController: UIViewController {
     }()
     
     private let summaryContainer = UIView()
+    private let summaryLeftStack = UIStackView()
     private let countLabel = UILabel()
     private let totalLabel = UILabel()
     private let payButton = UIButton(type: .system)
@@ -83,6 +84,7 @@ final class BasketViewController: UIViewController {
         ])
         
         summaryContainer.translatesAutoresizingMaskIntoConstraints = false
+        summaryLeftStack.translatesAutoresizingMaskIntoConstraints = false
         countLabel.translatesAutoresizingMaskIntoConstraints = false
         totalLabel.translatesAutoresizingMaskIntoConstraints = false
         payButton.translatesAutoresizingMaskIntoConstraints = false
@@ -92,13 +94,10 @@ final class BasketViewController: UIViewController {
             summaryContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             summaryContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             summaryContainer.heightAnchor.constraint(equalToConstant: 76),
-
-            countLabel.leadingAnchor.constraint(equalTo: summaryContainer.leadingAnchor, constant: 16),
-            countLabel.topAnchor.constraint(equalTo: summaryContainer.topAnchor, constant: 16),
-
-            totalLabel.leadingAnchor.constraint(equalTo: summaryContainer.leadingAnchor, constant: 16),
-            totalLabel.topAnchor.constraint(equalTo: countLabel.bottomAnchor, constant: 2),
-            totalLabel.bottomAnchor.constraint(lessThanOrEqualTo: summaryContainer.bottomAnchor, constant: -16),
+            
+            summaryLeftStack.leadingAnchor.constraint(equalTo: summaryContainer.leadingAnchor, constant: 16),
+            summaryLeftStack.centerYAnchor.constraint(equalTo: summaryContainer.centerYAnchor),
+            summaryLeftStack.trailingAnchor.constraint(lessThanOrEqualTo: payButton.leadingAnchor, constant: -24),
 
             payButton.trailingAnchor.constraint(equalTo: summaryContainer.trailingAnchor, constant: -16),
             payButton.centerYAnchor.constraint(equalTo: summaryContainer.centerYAnchor),
@@ -116,8 +115,13 @@ final class BasketViewController: UIViewController {
         summaryContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         summaryContainer.layer.masksToBounds = true
         
+        summaryLeftStack.axis = .vertical
+        summaryLeftStack.spacing = 2
+        
         countLabel.font = .systemFont(ofSize: 15)
+        countLabel.textColor = UIColor(resource: .blackApp)
         totalLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        totalLabel.textColor = UIColor(resource: .greenUniversal)
         
         payButton.backgroundColor = UIColor(resource: .blackApp)
         payButton.setTitleColor(UIColor(resource: .whiteApp), for: .normal)
@@ -126,8 +130,9 @@ final class BasketViewController: UIViewController {
         payButton.setTitle(NSLocalizedString("К оплате", comment: "button for pay"), for: .normal)
         payButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         
-        summaryContainer.addSubview(countLabel)
-        summaryContainer.addSubview(totalLabel)
+        summaryContainer.addSubview(summaryLeftStack)
+        summaryLeftStack.addArrangedSubview(countLabel)
+        summaryLeftStack.addArrangedSubview(totalLabel)
         summaryContainer.addSubview(payButton)
         view.addSubview(summaryContainer)
     }
