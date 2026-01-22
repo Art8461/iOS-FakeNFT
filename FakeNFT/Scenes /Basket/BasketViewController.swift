@@ -156,6 +156,7 @@ final class BasketViewController: UIViewController {
     
     private func presentDeleteConfirmation(for model: BasketItemCellModel) {
         let vc = BasketDeleteConfirmationViewController()
+        vc.imageURL = model.imageURL
         vc.onDelete = { [weak self, weak vc] in
             vc?.dismiss(animated: true)
             self?.presenter.didTapDelete(id: model.id)
