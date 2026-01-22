@@ -18,16 +18,24 @@ protocol BasketPresenter {
 
 final class BasketPresenterImpl: BasketPresenter {
     weak var view: BasketView?
-    private let servicesAssembly: ServicesAssembly
-
-    init(servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
+    private let basketService: BasketService
+    
+    init(basketService: BasketService) {
+        self.basketService = basketService
     }
-
+    
     func viewDidLoad() {
-        view?.display(isEmpty: true)
+        basketService.loadOrder { [weak self] result in
+            switch result {
+            case .success(let order):
+                self?.view?.display(isEmpty: order.nfts.isEmpty)
+                // self?.nftIds = order.nfts
+            case .failure:
+                self?.view?.display(isEmpty: true)
+            }
+        }
     }
-
+    
     func didTapSort() {
         // TODO: сортировка позже
     }

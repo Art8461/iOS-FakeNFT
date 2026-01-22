@@ -68,7 +68,7 @@ final class TabBarController: UITabBarController {
             servicesAssembly: servicesAssembly
         )
         
-        let basketPresenter = BasketPresenterImpl(servicesAssembly: servicesAssembly)
+        let basketPresenter = BasketPresenterImpl(basketService: servicesAssembly.basketService)
         let basketVC = BasketViewController(presenter: basketPresenter)
         basketPresenter.view = basketVC
         let basketNav = UINavigationController(rootViewController: basketVC)
