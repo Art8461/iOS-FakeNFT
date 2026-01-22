@@ -53,11 +53,17 @@ final class BasketViewController: UIViewController {
         return view
     }()
     
+    private let summaryContainer = UIView()
+    private let countLabel = UILabel()
+    private let totalLabel = UILabel()
+    private let payButton = UIButton(type: .system)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setupLayout()
         setupNavigation()
+        setupSummary()
+        setupLayout()
         presenter.viewDidLoad()
     }
     
@@ -68,12 +74,35 @@ final class BasketViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: summaryContainer.topAnchor),
             
             emptyStateLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             emptyStateLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             emptyStateLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             emptyStateLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        ])
+        
+        summaryContainer.translatesAutoresizingMaskIntoConstraints = false
+        countLabel.translatesAutoresizingMaskIntoConstraints = false
+        totalLabel.translatesAutoresizingMaskIntoConstraints = false
+        payButton.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            summaryContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            summaryContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            summaryContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            summaryContainer.heightAnchor.constraint(equalToConstant: 76),
+
+            countLabel.leadingAnchor.constraint(equalTo: summaryContainer.leadingAnchor, constant: 16),
+            countLabel.topAnchor.constraint(equalTo: summaryContainer.topAnchor, constant: 16),
+
+            totalLabel.leadingAnchor.constraint(equalTo: summaryContainer.leadingAnchor, constant: 16),
+            totalLabel.topAnchor.constraint(equalTo: countLabel.bottomAnchor, constant: 2),
+            totalLabel.bottomAnchor.constraint(lessThanOrEqualTo: summaryContainer.bottomAnchor, constant: -16),
+
+            payButton.trailingAnchor.constraint(equalTo: summaryContainer.trailingAnchor, constant: -16),
+            payButton.centerYAnchor.constraint(equalTo: summaryContainer.centerYAnchor),
+            payButton.heightAnchor.constraint(equalToConstant: 44)
         ])
     }
     
@@ -81,9 +110,32 @@ final class BasketViewController: UIViewController {
         navigationItem.rightBarButtonItem = sortButton
     }
     
+    private func setupSummary() {
+        summaryContainer.backgroundColor = UIColor(resource: .lightGreyApp)
+        summaryContainer.layer.cornerRadius = 12
+        summaryContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        summaryContainer.layer.masksToBounds = true
+        
+        countLabel.font = .systemFont(ofSize: 15)
+        totalLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        
+        payButton.backgroundColor = UIColor(resource: .blackApp)
+        payButton.setTitleColor(UIColor(resource: .whiteApp), for: .normal)
+        payButton.layer.cornerRadius = 16
+        payButton.clipsToBounds = true
+        payButton.setTitle(NSLocalizedString("К оплате", comment: "button for pay"), for: .normal)
+        payButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        
+        summaryContainer.addSubview(countLabel)
+        summaryContainer.addSubview(totalLabel)
+        summaryContainer.addSubview(payButton)
+        view.addSubview(summaryContainer)
+    }
+
     private func updateEmptyState(isEmpty: Bool) {
         emptyStateLabel.isHidden = !isEmpty
         collectionView.isHidden = isEmpty
+        summaryContainer.isHidden = isEmpty
         navigationItem.rightBarButtonItem = isEmpty ? nil : sortButton
     }
     
