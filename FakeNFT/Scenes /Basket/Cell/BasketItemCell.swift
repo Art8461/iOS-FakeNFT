@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import Kingfisher
 
 struct BasketItemCellModel {
+    let id: String
     let title: String
     let priceText: String
     let rating: Int   // 0...5
-    let image: UIImage?
+    let imageURL: URL?
 }
 
 final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
@@ -39,8 +41,8 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
     func configure(with model: BasketItemCellModel) {
         titleLabel.text = model.title
         priceValueLabel.text = model.priceText
-        previewImageView.image = model.image
         ratingView.setRating(model.rating)
+        previewImageView.kf.setImage(with: model.imageURL)
     }
     
     override func prepareForReuse() {
