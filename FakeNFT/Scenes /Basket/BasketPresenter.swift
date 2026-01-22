@@ -15,6 +15,7 @@ protocol BasketView: AnyObject {
 
 protocol BasketPresenter {
     func viewDidLoad()
+    func refresh()
     func didTapSort()
     func didTapDelete(id: String)
 }
@@ -26,6 +27,28 @@ final class BasketPresenterImpl: BasketPresenter {
     func didTapDelete(id: String) {
         nftIds.removeAll { $0 == id }
         updateOrder()
+    }
+    
+    func refresh() {
+        reloadOrder()
+    }
+    
+    private func reloadOrder() {
+        basketService.loadOrder { [weak self] result in
+            switch result {
+            case .success(let order):
+                self?.nftIds = order.nfts
+                if order.nfts.isEmpty {
+                    self?.view?.display(isEmpty: true)
+                    self?.view?.display(items: [])
+                    return
+                }
+                self?.view?.display(isEmpty: false)
+                self?.loadNfts(ids: order.nfts)
+            case .failure:
+                self?.view?.display(isEmpty: true)
+            }
+        }
     }
     
     private func updateOrder() {
@@ -58,22 +81,6 @@ final class BasketPresenterImpl: BasketPresenter {
     
     func viewDidLoad() {
         view?.display(isEmpty: true)
-        basketService.loadOrder { [weak self] result in
-            switch result {
-            case .success(let order):
-                self?.nftIds = order.nfts
-                if order.nfts.isEmpty {
-                    self?.view?.display(isEmpty: true)
-                    self?.view?.display(items: [])
-                    return
-                }
-                self?.view?.display(isEmpty: false)
-                self?.loadNfts(ids: order.nfts)
-                
-            case .failure:
-                self?.view?.display(isEmpty: true)
-            }
-        }
     }
     
     private func loadNfts(ids: [String]) {

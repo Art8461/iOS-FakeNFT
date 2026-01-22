@@ -73,6 +73,11 @@ final class BasketViewController: UIViewController {
         presenter.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter.refresh()
+    }
+    
     private func setupLayout() {
         view.addSubview(emptyStateLabel)
         view.addSubview(collectionView)
