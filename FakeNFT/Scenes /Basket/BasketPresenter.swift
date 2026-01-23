@@ -5,7 +5,7 @@
 //  Created by Artem Kuzmenko on 21.01.2026.
 //
 
-import UIKit
+import Foundation
 
 protocol BasketView: AnyObject {
     func display(isEmpty: Bool)
