@@ -17,4 +17,7 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
+    var basketService: BasketService {
+        BasketServiceImpl(networkClient: networkClient)
+    }
 }

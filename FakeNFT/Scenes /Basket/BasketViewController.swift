@@ -59,13 +59,23 @@ final class BasketViewController: UIViewController {
     private let totalLabel = UILabel()
     private let payButton = UIButton(type: .system)
     
+    private var cellModels: [BasketItemCellModel] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.register(BasketItemCell.self)
+
         view.backgroundColor = .systemBackground
         setupNavigation()
         setupSummary()
         setupLayout()
         presenter.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter.refresh()
     }
     
     private func setupLayout() {
@@ -144,27 +154,92 @@ final class BasketViewController: UIViewController {
         navigationItem.rightBarButtonItem = isEmpty ? nil : sortButton
     }
     
+    private func presentDeleteConfirmation(for model: BasketItemCellModel) {
+        let vc = BasketDeleteConfirmationViewController()
+        vc.imageURL = model.imageURL
+        vc.onDelete = { [weak self, weak vc] in
+            vc?.dismiss(animated: true)
+            self?.presenter.didTapDelete(id: model.id)
+        }
+        vc.onCancel = { [weak vc] in
+            vc?.dismiss(animated: true)
+        }
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        present(vc, animated: true)
+    }
+    
     @objc
     private func didTapSort() {
-        presenter.didTapSort()
-        // TODO: сортировка позже
+        let controller = UIAlertController(
+            title: NSLocalizedString("Сортировка", comment: "sort action sheet title"),
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        let sortByPrice = UIAlertAction(
+            title: NSLocalizedString("По цене", comment: "sort by price"),
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter.didSelectSort(option: .price)
+        }
+        let sortByRating = UIAlertAction(
+            title: NSLocalizedString("По рейтингу", comment: "sort by rating"),
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter.didSelectSort(option: .rating)
+        }
+        let sortByName = UIAlertAction(
+            title: NSLocalizedString("По названию", comment: "sort by name"),
+            style: .default
+        ) { [weak self] _ in
+            self?.presenter.didSelectSort(option: .name)
+        }
+        let cancel = UIAlertAction(
+            title: NSLocalizedString("Закрыть", comment: "cancel sort"),
+            style: .cancel
+        )
+        
+        controller.addAction(sortByPrice)
+        controller.addAction(sortByRating)
+        controller.addAction(sortByName)
+        controller.addAction(cancel)
+        
+        if let popover = controller.popoverPresentationController {
+            popover.barButtonItem = sortButton
+        }
+        present(controller, animated: true)
     }
 }
 
 extension BasketViewController: BasketView {
+    func display(items: [BasketItemCellModel]) {
+        cellModels = items
+        collectionView.reloadData()
+    }
+    
     func display(isEmpty: Bool) {
         updateEmptyState(isEmpty: isEmpty)
     }
     
+    func display(summary: BasketSummaryViewModel) {
+        countLabel.text = summary.countText
+        totalLabel.text = summary.totalText
+    }
 }
 
 extension BasketViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        0
+        cellModels.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        UICollectionViewCell()
+        let cell: BasketItemCell = collectionView.dequeueReusableCell(indexPath: indexPath)
+        let model = cellModels[indexPath.row]
+        cell.configure(with: model)
+        cell.onDelete = { [weak self] in
+            self?.presentDeleteConfirmation(for: model)
+        }
+        return cell
     }
 }

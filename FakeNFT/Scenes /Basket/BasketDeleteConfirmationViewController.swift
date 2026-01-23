@@ -6,14 +6,15 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class BasketDeleteConfirmationViewController: UIViewController {
     var onDelete: (() -> Void)?
     var onCancel: (() -> Void)?
+    var imageURL: URL?
     
     private let blurEffect = UIBlurEffect(style: .systemMaterialDark)
     private lazy var blurView = UIVisualEffectView(effect: blurEffect)
-    private lazy var vibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: blurEffect))
     
     private let imageView = UIImageView()
     private let titleLabel = UILabel()
@@ -40,25 +41,24 @@ final class BasketDeleteConfirmationViewController: UIViewController {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(didTapCancel))
         blurView.addGestureRecognizer(tap)
-        
-        blurView.contentView.addSubview(vibrancyView)
-        vibrancyView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            vibrancyView.topAnchor.constraint(equalTo: blurView.contentView.topAnchor),
-            vibrancyView.bottomAnchor.constraint(equalTo: blurView.contentView.bottomAnchor),
-            vibrancyView.leadingAnchor.constraint(equalTo: blurView.contentView.leadingAnchor),
-            vibrancyView.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor)
-        ])
     }
     
     private func setupContent() {
-        imageView.image = UIImage(named: "YourConfirmImage")
-        imageView.contentMode = .scaleAspectFit
         
-        titleLabel.text = NSLocalizedString("Вы уверены, что хотите удалить объект из корзины?", comment: "Confirmation title")
+        if let url = imageURL {
+            imageView.kf.setImage(with: url)
+        } else {
+            imageView.image = nil
+        }
+        
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 12
+        imageView.clipsToBounds = true
+        
+        titleLabel.text = NSLocalizedString("Вы уверены, что хотите \nудалить объект из корзины?", comment: "Confirmation title")
         titleLabel.font = .systemFont(ofSize: 13, weight: .regular)
         titleLabel.textAlignment = .center
-        titleLabel.numberOfLines = 1
+        titleLabel.numberOfLines = 0
         titleLabel.textColor = UIColor(resource: .blackApp)
         
         deleteButton.setTitle(NSLocalizedString("Удалить", comment: "delete button"), for: .normal)
@@ -91,13 +91,14 @@ final class BasketDeleteConfirmationViewController: UIViewController {
         stack.spacing = 20
         stack.alignment = .center
         
-        vibrancyView.contentView.addSubview(stack)
+        blurView.contentView.addSubview(stack)
         stack.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
-            stack.centerXAnchor.constraint(equalTo: vibrancyView.contentView.centerXAnchor),
-            stack.centerYAnchor.constraint(equalTo: vibrancyView.contentView.centerYAnchor),
-            stack.leadingAnchor.constraint(greaterThanOrEqualTo: vibrancyView.contentView.leadingAnchor, constant: 24),
-            stack.trailingAnchor.constraint(lessThanOrEqualTo: vibrancyView.contentView.trailingAnchor, constant: -24)
+            stack.centerXAnchor.constraint(equalTo: blurView.contentView.centerXAnchor),
+            stack.centerYAnchor.constraint(equalTo: blurView.contentView.centerYAnchor),
+            stack.leadingAnchor.constraint(greaterThanOrEqualTo: blurView.contentView.leadingAnchor, constant: 24),
+            stack.trailingAnchor.constraint(lessThanOrEqualTo: blurView.contentView.trailingAnchor, constant: -24)
         ])
         
         imageView.translatesAutoresizingMaskIntoConstraints = false

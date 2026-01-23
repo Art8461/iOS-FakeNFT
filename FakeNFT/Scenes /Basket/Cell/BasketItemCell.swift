@@ -33,8 +33,8 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
     func configure(with model: BasketItemCellModel) {
         titleLabel.text = model.title
         priceValueLabel.text = model.priceText
-        previewImageView.image = model.image
         ratingView.setRating(model.rating)
+        previewImageView.kf.setImage(with: model.imageURL)
     }
     
     override func prepareForReuse() {
@@ -84,6 +84,7 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
         
         deleteButton.setImage(UIImage(resource: .basketDel), for: .normal)
         deleteButton.tintColor = UIColor(resource: .blackApp)
+        deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
         
         contentView.addSubview(containerView)
         
@@ -120,6 +121,11 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
             textStack.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor, constant: -8)
         ])
     }
+    
+    var onDelete: (() -> Void)?
+
+    @objc private func didTapDelete() { onDelete?() }
+    
 }
 
 final class StarRatingView: UIView {
@@ -131,13 +137,14 @@ final class StarRatingView: UIView {
         stack.axis = .horizontal
         stack.spacing = 2
         stack.alignment = .center
+        stack.setContentHuggingPriority(.required, for: .horizontal)
         addSubview(stack)
         stack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stack.topAnchor.constraint(equalTo: topAnchor),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor),
             stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor)
+            stack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor)
         ])
         
         for _ in 0..<5 {
