@@ -40,10 +40,33 @@ final class ProfileEditViewController: UIViewController {
         return button
     }()
     
-    private lazy var avatarImage: UIImageView = {
+    private lazy var avatarButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = 35
+        button.clipsToBounds = true
+
         let image = UIImageView.baseAvatarImage()
-        image.image = UIImage(resource: .joaquinPhoenix) 
-        return image
+        image.image = UIImage(resource: .joaquinPhoenix)
+        button.addSubview(image)
+
+        NSLayoutConstraint.activate([
+            image.topAnchor.constraint(equalTo: button.topAnchor),
+            image.bottomAnchor.constraint(equalTo: button.bottomAnchor),
+            image.leadingAnchor.constraint(equalTo: button.leadingAnchor),
+            image.trailingAnchor.constraint(equalTo: button.trailingAnchor)
+        ])
+
+        button.addTarget(self, action: #selector(tapAvatar), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var editIcon: UIImageView = {
+        let icon = UIImageView()
+        icon.image = UIImage(resource: .foto)
+        icon.translatesAutoresizingMaskIntoConstraints = false
+        icon.contentMode = .scaleAspectFit
+        return icon
     }()
     
     private lazy var nameTextView: UITextView = {
@@ -88,17 +111,22 @@ final class ProfileEditViewController: UIViewController {
     }
     
     private func addSubviews() {
-        [avatarImage,bigStackView].forEach { view.addSubview($0) }
+        [avatarButton, editIcon, bigStackView].forEach { view.addSubview($0) }
     }
     
     private func setupConstraints() {
-        [avatarImage, bigStackView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [avatarButton, editIcon, bigStackView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
-            avatarImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            avatarImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            avatarButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            avatarButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             
-            bigStackView.topAnchor.constraint(equalTo: avatarImage.bottomAnchor, constant: 24),
+            editIcon.widthAnchor.constraint(equalToConstant: 22.57),
+            editIcon.heightAnchor.constraint(equalToConstant: 22.57),
+            editIcon.bottomAnchor.constraint(equalTo: avatarButton.bottomAnchor),
+            editIcon.trailingAnchor.constraint(equalTo: avatarButton.trailingAnchor),
+            
+            bigStackView.topAnchor.constraint(equalTo: avatarButton.bottomAnchor, constant: 24),
             bigStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             bigStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
@@ -106,6 +134,10 @@ final class ProfileEditViewController: UIViewController {
     
     @objc func tapBackButton(){
         presenter.didTapBack()
+    }
+    
+    @objc func tapAvatar(){
+        print ("редактирование аватарки")
     }
 }
 
