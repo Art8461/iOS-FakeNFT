@@ -8,13 +8,21 @@
 import UIKit
 import Kingfisher
 
+protocol ProfileViewProtocol: AnyObject {
+    func openEditProfile(model: ProfileEditModel)
+    func getProfileEditModel() -> ProfileEditModel
+}
 
 final class ProfileViewController: UIViewController{
     
+    
+    private let presenter: ProfilePresenterProtocol
+    
     let servicesAssembly: ServicesAssembly
     
-    init(servicesAssembly: ServicesAssembly) {
+    init(servicesAssembly: ServicesAssembly, presenter: ProfilePresenterProtocol) {
         self.servicesAssembly = servicesAssembly
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -22,6 +30,7 @@ final class ProfileViewController: UIViewController{
         fatalError("init(coder:) has not been implemented")
     }
     
+    let name = "Joaquin Phoenix"
     let descriptionText = "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям."
     let sait = "google.com"
     
@@ -38,17 +47,14 @@ final class ProfileViewController: UIViewController{
     }()
     
     private lazy var avatarImage: UIImageView = {
-        let image = UIImageView()
+        let image = UIImageView.baseAvatarImage()
         image.image = UIImage(resource: .joaquinPhoenix)
-        image.layer.cornerRadius = 35
-        image.contentMode = .scaleAspectFill
-        image.clipsToBounds = true
         return image
     }()
     
     private lazy var avatarName: UILabel = {
         let label = UILabel()
-        label.text = "Joaquin Phoenix"
+        label.text = name
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = .blackApp
         return label
@@ -104,6 +110,7 @@ final class ProfileViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .whiteApp
         setupNavigationBar()
         addSubviews()
         setupConstraints()
@@ -123,9 +130,6 @@ final class ProfileViewController: UIViewController{
         [bigStack, profileTableView].forEach{$0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
-            avatarImage.widthAnchor.constraint(equalToConstant: 70),
-            avatarImage.heightAnchor.constraint(equalToConstant: 70),
-            
             bigStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             bigStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             bigStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -146,6 +150,7 @@ final class ProfileViewController: UIViewController{
     
     
     @objc private func tapEditButton(){
+        presenter.didTapEdit()
         print("переход к экрану редактирования профиля")
     }
     
@@ -189,24 +194,22 @@ extension ProfileViewController: UITableViewDelegate {
     }
 }
 
-
-
-
-enum ProfileItemType {
-    case myNFT
-    case myFavorites
-
-    var title: String {
-        switch self {
-        case .myNFT:
-            return "Мои NFT"
-        case .myFavorites:
-            return "Избранные NFT"
-        }
+extension ProfileViewController: ProfileViewProtocol {
+    func openEditProfile(model: ProfileEditModel) {
+        let presenter = ProfileEditPresenter(model: model)
+        let editVC = ProfileEditViewController(presenter: presenter)
+        presenter.view = editVC
+        navigationController?.pushViewController(editVC, animated: true)
+        
     }
+    
+    func getProfileEditModel() -> ProfileEditModel {
+        ProfileEditModel(name: name, description: descriptionText, site: sait)
+    }
+    
 }
 
-struct ProfileItem {
-    let type: ProfileItemType
-    let count: Int
-}
+
+
+
+

@@ -60,9 +60,12 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let profilePresenter = ProfilePresenter()
         let profileVC = ProfileViewController(
-            servicesAssembly: servicesAssembly
+            servicesAssembly: servicesAssembly,
+            presenter: profilePresenter
         )
+        profilePresenter.view = profileVC
         
         let catalogVC = TestCatalogViewController(
             servicesAssembly: servicesAssembly
