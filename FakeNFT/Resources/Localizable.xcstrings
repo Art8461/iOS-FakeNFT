@@ -11,6 +11,16 @@
         }
       }
     },
+    "Error.later" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Повторить позже"
+          }
+        }
+      }
+    },
     "Error.network" : {
       "localizations" : {
         "ru" : {
@@ -74,7 +84,15 @@
       }
     },
     "Закрыть" : {
-      "comment" : "cancel sort"
+      "comment" : "cancel sort",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
     },
     "К оплате" : {
       "comment" : "button for pay",
@@ -121,13 +139,37 @@
       }
     },
     "По названию" : {
-      "comment" : "sort by name"
+      "comment" : "sort by name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By name"
+          }
+        }
+      }
     },
     "По рейтингу" : {
-      "comment" : "sort by rating"
+      "comment" : "sort by rating",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By rating"
+          }
+        }
+      }
     },
     "По цене" : {
-      "comment" : "sort by price"
+      "comment" : "sort by price",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By price"
+          }
+        }
+      }
     },
     "Профиль" : {
       "comment" : "tab title for profile",

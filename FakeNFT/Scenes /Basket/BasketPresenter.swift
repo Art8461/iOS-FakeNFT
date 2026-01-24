@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol BasketView: AnyObject {
+protocol BasketView: AnyObject, ErrorView {
     func display(isEmpty: Bool)
     func display(items: [BasketItemCellModel])
     func display(summary: BasketSummaryViewModel)
@@ -60,6 +60,12 @@ final class BasketPresenterImpl: BasketPresenter {
                 self?.currentNfts = []
                 self?.view?.displayLoading(false)
                 self?.view?.display(isEmpty: true)
+                let model = ErrorModel(
+                    message: NSLocalizedString("Error.network", comment: ""),
+                    actionText: NSLocalizedString("Error.later", comment: "")
+                ) {
+                }
+                self?.view?.showError(model)
             }
         }
     }
@@ -80,8 +86,13 @@ final class BasketPresenterImpl: BasketPresenter {
                 self?.loadNfts(ids: order.nfts)
             case .failure:
                 self?.view?.displayLoading(false)
-                // обработать ошибку
-                break
+                let model = ErrorModel(
+                    message: NSLocalizedString("Error.network", comment: ""),
+                    actionText: NSLocalizedString("Error.repeat", comment: "")
+                ) { [weak self] in
+                    self?.updateOrder()
+                }
+                self?.view?.showError(model)
             }
         }
     }
