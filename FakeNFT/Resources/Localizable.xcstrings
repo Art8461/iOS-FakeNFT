@@ -31,6 +31,16 @@
         }
       }
     },
+    "Error.partial" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось загрузить часть NFT"
+          }
+        }
+      }
+    },
     "Error.repeat" : {
       "localizations" : {
         "ru" : {
@@ -183,7 +193,15 @@
       }
     },
     "Сортировка" : {
-      "comment" : "sort action sheet title"
+      "comment" : "sort action sheet title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sorting"
+          }
+        }
+      }
     },
     "Статистика" : {
       "comment" : "tab title for statistics",

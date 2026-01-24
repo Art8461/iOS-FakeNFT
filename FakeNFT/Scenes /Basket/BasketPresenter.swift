@@ -137,8 +137,18 @@ final class BasketPresenterImpl: BasketPresenter {
         }
         
         group.notify(queue: .main) { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             self.view?.displayLoading(false)
+            
+            if let _ = firstError {
+                let model = ErrorModel(
+                    message: NSLocalizedString("Error.partial", comment: ""),
+                    actionText: NSLocalizedString("Error.repeat", comment: "")
+                ) { [weak self] in
+                    self?.loadNfts(ids: ids)
+                }
+                self.view?.showError(model)
+            }
             
             if let _ = firstError, nftsById.isEmpty {
                 self.currentNfts = []
