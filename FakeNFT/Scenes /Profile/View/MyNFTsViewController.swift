@@ -37,13 +37,8 @@ final class MyNFTsViewController: UIViewController {
         updateUI()
     }
     
-    private lazy var emptyNFTLabel: UILabel = {
-        let label = UILabel()
-        label.text = "У Вас еще нет NFT"
-        label.textAlignment = .center
-        label.font = .systemFont(ofSize: 17, weight: .bold)
-        return label
-    }()
+    private lazy var emptyNFTLabel =
+        UILabel.emptyStateLabel(text: "У Вас еще нет NFT")
     
     private lazy var myNFTTableView: UITableView = {
         let tableView = UITableView()
@@ -53,11 +48,7 @@ final class MyNFTsViewController: UIViewController {
     }()
     
     private func setupNavigationBar() {
-        navigationController?.navigationBar.titleTextAttributes = [
-            .font: UIFont.systemFont(ofSize: 17, weight: .bold),
-            .foregroundColor: UIColor.blackApp
-        ]
-        navigationItem.title = "Мои NFT"
+        setupBaseNavigationBar()
         navigationItem.leftBarButtonItem = .backButton(target: self, action: #selector(tapBackButton))
         navigationItem.rightBarButtonItem = .sortButton(target: self, action: #selector(tapSortButton))
     }
@@ -80,6 +71,7 @@ final class MyNFTsViewController: UIViewController {
         emptyNFTLabel.isHidden = !isEmpty
         myNFTTableView.isHidden = isEmpty
         
+        navigationItem.title = isEmpty ? nil : "Мои NFT"
         navigationItem.rightBarButtonItem = isEmpty ? nil : .sortButton(target: self, action: #selector(tapSortButton))
 
     }

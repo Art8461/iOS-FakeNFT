@@ -5,11 +5,12 @@
 //  Created by Андрей Пермяков on 22.01.2026.
 //
 
-import UIKit
+import Foundation
 
 protocol ProfilePresenterProtocol: AnyObject {
     func didTapEdit()
     func openMyNFTs()
+    func openFavoritesNFC()
 }
 
 
@@ -25,6 +26,10 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     
     func openMyNFTs() {
         view?.openMyNFTs()
+    }
+    
+    func openFavoritesNFC() {
+        view?.openFavoritesNFTs()
     }
 }
 

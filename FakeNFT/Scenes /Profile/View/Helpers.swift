@@ -6,6 +6,16 @@
 //
 import UIKit
 
+extension UIViewController {
+    func setupBaseNavigationBar() {
+        navigationController?.navigationBar.titleTextAttributes = [
+            .font: UIFont.systemFont(ofSize: 17, weight: .bold),
+            .foregroundColor: UIColor.blackApp
+        ]
+    }
+}
+
+
 extension UIImageView {
     
     static func baseAvatarImage() -> UIImageView {
@@ -48,6 +58,15 @@ extension UILabel {
         label.textColor = .blackApp
         return label
     }
+    
+    static func emptyStateLabel(text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.textColor = .blackApp
+        return label
+    }
 }
 
 extension UIStackView {
@@ -79,3 +98,5 @@ extension UIBarButtonItem {
         return .makeButton(image: UIImage(resource: .sort), target: target, action: action)
     }
 }
+
+

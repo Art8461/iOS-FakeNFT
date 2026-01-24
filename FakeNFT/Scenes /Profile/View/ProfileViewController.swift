@@ -12,6 +12,7 @@ protocol ProfileViewProtocol: AnyObject {
     func openEditProfile(model: ProfileEditModel)
     func getProfileEditModel() -> ProfileEditModel
     func openMyNFTs()
+    func openFavoritesNFTs()
 }
 
 final class ProfileViewController: UIViewController{
@@ -191,6 +192,7 @@ extension ProfileViewController: UITableViewDelegate {
             presenter.openMyNFTs()
             print("Переход к экрану Мои NFT")
         case .myFavorites:
+            presenter.openFavoritesNFC()
             print("Переход к экрану Избранные NFT")
         }
     }
@@ -213,6 +215,13 @@ extension ProfileViewController: ProfileViewProtocol {
     func openMyNFTs() {
         let presenter = MyNFTsPresenter()
         let myNFTsVC = MyNFTsViewController(presenter: presenter)
+        presenter.view = myNFTsVC
+        navigationController?.pushViewController(myNFTsVC, animated: true)
+    }
+    
+    func openFavoritesNFTs() {
+        let presenter = FavoritesNFTPresenter()
+        let myNFTsVC = FavoritesNFTViewController(presenter: presenter)
         presenter.view = myNFTsVC
         navigationController?.pushViewController(myNFTsVC, animated: true)
     }
