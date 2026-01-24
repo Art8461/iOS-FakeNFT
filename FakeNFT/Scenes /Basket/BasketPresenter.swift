@@ -11,6 +11,7 @@ protocol BasketView: AnyObject {
     func display(isEmpty: Bool)
     func display(items: [BasketItemCellModel])
     func display(summary: BasketSummaryViewModel)
+    func displayLoading(_ isLoading: Bool)
 }
 
 protocol BasketPresenter {
@@ -42,39 +43,43 @@ final class BasketPresenterImpl: BasketPresenter {
     }
     
     private func reloadOrder() {
+        view?.displayLoading(true)
         basketService.loadOrder { [weak self] result in
             switch result {
             case .success(let order):
                 self?.nftIds = order.nfts
                 if order.nfts.isEmpty {
                     self?.currentNfts = []
+                    self?.view?.displayLoading(false)
                     self?.view?.display(isEmpty: true)
                     self?.view?.display(items: [])
                     return
                 }
-                self?.view?.display(isEmpty: false)
                 self?.loadNfts(ids: order.nfts)
             case .failure:
                 self?.currentNfts = []
+                self?.view?.displayLoading(false)
                 self?.view?.display(isEmpty: true)
             }
         }
     }
     
     private func updateOrder() {
+        view?.displayLoading(true)
         basketService.updateOrder(nfts: nftIds) { [weak self] result in
             switch result {
             case .success(let order):
                 self?.nftIds = order.nfts
                 if order.nfts.isEmpty {
                     self?.currentNfts = []
+                    self?.view?.displayLoading(false)
                     self?.view?.display(isEmpty: true)
                     self?.view?.display(items: [])
                     return
                 }
-                self?.view?.display(isEmpty: false)
                 self?.loadNfts(ids: order.nfts)
             case .failure:
+                self?.view?.displayLoading(false)
                 // обработать ошибку
                 break
             }
@@ -96,6 +101,7 @@ final class BasketPresenterImpl: BasketPresenter {
     
     private func loadNfts(ids: [String]) {
         guard !ids.isEmpty else {
+            view?.displayLoading(false)
             currentNfts = []
             view?.display(items: [])
             view?.display(isEmpty: true)
@@ -121,6 +127,7 @@ final class BasketPresenterImpl: BasketPresenter {
         
         group.notify(queue: .main) { [weak self] in
             guard let self = self else { return }
+            self.view?.displayLoading(false)
             
             if let _ = firstError, nftsById.isEmpty {
                 self.currentNfts = []

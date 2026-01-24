@@ -53,6 +53,8 @@ final class BasketViewController: UIViewController {
         return view
     }()
     
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    
     private let summaryContainer = UIView()
     private let summaryLeftStack = UIStackView()
     private let countLabel = UILabel()
@@ -79,6 +81,14 @@ final class BasketViewController: UIViewController {
     }
     
     private func setupLayout() {
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        activityIndicator.hidesWhenStopped = true
+        
         view.addSubview(emptyStateLabel)
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
@@ -212,6 +222,19 @@ final class BasketViewController: UIViewController {
 }
 
 extension BasketViewController: BasketView {
+    
+    func displayLoading(_ isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+            navigationItem.rightBarButtonItem = nil
+            summaryContainer.isHidden = true
+            collectionView.isHidden = true
+            emptyStateLabel.isHidden = true
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+    
     func display(items: [BasketItemCellModel]) {
         cellModels = items
         collectionView.reloadData()
