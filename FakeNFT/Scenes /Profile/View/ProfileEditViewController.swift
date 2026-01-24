@@ -33,13 +33,6 @@ final class ProfileEditViewController: UIViewController {
         presenter.viewDidLoad()
     }
     
-    private lazy var backButton: UIBarButtonItem = {
-        let image = UIImage(resource: .chevronBackward)
-        let button = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(tapBackButton))
-        button.tintColor = .blackApp
-        return button
-    }()
-    
     private lazy var avatarButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -107,7 +100,8 @@ final class ProfileEditViewController: UIViewController {
     }()
     
     private func setupNavigationBar(){
-        navigationItem.leftBarButtonItem = backButton
+        navigationItem.leftBarButtonItem = .backButton(target: self, action: #selector(tapBackButton))
+      
     }
     
     private func addSubviews() {
@@ -134,11 +128,13 @@ final class ProfileEditViewController: UIViewController {
     
     @objc func tapBackButton(){
         presenter.didTapBack()
+        print("назад к профилю")
     }
     
     @objc func tapAvatar(){
         print ("редактирование аватарки")
     }
+
 }
 
 extension ProfileEditViewController: ProfileEditViewProtocol {

@@ -11,6 +11,7 @@ import Kingfisher
 protocol ProfileViewProtocol: AnyObject {
     func openEditProfile(model: ProfileEditModel)
     func getProfileEditModel() -> ProfileEditModel
+    func openMyNFTs()
 }
 
 final class ProfileViewController: UIViewController{
@@ -187,6 +188,7 @@ extension ProfileViewController: UITableViewDelegate {
         
         switch item.type {
         case .myNFT:
+            presenter.openMyNFTs()
             print("Переход к экрану Мои NFT")
         case .myFavorites:
             print("Переход к экрану Избранные NFT")
@@ -195,6 +197,7 @@ extension ProfileViewController: UITableViewDelegate {
 }
 
 extension ProfileViewController: ProfileViewProtocol {
+    
     func openEditProfile(model: ProfileEditModel) {
         let presenter = ProfileEditPresenter(model: model)
         let editVC = ProfileEditViewController(presenter: presenter)
@@ -205,6 +208,13 @@ extension ProfileViewController: ProfileViewProtocol {
     
     func getProfileEditModel() -> ProfileEditModel {
         ProfileEditModel(name: name, description: descriptionText, site: sait)
+    }
+    
+    func openMyNFTs() {
+        let presenter = MyNFTsPresenter()
+        let myNFTsVC = MyNFTsViewController(presenter: presenter)
+        presenter.view = myNFTsVC
+        navigationController?.pushViewController(myNFTsVC, animated: true)
     }
     
 }

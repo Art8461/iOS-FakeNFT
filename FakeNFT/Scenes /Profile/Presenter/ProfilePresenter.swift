@@ -9,6 +9,7 @@ import UIKit
 
 protocol ProfilePresenterProtocol: AnyObject {
     func didTapEdit()
+    func openMyNFTs()
 }
 
 
@@ -20,6 +21,10 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     func didTapEdit() {
         guard let model = view?.getProfileEditModel() else { return }
         view?.openEditProfile(model: model)
+    }
+    
+    func openMyNFTs() {
+        view?.openMyNFTs()
     }
 }
 

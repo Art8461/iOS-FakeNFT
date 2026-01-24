@@ -35,7 +35,6 @@ extension UITextView {
         textView.isScrollEnabled = false
         textView.clipsToBounds = true
         textView.textContainerInset = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
-        textView.translatesAutoresizingMaskIntoConstraints = false
         textView.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
         return textView
     }
@@ -62,5 +61,21 @@ extension UIStackView {
         stack.axis = .vertical
         stack.spacing = 8
         return stack
+    }
+}
+
+extension UIBarButtonItem {
+    static func makeButton(image: UIImage, target: Any?, action: Selector?, tintColor: UIColor = .blackApp) -> UIBarButtonItem {
+        let button = UIBarButtonItem(image: image, style: .plain, target: target, action: action)
+        button.tintColor = tintColor
+        return button
+    }
+
+    static func backButton(target: Any?, action: Selector?) -> UIBarButtonItem {
+        return .makeButton(image: UIImage(resource: .backward), target: target, action: action)
+    }
+
+    static func sortButton(target: Any?, action: Selector?) -> UIBarButtonItem {
+        return .makeButton(image: UIImage(resource: .sort), target: target, action: action)
     }
 }

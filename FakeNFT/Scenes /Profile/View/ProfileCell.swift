@@ -10,31 +10,31 @@ final class ProfileCell: UITableViewCell {
     
     static let reuseIdentifier = "ProfileCell"
     
-    private lazy var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .blackApp
         return label
     }()
     
-    private lazy var countLabel: UILabel = {
+    private let countLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .blackApp
         return label
     }()
     
-    private lazy var stackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleLabel, countLabel])
+    private let stackView: UIStackView = {
+        let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .leading
         stack.spacing = 8
         return stack
     }()
     
-    private lazy var chevronImage: UIImageView = {
+    private let chevronImage: UIImageView = {
         let imageLabel = UIImageView()
-        imageLabel.image = UIImage(resource: .chevronForward)
+        imageLabel.image = UIImage(resource: .forward)
         imageLabel.contentMode = .scaleAspectFit
         imageLabel.tintColor = .blackApp
         return imageLabel
@@ -53,6 +53,8 @@ final class ProfileCell: UITableViewCell {
     }
     
     private func addSubviews() {
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(countLabel)
         [stackView, chevronImage].forEach({ contentView.addSubview($0) })
     }
     
