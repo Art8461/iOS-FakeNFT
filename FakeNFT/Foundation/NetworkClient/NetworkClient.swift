@@ -40,7 +40,12 @@ struct DefaultNetworkClient: NetworkClient {
     private let session: URLSession
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
-
+    
+    private let parsingQueue = DispatchQueue(
+        label: "network-parsing-queue",
+        qos: .userInitiated
+    )
+    
     init(session: URLSession = URLSession.shared,
          decoder: JSONDecoder = JSONDecoder(),
          encoder: JSONEncoder = JSONEncoder()) {
@@ -48,7 +53,7 @@ struct DefaultNetworkClient: NetworkClient {
         self.decoder = decoder
         self.encoder = encoder
     }
-
+    
     @discardableResult
     func send(
         request: NetworkRequest,
@@ -61,18 +66,18 @@ struct DefaultNetworkClient: NetworkClient {
             }
         }
         guard let urlRequest = create(request: request) else { return nil }
-
+        
         let task = session.dataTask(with: urlRequest) { data, response, error in
             guard let response = response as? HTTPURLResponse else {
                 onResponse(.failure(NetworkClientError.urlSessionError))
                 return
             }
-
+            
             guard 200 ..< 300 ~= response.statusCode else {
                 onResponse(.failure(NetworkClientError.httpStatusCode(response.statusCode)))
                 return
             }
-
+            
             if let data = data {
                 onResponse(.success(data))
                 return
@@ -84,12 +89,12 @@ struct DefaultNetworkClient: NetworkClient {
                 return
             }
         }
-
+        
         task.resume()
-
+        
         return DefaultNetworkTask(dataTask: task)
     }
-
+    
     @discardableResult
     func send<T: Decodable>(
         request: NetworkRequest,
@@ -100,50 +105,62 @@ struct DefaultNetworkClient: NetworkClient {
         return send(request: request, completionQueue: completionQueue) { result in
             switch result {
             case let .success(data):
-                self.parse(data: data, type: type, onResponse: onResponse)
+                self.parse(data: data, type: type, completionQueue: completionQueue, onResponse: onResponse)
             case let .failure(error):
                 onResponse(.failure(error))
             }
         }
     }
-
+    
     // MARK: - Private
-
+    
     private func create(request: NetworkRequest) -> URLRequest? {
         guard let endpoint = request.endpoint else {
             assertionFailure("Empty endpoint")
             return nil
         }
-
+        
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
-
+        
         urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
-
+        
         if let dtoDictionary = request.dto?.asDictionary() {
             var urlComponents = URLComponents()
             let queryItems = dtoDictionary.map { field in
                 URLQueryItem(
                     name: field.key,
                     value: field.value
-                    )
+                )
             }
             urlComponents.queryItems = queryItems
             urlRequest.httpBody = urlComponents.query?.data(using: .utf8)
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         }
-
+        
         urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
+        
         return urlRequest
     }
-
-    private func parse<T: Decodable>(data: Data, type _: T.Type, onResponse: @escaping (Result<T, Error>) -> Void) {
-        do {
-            let response = try decoder.decode(T.self, from: data)
-            onResponse(.success(response))
-        } catch {
-            onResponse(.failure(NetworkClientError.parsingError))
+    
+    private func parse<T: Decodable>(
+        data: Data,
+        type _: T.Type,
+        completionQueue: DispatchQueue,
+        onResponse: @escaping (Result<T, Error>) -> Void
+    ) {
+        parsingQueue.async { [decoder] in
+            let result: Result<T, Error>
+            do {
+                let response = try decoder.decode(T.self, from: data)
+                result = .success(response)
+            } catch {
+                result = .failure(NetworkClientError.parsingError)
+            }
+            
+            completionQueue.async {
+                onResponse(result)
+            }
         }
     }
 }
