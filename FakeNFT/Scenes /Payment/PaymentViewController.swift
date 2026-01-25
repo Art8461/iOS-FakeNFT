@@ -135,12 +135,22 @@ final class PaymentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureNavigationBar()
+
         collectionView.delegate = self
         userAgreementButton.addTarget(self, action: #selector(didTapUserAgreement), for: .touchUpInside)
         payButton.addTarget(self, action: #selector(didTapPay), for: .touchUpInside)
         collectionView.register(CurrencyCell.self)
         setupLayout()
         presenter.viewDidLoad()
+    }
+    
+    private func configureNavigationBar() {
+        navigationItem.hidesBackButton = true
+        let image = UIImage(resource: .backward).withRenderingMode(.alwaysTemplate)
+        let backButton = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(didTapBack))
+        backButton.tintColor = UIColor(resource: .blackApp)
+        navigationItem.leftBarButtonItem = backButton
     }
     
     private func setupLayout(){
@@ -178,6 +188,10 @@ final class PaymentViewController: UIViewController {
         ])
     }
     
+    @objc private func didTapBack() {
+        navigationController?.popViewController(animated: true)
+    }
+
     @objc private func didTapUserAgreement() {
         presenter.didTapUserAgreement()
     }
