@@ -129,6 +129,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		286FE0972F253D3D0093EEF9 /* Payment */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Payment; sourceTree = "<group>"; };
 		287AB25B2F210DE60064446E /* Cell */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cell; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -216,9 +217,9 @@
 		287AB19D2F20A8DF0064446E /* Basket */ = {
 			isa = PBXGroup;
 			children = (
+				287AB25B2F210DE60064446E /* Cell */,
 				287AB3152F22622C0064446E /* BasketDeleteConfirmationViewController.swift */,
 				287AB2AF2F2238E00064446E /* BasketViewModels.swift */,
-				287AB25B2F210DE60064446E /* Cell */,
 				287AB2592F21092C0064446E /* BasketPresenter.swift */,
 				287AB19C2F20A8DF0064446E /* BasketViewController.swift */,
 			);
@@ -317,6 +318,7 @@
 		3F6806C729CBBC5B00B4F915 /* Scenes  */ = {
 			isa = PBXGroup;
 			children = (
+				286FE0972F253D3D0093EEF9 /* Payment */,
 				287AB19D2F20A8DF0064446E /* Basket */,
 				287AB19F2F20A8DF0064446E /* Profile */,
 				287AB1A12F20A8DF0064446E /* Stats */,
@@ -432,6 +434,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				286FE0972F253D3D0093EEF9 /* Payment */,
 				287AB25B2F210DE60064446E /* Cell */,
 			);
 			name = FakeNFT;
