@@ -45,27 +45,29 @@ final class BasketPresenterImpl: BasketPresenter {
     private func reloadOrder() {
         view?.displayLoading(true)
         basketService.loadOrder { [weak self] result in
-            switch result {
-            case .success(let order):
-                self?.nftIds = order.nfts
-                if order.nfts.isEmpty {
+            DispatchQueue.main.async{
+                switch result {
+                case .success(let order):
+                    self?.nftIds = order.nfts
+                    if order.nfts.isEmpty {
+                        self?.currentNfts = []
+                        self?.view?.displayLoading(false)
+                        self?.view?.display(isEmpty: true)
+                        self?.view?.display(items: [])
+                        return
+                    }
+                    self?.loadNfts(ids: order.nfts)
+                case .failure:
                     self?.currentNfts = []
                     self?.view?.displayLoading(false)
                     self?.view?.display(isEmpty: true)
-                    self?.view?.display(items: [])
-                    return
+                    let model = ErrorModel(
+                        message: NSLocalizedString("Error.network", comment: ""),
+                        actionText: NSLocalizedString("Error.later", comment: "")
+                    ) {
+                    }
+                    self?.view?.showError(model)
                 }
-                self?.loadNfts(ids: order.nfts)
-            case .failure:
-                self?.currentNfts = []
-                self?.view?.displayLoading(false)
-                self?.view?.display(isEmpty: true)
-                let model = ErrorModel(
-                    message: NSLocalizedString("Error.network", comment: ""),
-                    actionText: NSLocalizedString("Error.later", comment: "")
-                ) {
-                }
-                self?.view?.showError(model)
             }
         }
     }
@@ -73,26 +75,28 @@ final class BasketPresenterImpl: BasketPresenter {
     private func updateOrder() {
         view?.displayLoading(true)
         basketService.updateOrder(nfts: nftIds) { [weak self] result in
-            switch result {
-            case .success(let order):
-                self?.nftIds = order.nfts
-                if order.nfts.isEmpty {
-                    self?.currentNfts = []
+            DispatchQueue.main.async{
+                switch result {
+                case .success(let order):
+                    self?.nftIds = order.nfts
+                    if order.nfts.isEmpty {
+                        self?.currentNfts = []
+                        self?.view?.displayLoading(false)
+                        self?.view?.display(isEmpty: true)
+                        self?.view?.display(items: [])
+                        return
+                    }
+                    self?.loadNfts(ids: order.nfts)
+                case .failure:
                     self?.view?.displayLoading(false)
-                    self?.view?.display(isEmpty: true)
-                    self?.view?.display(items: [])
-                    return
+                    let model = ErrorModel(
+                        message: NSLocalizedString("Error.network", comment: ""),
+                        actionText: NSLocalizedString("Error.repeat", comment: "")
+                    ) { [weak self] in
+                        self?.updateOrder()
+                    }
+                    self?.view?.showError(model)
                 }
-                self?.loadNfts(ids: order.nfts)
-            case .failure:
-                self?.view?.displayLoading(false)
-                let model = ErrorModel(
-                    message: NSLocalizedString("Error.network", comment: ""),
-                    actionText: NSLocalizedString("Error.repeat", comment: "")
-                ) { [weak self] in
-                    self?.updateOrder()
-                }
-                self?.view?.showError(model)
             }
         }
     }
@@ -112,11 +116,13 @@ final class BasketPresenterImpl: BasketPresenter {
     
     private func loadNfts(ids: [String]) {
         guard !ids.isEmpty else {
-            view?.displayLoading(false)
-            currentNfts = []
-            view?.display(items: [])
-            view?.display(isEmpty: true)
-            return
+            DispatchQueue.main.async{
+                self.view?.displayLoading(false)
+                self.currentNfts = []
+                self.view?.display(items: [])
+                self.view?.display(isEmpty: true)
+            }
+                return
         }
         
         let group = DispatchGroup()
