@@ -39,20 +39,21 @@ extension CatalogPresenter: CatalogViewOutput {
 // MARK: - Private Methods
 private extension CatalogPresenter {
     
+    // CatalogPresenter.swift
     func loadData() {
         view?.setLoading(true)
         
+        defer {
+            view?.setLoading(false)
+        }
+        
         do {
-           
             let catalogData = try catalogProvider.loadCatalog()
             self.catalog = catalogData
             self.view?.showCatalog(catalogData)
         } catch {
-            
             self.view?.showError(error)
         }
-        
-        view?.setLoading(false)
     }
 }
 

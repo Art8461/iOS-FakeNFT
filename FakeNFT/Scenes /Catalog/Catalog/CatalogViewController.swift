@@ -69,8 +69,14 @@ private extension CatalogViewController {
     
     func setupNavigationItems() {
         navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(title: "By Name", style: .plain, target: self, action: #selector(sortByNameTapped)),
-            UIBarButtonItem(title: "By Count", style: .plain, target: self, action: #selector(sortByCountTapped))
+            UIBarButtonItem(title: "By Name",
+                            style: .plain,
+                            target: self,
+                            action: #selector(sortByNameTapped)),
+            UIBarButtonItem(title: "By Count",
+                            style: .plain,
+                            target: self,
+                            action: #selector(sortByCountTapped))
         ]
     }
     
@@ -99,7 +105,6 @@ extension CatalogViewController: UITableViewDataSource {
         }
         
         let item = items[indexPath.row]
-        
         cell.configure(imageName: item.cover, text: item.name, numberOfNfts: item.nfts.count)
         
         return cell

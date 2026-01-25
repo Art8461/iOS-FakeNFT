@@ -1,11 +1,10 @@
 import UIKit
 
-
 final class CatalogCell: UITableViewCell, ReuseIdentifying {
     
     static var reuseIdentifier: String {
-           return String(describing: self)
-       }
+        return String(describing: self)
+    }
     
     private enum CatalogCellLayout {
         static let imageTop: CGFloat = 20
@@ -14,7 +13,7 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
         static let labelBottom: CGFloat = -1
         static let imageCornerRadius: CGFloat = 12
     }
-
+    
     //MARK: - UI
     private lazy var catalogImage: UIImageView = {
         let image = UIImageView()
@@ -77,14 +76,9 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
         catalogLabel.text = nil
     }
     
-    
     func configure(imageName: String, text: String, numberOfNfts: Int) {
-          catalogImage.image = UIImage(named: imageName)
-          catalogLabel.text = "\(text.capitalized) (\(numberOfNfts))"
-      }
-//    func configure(imageURL: URL, text: String, numberOfNfts: Int) {
-//        catalogImage.kf.setImage(with: imageURL)
-//        catalogLabel.text = "\(text.capitalized) (\(numberOfNfts))"
-//    }
+        catalogImage.image = UIImage(named: imageName)
+        catalogLabel.text = "\(text.capitalized) (\(numberOfNfts))"
+    }
 }
 
