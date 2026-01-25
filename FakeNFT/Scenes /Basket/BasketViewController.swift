@@ -224,7 +224,10 @@ final class BasketViewController: UIViewController {
     }
     
     @objc private func didTapPay() {
-        let presenter = PaymentPresenterImpl(currencyService: servicesAssembly.currenciesService)
+        let presenter = PaymentPresenterImpl(
+            currencyService: servicesAssembly.currenciesService,
+            paymentService: servicesAssembly.paymentService
+        )
         let vc = PaymentViewController(presenter: presenter)
         presenter.view = vc
         vc.title = NSLocalizedString("Выберите способ оплаты", comment: "payment title")

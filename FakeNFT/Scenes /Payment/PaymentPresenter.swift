@@ -27,11 +27,14 @@ final class PaymentPresenterImpl: PaymentPresenter {
     weak var view: PaymentView?
 
     private let currencyService: CurrenciesService
+    private let paymentService: PaymentService
+
     private var cellModels: [CurrencyCellModel] = []
     private var selectedCurrencyId: String?
 
-    init(currencyService: CurrenciesService) {
+    init(currencyService: CurrenciesService, paymentService: PaymentService) {
         self.currencyService = currencyService
+        self.paymentService = paymentService
     }
 
     func viewDidLoad() {
@@ -46,8 +49,37 @@ final class PaymentPresenterImpl: PaymentPresenter {
     }
 
     func didTapPay() {
-        guard selectedCurrencyId != nil else { return }
-        view?.showPaymentSuccess()
+        guard let currencyId = selectedCurrencyId else { return }
+        view?.displayLoading(true)
+        
+        paymentService.payOrder(currencyId: currencyId) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.view?.displayLoading(false)
+                switch result {
+                case .success(let response):
+                    if response.success {
+                        self.view?.showPaymentSuccess()
+                    } else {
+                        let model = ErrorModel(
+                            message: NSLocalizedString("Error.network", comment: ""),
+                            actionText: NSLocalizedString("Error.repeat", comment: "")
+                        ) { [weak self] in
+                            self?.didTapPay()
+                        }
+                        self.view?.showError(model)
+                    }
+                case .failure:
+                    let model = ErrorModel(
+                        message: NSLocalizedString("Error.network", comment: ""),
+                        actionText: NSLocalizedString("Error.repeat", comment: "")
+                    ) { [weak self] in
+                        self?.didTapPay()
+                    }
+                    self.view?.showError(model)
+                }
+            }
+        }
     }
 
     func didTapUserAgreement() {
