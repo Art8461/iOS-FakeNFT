@@ -82,6 +82,9 @@
         }
       }
     },
+    "Вернуться в корзину" : {
+      "comment" : "return to basket button"
+    },
     "Вы уверены, что хотите \nудалить объект из корзины?" : {
       "comment" : "Confirmation title",
       "localizations" : {
@@ -148,6 +151,9 @@
         }
       }
     },
+    "Оплатить" : {
+
+    },
     "По названию" : {
       "comment" : "sort by name",
       "localizations" : {
@@ -181,6 +187,12 @@
         }
       }
     },
+    "Пользовательского соглашения" : {
+
+    },
+    "Пользовательское соглашение" : {
+
+    },
     "Профиль" : {
       "comment" : "tab title for profile",
       "localizations" : {
@@ -191,6 +203,9 @@
           }
         }
       }
+    },
+    "Совершая покупку, вы соглашаетесь с условиями" : {
+
     },
     "Сортировка" : {
       "comment" : "sort action sheet title",
@@ -224,6 +239,9 @@
           }
         }
       }
+    },
+    "Успех! Оплата прошла,\nпоздравляем с покупкой!" : {
+      "comment" : "payment success text"
     },
     "Цена" : {
       "comment" : "price title",

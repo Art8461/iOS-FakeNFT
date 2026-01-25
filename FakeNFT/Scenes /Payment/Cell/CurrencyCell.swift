@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class CurrencyCell: UICollectionViewListCell, ReuseIdentifying {
 
     private let containerView = UIView()
     private let iconImageView = UIImageView()
+    private let titleLabel = UILabel()
     private let nameLabel = UILabel()
-    private let codeLabel = UILabel()
     private let textStack = UIStackView()
 
     override init(frame: CGRect) {
@@ -25,17 +26,17 @@ final class CurrencyCell: UICollectionViewListCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(name: String, code: String, image: UIImage?) {
-        nameLabel.text = name
-        codeLabel.text = code
-        iconImageView.image = image
+    func configure(with model: CurrencyCellModel) {
+        titleLabel.text = model.title
+        nameLabel.text = model.name
+        iconImageView.kf.setImage(with: model.image)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         iconImageView.image = nil
+        titleLabel.text = nil
         nameLabel.text = nil
-        codeLabel.text = nil
     }
 
     private func setupViews() {
@@ -46,18 +47,18 @@ final class CurrencyCell: UICollectionViewListCell, ReuseIdentifying {
         
         iconImageView.contentMode = .scaleAspectFit
 
-        nameLabel.font = .bodyBold
-        nameLabel.textColor = UIColor(resource: .blackApp)
-        nameLabel.numberOfLines = 1
+        titleLabel.font = .bodyBold
+        titleLabel.textColor = UIColor(resource: .blackApp)
+        titleLabel.numberOfLines = 1
 
-        codeLabel.font = .caption2
-        codeLabel.textColor = UIColor(resource: .greenUniversal)
-        codeLabel.numberOfLines = 1
+        nameLabel.font = .caption2
+        nameLabel.textColor = UIColor(resource: .greenUniversal)
+        nameLabel.numberOfLines = 1
 
         textStack.axis = .vertical
         textStack.spacing = 2
+        textStack.addArrangedSubview(titleLabel)
         textStack.addArrangedSubview(nameLabel)
-        textStack.addArrangedSubview(codeLabel)
 
         contentView.addSubview(containerView)
         

@@ -8,6 +8,18 @@
 import UIKit
 
 final class PaymentViewController: UIViewController {
+    
+    init(currencyService: CurrenciesService) {
+            self.currencyService = currencyService
+            super.init(nibName: nil, bundle: nil)
+        }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private var cellModels: [CurrencyCellModel] = []
+    private let currencyService: CurrenciesService
 
     private lazy var collectionView: UICollectionView = {
         let layout = Self.makeCurrencyLayout()
@@ -126,6 +138,24 @@ final class PaymentViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupLayout()
         userAgreementButton.addTarget(self, action: #selector(openUserAgreement), for: .touchUpInside)
+        
+        currencyService.loadCurrencies { [weak self] result in
+            switch result {
+            case .success(let currencies):
+                self?.cellModels = currencies.map {
+                    CurrencyCellModel(
+                        id: $0.id,
+                        title: $0.title,
+                        name: $0.name,
+                        image: $0.image
+                    )
+                }
+                self?.collectionView.reloadData()
+            case .failure(let error):
+                // показать ошибку
+                print(error)
+            }
+        }
     }
     private func setupLayout(){
         
@@ -168,10 +198,12 @@ final class PaymentViewController: UIViewController {
 
 extension PaymentViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        <#code#>
+        cellModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
+        let cell: CurrencyCell = collectionView.dequeueReusableCell(indexPath: indexPath)
+        cell.configure(with: cellModels[indexPath.item])
+        return cell
     }
 }
