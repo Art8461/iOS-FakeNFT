@@ -89,7 +89,7 @@ final class PaymentViewController: UIViewController {
     
     private static func makeCurrencyLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { _, env in
-            let contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+            let contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 16, bottom: 8, trailing: 16)
             let interItemSpacing: CGFloat = 7
             let columns: CGFloat = 2
             
