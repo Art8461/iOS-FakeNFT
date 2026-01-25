@@ -52,6 +52,9 @@ final class BasketItemCell: UICollectionViewListCell, ReuseIdentifying {
     }
     
     private func setupViews() {
+        
+        backgroundConfiguration = .clear()
+
         previewImageView.contentMode = .scaleAspectFill
         previewImageView.clipsToBounds = true
         previewImageView.layer.cornerRadius = 12

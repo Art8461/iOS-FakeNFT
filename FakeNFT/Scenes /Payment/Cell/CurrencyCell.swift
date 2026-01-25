@@ -41,6 +41,7 @@ final class CurrencyCell: UICollectionViewListCell, ReuseIdentifying {
 
     private func setupViews() {
         
+        backgroundConfiguration = .clear()
         containerView.backgroundColor = UIColor(resource: .lightGreyApp)
         containerView.layer.cornerRadius = 12
         containerView.layer.masksToBounds = true
@@ -86,5 +87,20 @@ final class CurrencyCell: UICollectionViewListCell, ReuseIdentifying {
             textStack.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             textStack.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -12)
         ])
+    }
+    
+    override var isSelected: Bool {
+        didSet { updateSelectionState() }
+    }
+
+    override var isHighlighted: Bool {
+        didSet { updateSelectionState() }
+    }
+
+    private func updateSelectionState() {
+        let isActive = isSelected || isHighlighted
+        containerView.layer.borderWidth = isActive ? 1 : 0
+        containerView.layer.borderColor = UIColor(resource: .blackApp).cgColor
+        containerView.backgroundColor = UIColor(resource: .lightGreyApp)
     }
 }
