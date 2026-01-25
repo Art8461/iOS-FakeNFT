@@ -13,6 +13,7 @@ protocol PaymentView: AnyObject, ErrorView {
     func setPayEnabled(_ isEnabled: Bool)
     func openUserAgreement(url: URL)
     func showPaymentSuccess()
+    func returnToBasket()
 }
 
 protocol PaymentPresenter {
@@ -20,12 +21,15 @@ protocol PaymentPresenter {
     func didSelectCurrency(at index: Int)
     func didTapPay()
     func didTapUserAgreement()
+    func didTapReturnToBasket()
 }
 
 final class PaymentPresenterImpl: PaymentPresenter {
 
     weak var view: PaymentView?
 
+    private let orderId: String
+    
     private let currencyService: CurrenciesService
     private let paymentService: PaymentService
     private let basketService: BasketService
@@ -33,10 +37,11 @@ final class PaymentPresenterImpl: PaymentPresenter {
     private var cellModels: [CurrencyCellModel] = []
     private var selectedCurrencyId: String?
 
-    init(currencyService: CurrenciesService, paymentService: PaymentService, basketService: BasketService) {
+    init(currencyService: CurrenciesService, paymentService: PaymentService, basketService: BasketService, orderId: String) {
         self.currencyService = currencyService
         self.paymentService = paymentService
         self.basketService = basketService
+        self.orderId = orderId
     }
 
     func viewDidLoad() {
@@ -53,7 +58,7 @@ final class PaymentPresenterImpl: PaymentPresenter {
     func didTapPay() {
         guard let currencyId = selectedCurrencyId else { return }
         view?.displayLoading(true)
-        
+
         paymentService.payOrder(currencyId: currencyId) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self else { return }
@@ -61,23 +66,7 @@ final class PaymentPresenterImpl: PaymentPresenter {
                 switch result {
                 case .success(let response):
                     if response.success {
-                        self.basketService.completeOrder { [weak self] result in
-                            DispatchQueue.main.async {
-                                guard let self else { return }
-                                switch result {
-                                case .success:
-                                    self.view?.showPaymentSuccess()
-                                case .failure:
-                                    let model = ErrorModel(
-                                        message: NSLocalizedString("Error.network", comment: ""),
-                                        actionText: NSLocalizedString("Error.repeat", comment: "")
-                                    ) { [weak self] in
-                                        self?.didTapPay()
-                                    }
-                                    self.view?.showError(model)
-                                }
-                            }
-                        }
+                        self.view?.showPaymentSuccess()
                     } else {
                         let model = ErrorModel(
                             message: NSLocalizedString("Error.network", comment: ""),
@@ -100,6 +89,18 @@ final class PaymentPresenterImpl: PaymentPresenter {
         }
     }
 
+    func didTapReturnToBasket() {
+        view?.displayLoading(true)
+        basketService.completeOrder(orderId: orderId) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.view?.displayLoading(false)
+                // игнорируем любую ошибку
+                self.view?.returnToBasket()
+            }
+        }
+    }
+    
     func didTapUserAgreement() {
         guard let url = URL(string: "https://yandex.ru/legal/practicum_termsofuse") else { return }
         view?.openUserAgreement(url: url)

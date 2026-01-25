@@ -15,3 +15,14 @@ struct CompleteOrderRequest: NetworkRequest {
         URL(string: "\(RequestConstants.baseURL)/api/v1/orders/1")
     }
 }
+struct CompleteOrderDto: Dto {
+    let id: String
+    let nfts: [String]
+
+    func asDictionary() -> [String : String] {
+        [
+            "id": id, //как id order
+            "nfts": nfts.joined(separator: "") // пустой массив
+        ]
+    }
+}

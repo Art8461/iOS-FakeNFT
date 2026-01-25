@@ -246,11 +246,15 @@ extension PaymentViewController: PaymentView {
             present(UINavigationController(rootViewController: vc), animated: true)
         }
     }
-
+    
+    func returnToBasket() {
+        navigationController?.popToRootViewController(animated: true)
+    }
+    
     func showPaymentSuccess() {
         let vc = PaymentSuccessViewController()
         vc.onReturnToBasket = { [weak self] in
-            self?.navigationController?.popToRootViewController(animated: true)
+            self?.presenter.didTapReturnToBasket()
         }
         if let nav = navigationController {
             nav.pushViewController(vc, animated: true)

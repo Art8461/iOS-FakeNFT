@@ -224,10 +224,12 @@ final class BasketViewController: UIViewController {
     }
     
     @objc private func didTapPay() {
+        guard let orderId = presenter.orderId else { return } // можно показать ошибку
         let presenter = PaymentPresenterImpl(
             currencyService: servicesAssembly.currenciesService,
             paymentService: servicesAssembly.paymentService,
-            basketService: servicesAssembly.basketService
+            basketService: servicesAssembly.basketService,
+            orderId: orderId
         )
         let vc = PaymentViewController(presenter: presenter)
         presenter.view = vc

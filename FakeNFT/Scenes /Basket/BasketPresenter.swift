@@ -19,6 +19,7 @@ protocol BasketPresenter {
     func refresh()
     func didSelectSort(option: BasketSortOption)
     func didTapDelete(id: String)
+    var orderId: String? { get }
 }
 
 enum BasketSortOption {
@@ -29,6 +30,7 @@ enum BasketSortOption {
 
 final class BasketPresenterImpl: BasketPresenter {
     
+    internal var orderId: String?
     private var nftIds: [String] = []
     private var currentNfts: [Nft] = []
     private var sortOption: BasketSortOption?
@@ -48,6 +50,7 @@ final class BasketPresenterImpl: BasketPresenter {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let order):
+                    self?.orderId = order.id
                     self?.nftIds = order.nfts
                     if order.nfts.isEmpty {
                         self?.currentNfts = []

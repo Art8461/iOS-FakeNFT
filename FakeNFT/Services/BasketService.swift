@@ -6,11 +6,12 @@
 //
 
 typealias OrderCompletion = (Result<Order, Error>) -> Void
+typealias CompleteOrderCompletion = (Result<Void, Error>) -> Void
 
 protocol BasketService {
     func loadOrder(completion: @escaping OrderCompletion)
     func updateOrder(nfts: [String], completion: @escaping OrderCompletion)
-    func completeOrder(completion: @escaping OrderCompletion)
+    func completeOrder(orderId: String, completion: @escaping CompleteOrderCompletion)
 }
 
 final class BasketServiceImpl: BasketService {
@@ -30,8 +31,16 @@ final class BasketServiceImpl: BasketService {
         networkClient.send(request: request, type: Order.self, onResponse: completion)
     }
     
-    func completeOrder(completion: @escaping OrderCompletion) {
-            let request = CompleteOrderRequest(dto: nil)
-            networkClient.send(request: request, type: Order.self, onResponse: completion)
+    func completeOrder(orderId: String, completion: @escaping CompleteOrderCompletion) {
+        let dto = CompleteOrderDto(id: orderId, nfts: [])
+        let request = CompleteOrderRequest(dto: dto) // URL остаётся /orders/1
+        networkClient.send(request: request) { result in
+            switch result {
+            case .success:
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
+    }
 }
