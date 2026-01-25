@@ -45,7 +45,7 @@ final class BasketPresenterImpl: BasketPresenter {
     private func reloadOrder() {
         view?.displayLoading(true)
         basketService.loadOrder { [weak self] result in
-            DispatchQueue.main.async{
+            DispatchQueue.main.async {
                 switch result {
                 case .success(let order):
                     self?.nftIds = order.nfts
@@ -116,7 +116,7 @@ final class BasketPresenterImpl: BasketPresenter {
     
     private func loadNfts(ids: [String]) {
         guard !ids.isEmpty else {
-            DispatchQueue.main.async{
+            DispatchQueue.main.async {
                 self.view?.displayLoading(false)
                 self.currentNfts = []
                 self.view?.display(items: [])
@@ -127,41 +127,42 @@ final class BasketPresenterImpl: BasketPresenter {
         
         let group = DispatchGroup()
         var nftsById: [String: Nft] = [:]
-        var firstError: Error?
+        var tasks: [NetworkTask] = []
+        var hasFailed = false
         
         ids.forEach { id in
             group.enter()
-            nftService.loadNft(id: id) { result in
+            let task = nftService.loadNft(id: id) { [weak self] result in
                 defer { group.leave() }
+                guard let self else { return }
+                if hasFailed { return }
+                
                 switch result {
                 case .success(let nft):
                     nftsById[id] = nft
-                case .failure(let error):
-                    if firstError == nil { firstError = error }
+                case .failure:
+                    if hasFailed { return }
+                    hasFailed = true
+                    tasks.forEach { $0.cancel() }
+                    
+                    DispatchQueue.main.async {
+                        self.view?.displayLoading(false)
+                        let model = ErrorModel(
+                            message: NSLocalizedString("Error.partial", comment: ""),
+                            actionText: NSLocalizedString("Error.repeat", comment: "")
+                        ) { [weak self] in
+                            self?.loadNfts(ids: ids)
+                        }
+                        self.view?.showError(model)
+                    }
                 }
             }
+            if let task { tasks.append(task) }
         }
         
         group.notify(queue: .main) { [weak self] in
-            guard let self else { return }
+            guard let self, !hasFailed else { return }
             self.view?.displayLoading(false)
-            
-            if let _ = firstError {
-                let model = ErrorModel(
-                    message: NSLocalizedString("Error.partial", comment: ""),
-                    actionText: NSLocalizedString("Error.repeat", comment: "")
-                ) { [weak self] in
-                    self?.loadNfts(ids: ids)
-                }
-                self.view?.showError(model)
-            }
-            
-            if let _ = firstError, nftsById.isEmpty {
-                self.currentNfts = []
-                self.view?.display(isEmpty: true)
-                return
-            }
-            
             let orderedNfts = ids.compactMap { nftsById[$0] }
             self.currentNfts = orderedNfts
             self.applySortAndDisplay()
