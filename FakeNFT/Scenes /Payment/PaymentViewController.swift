@@ -10,9 +10,7 @@ import UIKit
 final class PaymentViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
-        var config = UICollectionLayoutListConfiguration(appearance: .plain)
-        config.showsSeparators = false
-        let layout = UICollectionViewCompositionalLayout.list(using: config)
+        let layout = Self.makeCurrencyLayout()
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
@@ -88,6 +86,37 @@ final class PaymentViewController: UIViewController {
         stack.spacing = 16
         return stack
     }()
+    
+    private static func makeCurrencyLayout() -> UICollectionViewLayout {
+        UICollectionViewCompositionalLayout { _, env in
+            let contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+            let interItemSpacing: CGFloat = 7
+            let columns: CGFloat = 2
+            
+            let availableWidth = env.container.effectiveContentSize.width - contentInsets.leading - contentInsets.trailing - interItemSpacing
+            
+            let itemWidth = floor(availableWidth / columns)
+            
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(itemWidth),
+                heightDimension: .absolute(46)
+            )
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .absolute(46)
+            )
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item, item])
+            group.interItemSpacing = .fixed(interItemSpacing)
+            
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = contentInsets
+            section.interGroupSpacing = 7
+            
+            return section
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
