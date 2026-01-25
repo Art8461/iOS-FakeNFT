@@ -9,17 +9,19 @@ import UIKit
 
 final class PaymentViewController: UIViewController {
     
-    init(currencyService: CurrenciesService) {
-            self.currencyService = currencyService
-            super.init(nibName: nil, bundle: nil)
-        }
+    private let presenter: PaymentPresenter
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
+
+    init(presenter: PaymentPresenter) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     private var cellModels: [CurrencyCellModel] = []
-    private let currencyService: CurrenciesService
 
     private lazy var collectionView: UICollectionView = {
         let layout = Self.makeCurrencyLayout()
@@ -133,31 +135,24 @@ final class PaymentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView.register(CurrencyCell.self)
+        collectionView.delegate = self
+        userAgreementButton.addTarget(self, action: #selector(didTapUserAgreement), for: .touchUpInside)
+        payButton.addTarget(self, action: #selector(didTapPay), for: .touchUpInside)
 
-        view.backgroundColor = .systemBackground
         setupLayout()
-        userAgreementButton.addTarget(self, action: #selector(openUserAgreement), for: .touchUpInside)
-        
-        currencyService.loadCurrencies { [weak self] result in
-            switch result {
-            case .success(let currencies):
-                self?.cellModels = currencies.map {
-                    CurrencyCellModel(
-                        id: $0.id,
-                        title: $0.title,
-                        name: $0.name,
-                        image: $0.image
-                    )
-                }
-                self?.collectionView.reloadData()
-            case .failure(let error):
-                // показать ошибку
-                print(error)
-            }
-        }
+        presenter.viewDidLoad()
     }
+    
     private func setupLayout(){
+        
+        view.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.hidesWhenStopped = true
+
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
         
         view.addSubview(collectionView)
         view.addSubview(containerView)
@@ -183,16 +178,12 @@ final class PaymentViewController: UIViewController {
         ])
     }
     
-    @objc private func openUserAgreement() {
-        guard let url = URL(string: "https://yandex.ru/legal/practicum_termsofuse") else { return }
-        let vc = WebViewController(url: url)
-        vc.title = NSLocalizedString("Пользовательское соглашение", comment: "")
+    @objc private func didTapUserAgreement() {
+        presenter.didTapUserAgreement()
+    }
 
-        if let nav = navigationController {
-            nav.pushViewController(vc, animated: true)
-        } else {
-            present(UINavigationController(rootViewController: vc), animated: true)
-        }
+    @objc private func didTapPay() {
+        presenter.didTapPay()
     }
 }
 
@@ -205,5 +196,54 @@ extension PaymentViewController: UICollectionViewDataSource {
         let cell: CurrencyCell = collectionView.dequeueReusableCell(indexPath: indexPath)
         cell.configure(with: cellModels[indexPath.item])
         return cell
+    }
+}
+
+extension PaymentViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        presenter.didSelectCurrency(at: indexPath.item)
+    }
+}
+
+extension PaymentViewController: PaymentView {
+
+    func displayLoading(_ isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+
+    func display(currencies: [CurrencyCellModel]) {
+        cellModels = currencies
+        collectionView.reloadData()
+    }
+
+    func setPayEnabled(_ isEnabled: Bool) {
+        payButton.isEnabled = isEnabled
+        payButton.alpha = isEnabled ? 1.0 : 0.5
+    }
+
+    func openUserAgreement(url: URL) {
+        let vc = WebViewController(url: url)
+        vc.title = NSLocalizedString("Пользовательское соглашение", comment: "")
+        if let nav = navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            present(UINavigationController(rootViewController: vc), animated: true)
+        }
+    }
+
+    func showPaymentSuccess() {
+        let vc = PaymentSuccessViewController()
+        vc.onReturnToBasket = { [weak self] in
+            self?.navigationController?.popToRootViewController(animated: true)
+        }
+        if let nav = navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            present(UINavigationController(rootViewController: vc), animated: true)
+        }
     }
 }
