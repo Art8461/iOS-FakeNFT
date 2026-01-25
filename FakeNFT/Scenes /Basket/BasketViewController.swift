@@ -226,7 +226,8 @@ final class BasketViewController: UIViewController {
     @objc private func didTapPay() {
         let presenter = PaymentPresenterImpl(
             currencyService: servicesAssembly.currenciesService,
-            paymentService: servicesAssembly.paymentService
+            paymentService: servicesAssembly.paymentService,
+            basketService: servicesAssembly.basketService
         )
         let vc = PaymentViewController(presenter: presenter)
         presenter.view = vc

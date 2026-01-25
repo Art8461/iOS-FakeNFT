@@ -28,13 +28,15 @@ final class PaymentPresenterImpl: PaymentPresenter {
 
     private let currencyService: CurrenciesService
     private let paymentService: PaymentService
+    private let basketService: BasketService
 
     private var cellModels: [CurrencyCellModel] = []
     private var selectedCurrencyId: String?
 
-    init(currencyService: CurrenciesService, paymentService: PaymentService) {
+    init(currencyService: CurrenciesService, paymentService: PaymentService, basketService: BasketService) {
         self.currencyService = currencyService
         self.paymentService = paymentService
+        self.basketService = basketService
     }
 
     func viewDidLoad() {
@@ -59,7 +61,23 @@ final class PaymentPresenterImpl: PaymentPresenter {
                 switch result {
                 case .success(let response):
                     if response.success {
-                        self.view?.showPaymentSuccess()
+                        self.basketService.completeOrder { [weak self] result in
+                            DispatchQueue.main.async {
+                                guard let self else { return }
+                                switch result {
+                                case .success:
+                                    self.view?.showPaymentSuccess()
+                                case .failure:
+                                    let model = ErrorModel(
+                                        message: NSLocalizedString("Error.network", comment: ""),
+                                        actionText: NSLocalizedString("Error.repeat", comment: "")
+                                    ) { [weak self] in
+                                        self?.didTapPay()
+                                    }
+                                    self.view?.showError(model)
+                                }
+                            }
+                        }
                     } else {
                         let model = ErrorModel(
                             message: NSLocalizedString("Error.network", comment: ""),
