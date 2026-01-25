@@ -64,8 +64,8 @@ final class TabBarController: UITabBarController {
             servicesAssembly: servicesAssembly
         )
         
-        let catalogVC = TestCatalogViewController(
-            servicesAssembly: servicesAssembly
+        let catalogVC = CatalogViewController(
+            catalogProvider: servicesAssembly.catalogProvider
         )
         
         let basketVC = BasketViewController(
