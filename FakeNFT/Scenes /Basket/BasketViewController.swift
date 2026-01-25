@@ -10,9 +10,11 @@ import UIKit
 final class BasketViewController: UIViewController {
     
     private let presenter: BasketPresenter
+    private let servicesAssembly: ServicesAssembly
 
-    init(presenter: BasketPresenter) {
+    init(presenter: BasketPresenter, servicesAssembly: ServicesAssembly) {
         self.presenter = presenter
+        self.servicesAssembly = servicesAssembly
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -149,6 +151,7 @@ final class BasketViewController: UIViewController {
         payButton.clipsToBounds = true
         payButton.setTitle(NSLocalizedString("К оплате", comment: "button for pay"), for: .normal)
         payButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        payButton.addTarget(self, action: #selector(didTapPay), for: .touchUpInside)
         
         summaryContainer.addSubview(summaryLeftStack)
         summaryLeftStack.addArrangedSubview(countLabel)
@@ -218,6 +221,19 @@ final class BasketViewController: UIViewController {
             popover.barButtonItem = sortButton
         }
         present(controller, animated: true)
+    }
+    
+    @objc private func didTapPay() {
+        let presenter = PaymentPresenterImpl(currencyService: servicesAssembly.currenciesService)
+        let vc = PaymentViewController(presenter: presenter)
+        presenter.view = vc
+        vc.title = NSLocalizedString("Выберите способ оплаты", comment: "payment title")
+
+        if let nav = navigationController {
+            nav.pushViewController(vc, animated: true)
+        } else {
+            present(UINavigationController(rootViewController: vc), animated: true)
+        }
     }
 }
 

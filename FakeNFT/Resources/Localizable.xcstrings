@@ -96,6 +96,9 @@
         }
       }
     },
+    "Выберите способ оплаты" : {
+      "comment" : "payment title"
+    },
     "Закрыть" : {
       "comment" : "cancel sort",
       "localizations" : {

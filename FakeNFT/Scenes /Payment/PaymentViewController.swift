@@ -138,7 +138,7 @@ final class PaymentViewController: UIViewController {
         collectionView.delegate = self
         userAgreementButton.addTarget(self, action: #selector(didTapUserAgreement), for: .touchUpInside)
         payButton.addTarget(self, action: #selector(didTapPay), for: .touchUpInside)
-
+        collectionView.register(CurrencyCell.self)
         setupLayout()
         presenter.viewDidLoad()
     }
