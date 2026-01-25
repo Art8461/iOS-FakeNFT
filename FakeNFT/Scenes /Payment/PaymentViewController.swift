@@ -103,11 +103,10 @@ final class PaymentViewController: UIViewController {
     
     private static func makeCurrencyLayout() -> UICollectionViewLayout {
         UICollectionViewCompositionalLayout { _, env in
-            let contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 16, bottom: 8, trailing: 16)
-            let interItemSpacing: CGFloat = 7
+            let contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 0, bottom: 8, trailing: 0)
             let columns: CGFloat = 2
             
-            let availableWidth = env.container.effectiveContentSize.width - contentInsets.leading - contentInsets.trailing - interItemSpacing
+            let availableWidth = env.container.effectiveContentSize.width - contentInsets.leading - contentInsets.trailing
             
             let itemWidth = floor(availableWidth / columns)
             
@@ -122,7 +121,6 @@ final class PaymentViewController: UIViewController {
                 heightDimension: .absolute(46)
             )
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item, item])
-            group.interItemSpacing = .fixed(interItemSpacing)
             
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = contentInsets
@@ -178,13 +176,13 @@ final class PaymentViewController: UIViewController {
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             containerView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             
             bottomStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
             bottomStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             bottomStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
-            bottomStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16)
+            bottomStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
     }
     

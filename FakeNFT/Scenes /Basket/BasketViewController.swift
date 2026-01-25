@@ -230,6 +230,7 @@ final class BasketViewController: UIViewController {
         vc.title = NSLocalizedString("Выберите способ оплаты", comment: "payment title")
 
         if let nav = navigationController {
+            vc.hidesBottomBarWhenPushed = true
             nav.pushViewController(vc, animated: true)
         } else {
             present(UINavigationController(rootViewController: vc), animated: true)
