@@ -40,7 +40,8 @@ final class MyNFTCell: UITableViewCell {
     
     private let likeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.tintColor = .blackApp
+        button.tintColor = .white
+        button.backgroundColor = .clear
         return button
     }()
     
@@ -132,8 +133,8 @@ final class MyNFTCell: UITableViewCell {
             imageNFTView.widthAnchor.constraint(equalToConstant: 108),
             imageNFTView.heightAnchor.constraint(equalToConstant: 108),
             
-            likeButton.topAnchor.constraint(equalTo: imageNFTView.topAnchor, constant: 12),
-            likeButton.trailingAnchor.constraint(equalTo: imageNFTView.trailingAnchor, constant: 12),
+            likeButton.topAnchor.constraint(equalTo: imageNFTView.topAnchor),
+            likeButton.trailingAnchor.constraint(equalTo: imageNFTView.trailingAnchor),
             likeButton.widthAnchor.constraint(equalToConstant: 42),
             likeButton.heightAnchor.constraint(equalToConstant: 42),
             

@@ -75,21 +75,6 @@ final class MyNFTsViewController: UIViewController {
         
     }
     
-    private func setupMocks() {
-        myNFTs = [
-            NFTCartModel(
-                imageName: "NFTCardTest",
-                likeImageName: "noFavorites",
-                title: "Test",
-                starsImageName: "Rating3",
-                authorName: "Andrey P",
-                price: "1.78 ETH"
-            )
-        ]
-        myNFTTableView.reloadData()
-    }
-    
-    
     private func updateUI() {
         let isEmpty = myNFTs.isEmpty
         emptyNFTLabel.isHidden = !isEmpty
@@ -135,3 +120,41 @@ extension MyNFTsViewController: MyNFTsViewProtocol {
         navigationController?.popViewController(animated: true)
     }
 }
+
+private extension MyNFTsViewController {
+
+    func setupMocks() {
+        myNFTs = makeMockNFTs()
+        myNFTTableView.reloadData()
+    }
+
+    func makeMockNFTs() -> [NFTCartModel] {
+        return [
+            NFTCartModel(
+                imageName: "NFTCardTest",
+                likeImageName: "NoFavorites",
+                title: "Test",
+                starsImageName: "Rating3",
+                authorName: "Andrey P",
+                price: "1.78 ETH"
+            ),
+            NFTCartModel(
+                imageName: "NFTCardTest2",
+                likeImageName: "NoFavorites",
+                title: "Test 2",
+                starsImageName: "Rating3",
+                authorName: "Andrey P",
+                price: "2.50 ETH"
+            ),
+            NFTCartModel(
+                imageName: "NFTCardTest3",
+                likeImageName: "NoFavorites",
+                title: "Test 3",
+                starsImageName: "Rating3",
+                authorName: "Andrey P",
+                price: "3.12 ETH"
+            )
+        ]
+    }
+}
+
