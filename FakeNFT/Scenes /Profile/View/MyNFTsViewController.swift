@@ -16,13 +16,13 @@ final class MyNFTsViewController: UIViewController {
     
     private let presenter: MyNFTsPresenterProtocol
     
-    var myNFTs: [String] = []
+    var myNFTs: [NFTCartModel] = []
     
     init(presenter: MyNFTsPresenterProtocol) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -34,16 +34,20 @@ final class MyNFTsViewController: UIViewController {
         setupNavigationBar()
         addSubviews()
         setupConstraints()
+        setupMocks()
         updateUI()
     }
     
     private lazy var emptyNFTLabel =
-        UILabel.emptyStateLabel(text: "У Вас еще нет NFT")
+    UILabel.emptyStateLabel(text: "У Вас еще нет NFT")
     
     private lazy var myNFTTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(MyNFTCell.self, forCellReuseIdentifier: "MyNFTCell")
         tableView.backgroundColor = .whiteApp
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.separatorStyle = .none
         return tableView
     }()
     
@@ -56,15 +60,35 @@ final class MyNFTsViewController: UIViewController {
     private func addSubviews() {
         [emptyNFTLabel, myNFTTableView].forEach { view.addSubview($0) }
     }
-
+    
     private func setupConstraints() {
         [emptyNFTLabel, myNFTTableView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
             emptyNFTLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyNFTLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+            emptyNFTLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
+            myNFTTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            myNFTTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            myNFTTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            myNFTTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
     }
+    
+    private func setupMocks() {
+        myNFTs = [
+            NFTCartModel(
+                imageName: "NFTCardTest",
+                likeImageName: "noFavorites",
+                title: "Test",
+                starsImageName: "Rating3",
+                authorName: "Andrey P",
+                price: "1.78 ETH"
+            )
+        ]
+        myNFTTableView.reloadData()
+    }
+    
     
     private func updateUI() {
         let isEmpty = myNFTs.isEmpty
@@ -73,7 +97,7 @@ final class MyNFTsViewController: UIViewController {
         
         navigationItem.title = isEmpty ? nil : "Мои NFT"
         navigationItem.rightBarButtonItem = isEmpty ? nil : .sortButton(target: self, action: #selector(tapSortButton))
-
+        
     }
     
     @objc func tapBackButton(){
@@ -85,6 +109,26 @@ final class MyNFTsViewController: UIViewController {
         print("сортировка")
     }
 }
+
+extension MyNFTsViewController: UITableViewDataSource, UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return myNFTs.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MyNFTCell.reuseIdentifier, for: indexPath) as? MyNFTCell else {
+            return UITableViewCell()
+        }
+        cell.configure(with: myNFTs[indexPath.row])
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 140
+    }
+}
+
 
 extension MyNFTsViewController: MyNFTsViewProtocol {
     func closeScreen() {
