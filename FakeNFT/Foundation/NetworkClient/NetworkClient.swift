@@ -66,8 +66,10 @@ struct DefaultNetworkClient: NetworkClient {
             }
         }
         guard let urlRequest = create(request: request) else { return nil }
+        logRequest(urlRequest)
         
         let task = session.dataTask(with: urlRequest) { data, response, error in
+            self.logResponse(request: urlRequest, response: response, data: data, error: error)
             guard let response = response as? HTTPURLResponse else {
                 onResponse(.failure(NetworkClientError.urlSessionError))
                 return
@@ -141,6 +143,69 @@ struct DefaultNetworkClient: NetworkClient {
         urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
         return urlRequest
+    }
+
+    private func logRequest(_ request: URLRequest) {
+#if DEBUG
+        let method = request.httpMethod ?? "UNKNOWN"
+        let urlString = request.url?.absoluteString ?? "<no url>"
+        var headers = request.allHTTPHeaderFields ?? [:]
+        if headers["X-Practicum-Mobile-Token"] != nil {
+            headers["X-Practicum-Mobile-Token"] = "<redacted>"
+        }
+        let body: String
+        if let data = request.httpBody {
+            if data.isEmpty {
+                body = "<empty>"
+            } else if let bodyString = String(data: data, encoding: .utf8) {
+                body = bodyString
+            } else {
+                body = "<non-utf8 body: \(data.count) bytes>"
+            }
+        } else {
+            body = "<none>"
+        }
+        print("""
+        [Network] Request
+        \(method) \(urlString)
+        Headers: \(headers)
+        Body: \(body)
+        """)
+#endif
+    }
+
+    private func logResponse(request: URLRequest, response: URLResponse?, data: Data?, error: Error?) {
+#if DEBUG
+        let method = request.httpMethod ?? "UNKNOWN"
+        let urlString = request.url?.absoluteString ?? "<no url>"
+        let statusCode = (response as? HTTPURLResponse)?.statusCode
+        let errorText = error.map { String(describing: $0) } ?? "<none>"
+        let bodyText: String
+        if let data = data {
+            if data.isEmpty {
+                bodyText = "<empty>"
+            } else if let bodyString = String(data: data, encoding: .utf8) {
+                let limit = 1000
+                if bodyString.count > limit {
+                    let idx = bodyString.index(bodyString.startIndex, offsetBy: limit)
+                    bodyText = "\(bodyString[..<idx])... <truncated>"
+                } else {
+                    bodyText = bodyString
+                }
+            } else {
+                bodyText = "<non-utf8 body: \(data.count) bytes>"
+            }
+        } else {
+            bodyText = "<none>"
+        }
+        print("""
+        [Network] Response
+        \(method) \(urlString)
+        Status: \(statusCode.map(String.init) ?? "nil")
+        Error: \(errorText)
+        Body: \(bodyText)
+        """)
+#endif
     }
     
     private func parse<T: Decodable>(
