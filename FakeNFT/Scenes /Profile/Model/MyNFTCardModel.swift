@@ -12,7 +12,7 @@ struct NFTCartModel {
     let likeImageName: String
     let title: String
     let starsImageName: String  
-    let authorName: String
+    let authorName: String?
     let price: String
 }
 
