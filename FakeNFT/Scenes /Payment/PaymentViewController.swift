@@ -188,7 +188,7 @@ final class PaymentViewController: UIViewController {
     }
     
     @objc private func didTapBack() {
-        navigationController?.popViewController(animated: true)
+        presenter.didTapBack()
     }
 
     @objc private func didTapUserAgreement() {
@@ -236,31 +236,5 @@ extension PaymentViewController: PaymentView {
     func setPayEnabled(_ isEnabled: Bool) {
         payButton.isEnabled = isEnabled
         payButton.alpha = isEnabled ? 1.0 : 0.5
-    }
-
-    func openUserAgreement(url: URL) {
-        let vc = WebViewController(url: url)
-        vc.title = NSLocalizedString("Пользовательское соглашение", comment: "")
-        if let nav = navigationController {
-            nav.pushViewController(vc, animated: true)
-        } else {
-            present(UINavigationController(rootViewController: vc), animated: true)
-        }
-    }
-    
-    func returnToBasket() {
-        navigationController?.popToRootViewController(animated: true)
-    }
-    
-    func showPaymentSuccess() {
-        let vc = PaymentSuccessViewController()
-        vc.onReturnToBasket = { [weak self] in
-            self?.presenter.didTapReturnToBasket()
-        }
-        if let nav = navigationController {
-            nav.pushViewController(vc, animated: true)
-        } else {
-            present(UINavigationController(rootViewController: vc), animated: true)
-        }
     }
 }

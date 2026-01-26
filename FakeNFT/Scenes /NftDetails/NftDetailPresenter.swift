@@ -6,12 +6,6 @@ protocol NftDetailPresenter {
     func viewDidLoad()
 }
 
-// MARK: - State
-
-enum NftDetailState {
-    case initial, loading, failed(Error), data(Nft)
-}
-
 final class NftDetailPresenterImpl: NftDetailPresenter {
 
     // MARK: - Properties
@@ -19,11 +13,6 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
     weak var view: NftDetailView?
     private let input: NftDetailInput
     private let service: NftService
-    private var state = NftDetailState.initial {
-        didSet {
-            stateDidChanged()
-        }
-    }
 
     // MARK: - Init
 
@@ -35,34 +24,23 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
     // MARK: - Functions
 
     func viewDidLoad() {
-        state = .loading
-    }
-
-    private func stateDidChanged() {
-        switch state {
-        case .initial:
-            assertionFailure("can't move to initial state")
-        case .loading:
-            view?.showLoading()
-            loadNft()
-        case .data(let nft):
-            view?.hideLoading()
-            let cellModels = nft.images.map { NftDetailCellModel(url: $0) }
-            view?.displayCells(cellModels)
-        case .failed(let error):
-            let errorModel = makeErrorModel(error)
-            view?.hideLoading()
-            view?.showError(errorModel)
-        }
+        loadNft()
     }
 
     private func loadNft() {
+        view?.showLoading()
         service.loadNft(id: input.id) { [weak self] result in
-            switch result {
-            case .success(let nft):
-                self?.state = .data(nft)
-            case .failure(let error):
-                self?.state = .failed(error)
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.view?.hideLoading()
+                switch result {
+                case .success(let nft):
+                    let cellModels = nft.images.map { NftDetailCellModel(url: $0) }
+                    self.view?.displayCells(cellModels)
+                case .failure(let error):
+                    let errorModel = self.makeErrorModel(error)
+                    self.view?.showError(errorModel)
+                }
             }
         }
     }
@@ -79,7 +57,7 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
             title: NSLocalizedString("Error.repeat", comment: ""),
             style: .default
         ) { [weak self] in
-            self?.state = .loading
+            self?.loadNft()
         }
         let secondary = ErrorAction(
             title: NSLocalizedString("Закрыть", comment: ""),

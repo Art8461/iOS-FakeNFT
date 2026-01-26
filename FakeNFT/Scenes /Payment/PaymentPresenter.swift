@@ -11,9 +11,6 @@ protocol PaymentView: AnyObject, ErrorView {
     func display(currencies: [CurrencyCellModel])
     func displayLoading(_ isLoading: Bool)
     func setPayEnabled(_ isEnabled: Bool)
-    func openUserAgreement(url: URL)
-    func showPaymentSuccess()
-    func returnToBasket()
 }
 
 protocol PaymentPresenter {
@@ -22,6 +19,7 @@ protocol PaymentPresenter {
     func didTapPay()
     func didTapUserAgreement()
     func didTapReturnToBasket()
+    func didTapBack()
 }
 
 final class PaymentPresenterImpl: PaymentPresenter {
@@ -33,15 +31,23 @@ final class PaymentPresenterImpl: PaymentPresenter {
     private let currencyService: CurrenciesService
     private let paymentService: PaymentService
     private let basketService: BasketService
+    private let router: PaymentRouting
 
     private var cellModels: [CurrencyCellModel] = []
     private var selectedCurrencyId: String?
 
-    init(currencyService: CurrenciesService, paymentService: PaymentService, basketService: BasketService, orderId: String) {
+    init(
+        currencyService: CurrenciesService,
+        paymentService: PaymentService,
+        basketService: BasketService,
+        orderId: String,
+        router: PaymentRouting
+    ) {
         self.currencyService = currencyService
         self.paymentService = paymentService
         self.basketService = basketService
         self.orderId = orderId
+        self.router = router
     }
 
     func viewDidLoad() {
@@ -66,7 +72,9 @@ final class PaymentPresenterImpl: PaymentPresenter {
                 switch result {
                 case .success(let response):
                     if response.success {
-                        self.view?.showPaymentSuccess()
+                        self.router.showPaymentSuccess { [weak self] in
+                            self?.didTapReturnToBasket()
+                        }
                     } else {
                         let primary = ErrorAction(
                             title: NSLocalizedString("Error.repeat", comment: ""),
@@ -106,14 +114,18 @@ final class PaymentPresenterImpl: PaymentPresenter {
                 guard let self else { return }
                 self.view?.displayLoading(false)
                 // игнорируем любую ошибку
-                self.view?.returnToBasket()
+                self.router.returnToBasket()
             }
         }
     }
     
     func didTapUserAgreement() {
         guard let url = URL(string: "https://yandex.ru/legal/practicum_termsofuse") else { return }
-        view?.openUserAgreement(url: url)
+        router.showUserAgreement(url: url)
+    }
+    
+    func didTapBack() {
+        router.close()
     }
 
     private func loadCurrencies() {

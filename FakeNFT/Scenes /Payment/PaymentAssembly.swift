@@ -15,14 +15,17 @@ final class PaymentAssembly {
     }
 
     func build(orderId: String) -> UIViewController {
+        let router = PaymentRouter()
         let presenter = PaymentPresenterImpl(
             currencyService: servicesAssembly.currenciesService,
             paymentService: servicesAssembly.paymentService,
             basketService: servicesAssembly.basketService,
-            orderId: orderId
+            orderId: orderId,
+            router: router
         )
         let vc = PaymentViewController(presenter: presenter)
         presenter.view = vc
+        router.viewController = vc
         vc.title = NSLocalizedString("Выберите способ оплаты", comment: "payment title")
         return vc
     }

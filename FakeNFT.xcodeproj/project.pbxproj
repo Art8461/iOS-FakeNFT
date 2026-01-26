@@ -235,9 +235,9 @@
 		287AB19D2F20A8DF0064446E /* Basket */ = {
 			isa = PBXGroup;
 			children = (
+				287AB25B2F210DE60064446E /* Cell */,
 				28F47F5E2F2787F90070F809 /* BasketAssembly.swift */,
 				28F47F592F27862A0070F809 /* BasketRouter.swift */,
-				287AB25B2F210DE60064446E /* Cell */,
 				287AB3152F22622C0064446E /* BasketDeleteConfirmationViewController.swift */,
 				287AB2AF2F2238E00064446E /* BasketViewModels.swift */,
 				287AB2592F21092C0064446E /* BasketPresenter.swift */,
