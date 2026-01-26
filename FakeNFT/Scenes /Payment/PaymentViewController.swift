@@ -45,7 +45,7 @@ final class PaymentViewController: UIViewController {
     private lazy var agreementTextLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = NSLocalizedString("Совершая покупку, вы соглашаетесь с условиями" , comment: "")
+        label.text = NSLocalizedString("Совершая покупку, вы соглашаетесь с условиями" , comment: "text agreement")
         label.textAlignment = .left
         label.numberOfLines = 0
         label.textColor = UIColor(resource: .blackApp)
@@ -56,7 +56,7 @@ final class PaymentViewController: UIViewController {
     private lazy var userAgreementButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        let title = NSLocalizedString("Пользовательского соглашения", comment: "")
+        let title = NSLocalizedString("Пользовательского соглашения", comment: "user agreement")
         let attrs: [NSAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 13, weight: .regular),
             .foregroundColor: UIColor(resource: .blueUniversal),
@@ -70,7 +70,7 @@ final class PaymentViewController: UIViewController {
     private lazy var payButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(NSLocalizedString("Оплатить", comment: ""), for: .normal)
+        button.setTitle(NSLocalizedString("Оплатить", comment: "pay button"), for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         button.backgroundColor = UIColor(resource: .blackApp)
         button.setTitleColor(UIColor(resource: .whiteApp), for: .normal)

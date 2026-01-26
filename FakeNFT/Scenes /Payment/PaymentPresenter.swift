@@ -82,10 +82,14 @@ final class PaymentPresenterImpl: PaymentPresenter {
                         ) { [weak self] in
                             self?.didTapPay()
                         }
+                        let secondary = ErrorAction(
+                            title: NSLocalizedString("Error.close", comment: ""),
+                            style: .cancel
+                        ) { }
                         let model = ErrorModel(
-                            message: NSLocalizedString("Error.network", comment: ""),
+                            message: NSLocalizedString("Error.paymentFailed", comment: ""),
                             primaryAction: primary,
-                            secondaryAction: nil
+                            secondaryAction: secondary
                         )
                         self.view?.showError(model)
                     }
@@ -96,10 +100,14 @@ final class PaymentPresenterImpl: PaymentPresenter {
                     ) { [weak self] in
                         self?.didTapPay()
                     }
+                    let secondary = ErrorAction(
+                        title: NSLocalizedString("Error.close", comment: ""),
+                        style: .cancel
+                    ) { }
                     let model = ErrorModel(
                         message: NSLocalizedString("Error.network", comment: ""),
                         primaryAction: primary,
-                        secondaryAction: nil
+                        secondaryAction: secondary
                     )
                     self.view?.showError(model)
                 }
@@ -152,10 +160,14 @@ final class PaymentPresenterImpl: PaymentPresenter {
                     ) { [weak self] in
                         self?.loadCurrencies()
                     }
+                    let secondary = ErrorAction(
+                        title: NSLocalizedString("Error.close", comment: ""),
+                        style: .cancel
+                    ) { }
                     let model = ErrorModel(
                         message: NSLocalizedString("Error.network", comment: ""),
                         primaryAction: primary,
-                        secondaryAction: nil
+                        secondaryAction: secondary
                     )
                     self.view?.showError(model)
                 }
