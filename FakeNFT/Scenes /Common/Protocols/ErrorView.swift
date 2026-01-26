@@ -1,9 +1,22 @@
 import UIKit
 
 struct ErrorModel {
+    let title: String?
     let message: String
     let primaryAction: ErrorAction
     let secondaryAction: ErrorAction? // опционально, nil-одна кнопка
+
+    init(
+        title: String? = nil,
+        message: String,
+        primaryAction: ErrorAction,
+        secondaryAction: ErrorAction? = nil
+    ) {
+        self.title = title
+        self.message = message
+        self.primaryAction = primaryAction
+        self.secondaryAction = secondaryAction
+    }
 }
 
 struct ErrorAction {
@@ -19,7 +32,7 @@ protocol ErrorView {
 extension ErrorView where Self: UIViewController {
 
     func showError(_ model: ErrorModel) {
-        let title = NSLocalizedString("Error.title", comment: "")
+        let title = model.title ?? NSLocalizedString("Error.title", comment: "")
         let alert = UIAlertController(title: title, message: model.message, preferredStyle: .alert)
 
         let primary = UIAlertAction(title: model.primaryAction.title,

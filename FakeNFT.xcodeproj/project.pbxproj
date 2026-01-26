@@ -23,6 +23,14 @@
 		0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB7482A7808900009A829 /* TestCatalogController.swift */; };
 		0CFCB74B2A780EA80009A829 /* UIView+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB74A2A780EA80009A829 /* UIView+Constraints.swift */; };
 		0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB74D2A7817DC0009A829 /* NftStorage.swift */; };
+		A0B1C2D3E4F5A6B7C8D9E0F1 /* AuthAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E101 /* AuthAssembly.swift */; };
+		A0B1C2D3E4F5A6B7C8D9E0F2 /* AuthPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E102 /* AuthPresenter.swift */; };
+		A0B1C2D3E4F5A6B7C8D9E0F3 /* AuthRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E103 /* AuthRouter.swift */; };
+		A0B1C2D3E4F5A6B7C8D9E0F4 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E104 /* AuthViewController.swift */; };
+		A0B1C2D3E4F5A6B7C8D9E0F5 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E105 /* AuthService.swift */; };
+		281C7F762F27E74A009F9CE3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 281C7F752F27E74A009F9CE3 /* FirebaseAuth */; };
+		281C7F782F27E74A009F9CE3 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 281C7F772F27E74A009F9CE3 /* FirebaseCore */; };
+		281C7F7A2F27E893009F9CE3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 281C7F792F27E893009F9CE3 /* GoogleService-Info.plist */; };
 		287AB1A22F20A8DF0064446E /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB1A02F20A8DF0064446E /* StatsViewController.swift */; };
 		287AB1A32F20A8DF0064446E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB19E2F20A8DF0064446E /* ProfileViewController.swift */; };
 		287AB1A42F20A8DF0064446E /* BasketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB19C2F20A8DF0064446E /* BasketViewController.swift */; };
@@ -100,6 +108,7 @@
 		0CFCB7482A7808900009A829 /* TestCatalogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCatalogController.swift; sourceTree = "<group>"; };
 		0CFCB74A2A780EA80009A829 /* UIView+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Constraints.swift"; sourceTree = "<group>"; };
 		0CFCB74D2A7817DC0009A829 /* NftStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftStorage.swift; sourceTree = "<group>"; };
+		281C7F792F27E893009F9CE3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		287AB19C2F20A8DF0064446E /* BasketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketViewController.swift; sourceTree = "<group>"; };
 		287AB19E2F20A8DF0064446E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		287AB1A02F20A8DF0064446E /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +129,11 @@
 		28F47F572F267B1A0070F809 /* CompleteOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteOrderRequest.swift; sourceTree = "<group>"; };
 		28F47F592F27862A0070F809 /* BasketRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketRouter.swift; sourceTree = "<group>"; };
 		28F47F5E2F2787F90070F809 /* BasketAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketAssembly.swift; sourceTree = "<group>"; };
+		A0B1C2D3E4F5A6B7C8D9E101 /* AuthAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthAssembly.swift; sourceTree = "<group>"; };
+		A0B1C2D3E4F5A6B7C8D9E102 /* AuthPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthPresenter.swift; sourceTree = "<group>"; };
+		A0B1C2D3E4F5A6B7C8D9E103 /* AuthRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRouter.swift; sourceTree = "<group>"; };
+		A0B1C2D3E4F5A6B7C8D9E104 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		A0B1C2D3E4F5A6B7C8D9E105 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		3F478ECE29DB474E00F6D39E /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		3F478ED029DB476500F6D39E /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		3F68069329CBBAF100B4F915 /* FakeNFT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FakeNFT.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +171,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F603CD029DB4A74000C43D7 /* Kingfisher in Frameworks */,
+				281C7F762F27E74A009F9CE3 /* FirebaseAuth in Frameworks */,
+				281C7F782F27E74A009F9CE3 /* FirebaseCore in Frameworks */,
 				3F603CCD29DB4A53000C43D7 /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,6 +319,7 @@
 				3F6806C729CBBC5B00B4F915 /* Scenes  */,
 				3F6806C629CBBC4E00B4F915 /* Services */,
 				3F6806A429CBBAF200B4F915 /* Info.plist */,
+				281C7F792F27E893009F9CE3 /* GoogleService-Info.plist */,
 			);
 			path = FakeNFT;
 			sourceTree = "<group>";
@@ -329,6 +346,7 @@
 				28F47F462F265CA70070F809 /* PaymentService.swift */,
 				28F47F402F263BA90070F809 /* CurrenciesService.swift */,
 				287AB2AD2F222ADB0064446E /* BasketService.swift */,
+				A0B1C2D3E4F5A6B7C8D9E105 /* AuthService.swift */,
 				3FC8C38F29D245250081F015 /* Requests */,
 				0C79EE6B2A76DE2E00EE90EA /* ServicesAssemly.swift */,
 				558E39E62C68CE0900FB86AC /* NftService.swift */,
@@ -340,6 +358,7 @@
 		3F6806C729CBBC5B00B4F915 /* Scenes  */ = {
 			isa = PBXGroup;
 			children = (
+				A0B1C2D3E4F5A6B7C8D9E110 /* Auth */,
 				286FE0972F253D3D0093EEF9 /* Payment */,
 				287AB19D2F20A8DF0064446E /* Basket */,
 				287AB19F2F20A8DF0064446E /* Profile */,
@@ -351,6 +370,17 @@
 				3F6806C829CBBC8100B4F915 /* ProductDetails */,
 			);
 			path = "Scenes ";
+			sourceTree = "<group>";
+		};
+		A0B1C2D3E4F5A6B7C8D9E110 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				A0B1C2D3E4F5A6B7C8D9E101 /* AuthAssembly.swift */,
+				A0B1C2D3E4F5A6B7C8D9E102 /* AuthPresenter.swift */,
+				A0B1C2D3E4F5A6B7C8D9E103 /* AuthRouter.swift */,
+				A0B1C2D3E4F5A6B7C8D9E104 /* AuthViewController.swift */,
+			);
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		3F6806C829CBBC8100B4F915 /* ProductDetails */ = {
@@ -468,6 +498,8 @@
 			packageProductDependencies = (
 				3F603CCC29DB4A53000C43D7 /* ProgressHUD */,
 				3F603CCF29DB4A74000C43D7 /* Kingfisher */,
+				281C7F752F27E74A009F9CE3 /* FirebaseAuth */,
+				281C7F772F27E74A009F9CE3 /* FirebaseCore */,
 			);
 			productName = FakeNFT;
 			productReference = 3F68069329CBBAF100B4F915 /* FakeNFT.app */;
@@ -545,6 +577,7 @@
 			packageReferences = (
 				3F603CCB29DB4A53000C43D7 /* XCRemoteSwiftPackageReference "ProgressHUD" */,
 				3F603CCE29DB4A74000C43D7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				281C7F742F27E74A009F9CE3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 3F68069429CBBAF100B4F915 /* Products */;
 			projectDirPath = "";
@@ -563,6 +596,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F6806A329CBBAF200B4F915 /* LaunchScreen.storyboard in Resources */,
+				281C7F7A2F27E893009F9CE3 /* GoogleService-Info.plist in Resources */,
 				287AB1AF2F20B5810064446E /* Localizable.xcstrings in Resources */,
 				3F6806A029CBBAF200B4F915 /* Assets.xcassets in Resources */,
 			);
@@ -615,6 +649,11 @@
 				287AB2AE2F222ADF0064446E /* BasketService.swift in Sources */,
 				287AB2B02F2238E20064446E /* BasketViewModels.swift in Sources */,
 				3F68069929CBBAF100B4F915 /* SceneDelegate.swift in Sources */,
+				A0B1C2D3E4F5A6B7C8D9E0F5 /* AuthService.swift in Sources */,
+				A0B1C2D3E4F5A6B7C8D9E0F1 /* AuthAssembly.swift in Sources */,
+				A0B1C2D3E4F5A6B7C8D9E0F2 /* AuthPresenter.swift in Sources */,
+				A0B1C2D3E4F5A6B7C8D9E0F3 /* AuthRouter.swift in Sources */,
+				A0B1C2D3E4F5A6B7C8D9E0F4 /* AuthViewController.swift in Sources */,
 				0C79EE6C2A76DE2E00EE90EA /* ServicesAssemly.swift in Sources */,
 				28F47F3F2F263B770070F809 /* CurrenciesRequest.swift in Sources */,
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
@@ -976,6 +1015,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		281C7F742F27E74A009F9CE3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.8.0;
+			};
+		};
 		3F603CCB29DB4A53000C43D7 /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/relatedcode/ProgressHUD";
@@ -995,6 +1042,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		281C7F752F27E74A009F9CE3 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 281C7F742F27E74A009F9CE3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		281C7F772F27E74A009F9CE3 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 281C7F742F27E74A009F9CE3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
 		3F603CCC29DB4A53000C43D7 /* ProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3F603CCB29DB4A53000C43D7 /* XCRemoteSwiftPackageReference "ProgressHUD" */;
