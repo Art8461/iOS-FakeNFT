@@ -64,8 +64,9 @@ final class TabBarController: UITabBarController {
             servicesAssembly: servicesAssembly
         )
         
-        let catalogVC = TestCatalogViewController(
-            servicesAssembly: servicesAssembly
+        let catalogVC = CatalogViewController(
+            catalogProvider: servicesAssembly.catalogProvider
+
         )
         
         let basketVC = BasketViewController(
@@ -76,12 +77,14 @@ final class TabBarController: UITabBarController {
             servicesAssembly: servicesAssembly
         )
         
+        let catalogNavigationController = UINavigationController(rootViewController: catalogVC)
+        
         profileVC.tabBarItem = profileTabBarItem
-        catalogVC.tabBarItem = catalogTabBarItem
+        catalogNavigationController.tabBarItem = catalogTabBarItem
         basketVC.tabBarItem = basketTabBarItem
         statitisticsVC.tabBarItem = statTabBarItem
 
-        viewControllers = [profileVC, catalogVC, basketVC, statitisticsVC]
+        viewControllers = [profileVC, catalogNavigationController, basketVC, statitisticsVC]
 
         view.backgroundColor = .systemBackground
         

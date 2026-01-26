@@ -17,4 +17,6 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
+    var catalogProvider: CatalogProviderProtocol { CatalogMockProvider() }
+
 }

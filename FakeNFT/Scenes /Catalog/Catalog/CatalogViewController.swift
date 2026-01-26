@@ -6,16 +6,19 @@ final class CatalogViewController: UIViewController {
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     
     // MARK: - Dependencies
-    private var presenter: CatalogViewOutput!
+    private let catalogProvider: CatalogProviderProtocol
     
-    // MARK: - Data for table
+    private lazy var presenter: CatalogViewOutput = {
+        CatalogPresenter(view: self, catalogProvider: catalogProvider)
+    }()
+    
+    // MARK: - Data
     private var items: [Catalog] = []
     
     // MARK: - Init
     init(catalogProvider: CatalogProviderProtocol) {
+        self.catalogProvider = catalogProvider
         super.init(nibName: nil, bundle: nil)
-        let presenter = CatalogPresenter(view: self, catalogProvider: catalogProvider)
-        self.presenter = presenter
     }
     
     required init?(coder: NSCoder) {
@@ -30,16 +33,17 @@ final class CatalogViewController: UIViewController {
     }
 }
 
-// MARK: - Setup UI
-private extension CatalogViewController {
+    // MARK: - Setup UI
+    private extension CatalogViewController {
     func setupUI() {
-        view.backgroundColor = .backgroundUniversal
+        view.backgroundColor = .whiteApp
         
         setupTableView()
         setupActivityIndicator()
         setupNavigationItems()
     }
     
+    // Настройка таблицы
     func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .clear
@@ -57,6 +61,7 @@ private extension CatalogViewController {
         ])
     }
     
+    // Настройка индикатора
     func setupActivityIndicator() {
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(activityIndicator)
@@ -67,34 +72,57 @@ private extension CatalogViewController {
         ])
     }
     
+    // Настройка navigation bar
     func setupNavigationItems() {
-        navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(title: "By Name",
-                            style: .plain,
-                            target: self,
-                            action: #selector(sortByNameTapped)),
-            UIBarButtonItem(title: "By Count",
-                            style: .plain,
-                            target: self,
-                            action: #selector(sortByCountTapped))
-        ]
+        let sortImage = UIImage(named: "Sort")
+        let sortButton = UIBarButtonItem(
+            image: sortImage,
+            style: .plain,
+            target: self,
+            action: #selector(showSortOptions)
+        )
+        
+        navigationItem.rightBarButtonItem = sortButton
     }
     
-    @objc func sortByNameTapped() {
-        presenter.didTapSortByName()
-    }
-    
-    @objc func sortByCountTapped() {
-        presenter.didTapSortByCount()
+    // Алерт. Логика обработки нажатий
+    @objc
+    func showSortOptions() {
+        
+        // UIAlertController c типом .actionSheet (меню снизу экрана)
+        let alert = UIAlertController(
+            title: "Сортировка",
+            message: nil,
+            preferredStyle: .actionSheet
+        )
+        
+        // Действие "Сортировать по имени"
+        let sortByNameAction = UIAlertAction(title: "По имени", style: .default) { [weak self] _ in
+            self?.presenter.didTapSortByName()
+        }
+        
+        // Действие "Сортировать по количеству NFT"
+        let sortByCountAction = UIAlertAction(title: "По количеству NFT", style: .default) { [weak self] _ in
+            self?.presenter.didTapSortByCount()
+        }
+        
+        // Действие "Отмена"
+        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        alert.addAction(sortByNameAction)
+        alert.addAction(sortByCountAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
     }
 }
 
-// MARK: - UITableViewDataSource
-extension CatalogViewController: UITableViewDataSource {
+    // MARK: - UITableViewDataSource
+    extension CatalogViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
     
+    // Возвращает ячейку для строки по указанному indexPath
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
@@ -111,8 +139,8 @@ extension CatalogViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - UITableViewDelegate
-extension CatalogViewController: UITableViewDelegate {
+    // MARK: - UITableViewDelegate
+    extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -120,8 +148,10 @@ extension CatalogViewController: UITableViewDelegate {
     }
 }
 
-// MARK: - CatalogViewInput
-extension CatalogViewController: CatalogViewInput {
+    // MARK: - CatalogViewInput
+    extension CatalogViewController: CatalogViewInput {
+    
+    // Показывает или скрывает индикатор загрузки.
     func setLoading(_ isLoading: Bool) {
         if isLoading {
             activityIndicator.startAnimating()
@@ -130,6 +160,7 @@ extension CatalogViewController: CatalogViewInput {
         }
     }
     
+    // Отображает пользователю сообщение об ошибке
     func showError(_ error: Error) {
         let alert = UIAlertController(title: "Ошибка",
                                       message: error.localizedDescription,
@@ -138,6 +169,7 @@ extension CatalogViewController: CatalogViewInput {
         present(alert, animated: true)
     }
     
+    // Обновляет таблицу, отображая полученный список элементов каталога
     func showCatalog(_ items: [Catalog]) {
         self.items = items
         tableView.reloadData()
