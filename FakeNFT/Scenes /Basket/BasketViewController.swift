@@ -10,11 +10,9 @@ import UIKit
 final class BasketViewController: UIViewController {
     
     private let presenter: BasketPresenter
-    private let servicesAssembly: ServicesAssembly
 
-    init(presenter: BasketPresenter, servicesAssembly: ServicesAssembly) {
+    init(presenter: BasketPresenter) {
         self.presenter = presenter
-        self.servicesAssembly = servicesAssembly
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -224,23 +222,7 @@ final class BasketViewController: UIViewController {
     }
     
     @objc private func didTapPay() {
-        guard let orderId = presenter.orderId else { return } // можно показать ошибку
-        let presenter = PaymentPresenterImpl(
-            currencyService: servicesAssembly.currenciesService,
-            paymentService: servicesAssembly.paymentService,
-            basketService: servicesAssembly.basketService,
-            orderId: orderId
-        )
-        let vc = PaymentViewController(presenter: presenter)
-        presenter.view = vc
-        vc.title = NSLocalizedString("Выберите способ оплаты", comment: "payment title")
-
-        if let nav = navigationController {
-            vc.hidesBottomBarWhenPushed = true
-            nav.pushViewController(vc, animated: true)
-        } else {
-            present(UINavigationController(rootViewController: vc), animated: true)
-        }
+        presenter.didTapPay()
     }
 }
 

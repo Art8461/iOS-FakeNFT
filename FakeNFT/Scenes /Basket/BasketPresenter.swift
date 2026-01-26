@@ -19,6 +19,7 @@ protocol BasketPresenter {
     func refresh()
     func didSelectSort(option: BasketSortOption)
     func didTapDelete(id: String)
+    func didTapPay()
     var orderId: String? { get }
 }
 
@@ -29,6 +30,17 @@ enum BasketSortOption {
 }
 
 final class BasketPresenterImpl: BasketPresenter {
+    
+    weak var view: BasketView?
+    private let basketService: BasketService
+    private let nftService: NftService
+    private let router: BasketRouting
+    
+    init(basketService: BasketService, nftService: NftService, router: BasketRouting) {
+        self.basketService = basketService
+        self.nftService = nftService
+        self.router = router
+    }
     
     internal var orderId: String?
     private var nftIds: [String] = []
@@ -42,6 +54,18 @@ final class BasketPresenterImpl: BasketPresenter {
     
     func refresh() {
         reloadOrder()
+    }
+    
+    func didTapPay() {
+        guard let orderId else {
+            let model = ErrorModel(
+                message: NSLocalizedString("Error.network", comment: ""),
+                actionText: NSLocalizedString("Error.later", comment: "")
+            ) {}
+            view?.showError(model)
+            return
+        }
+        router.showPayment(orderId: orderId)
     }
     
     private func reloadOrder() {
@@ -102,15 +126,6 @@ final class BasketPresenterImpl: BasketPresenter {
                 }
             }
         }
-    }
-    
-    weak var view: BasketView?
-    private let basketService: BasketService
-    private let nftService: NftService
-    
-    init(basketService: BasketService, nftService: NftService) {
-        self.basketService = basketService
-        self.nftService = nftService
     }
     
     func viewDidLoad() {
