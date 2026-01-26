@@ -58,11 +58,18 @@ final class BasketPresenterImpl: BasketPresenter {
     
     func didTapPay() {
         guard let orderId else {
+            let primary = ErrorAction(
+                title: NSLocalizedString("Error.repeat", comment: ""),
+                style: .default
+            ) { [weak self] in
+                self?.didTapPay()
+            }
             let model = ErrorModel(
                 message: NSLocalizedString("Error.network", comment: ""),
-                actionText: NSLocalizedString("Error.later", comment: "")
-            ) {}
-            view?.showError(model)
+                primaryAction: primary,
+                secondaryAction: nil
+            )
+            self.view?.showError(model)
             return
         }
         router.showPayment(orderId: orderId)
@@ -88,11 +95,17 @@ final class BasketPresenterImpl: BasketPresenter {
                     self?.currentNfts = []
                     self?.view?.displayLoading(false)
                     self?.view?.display(isEmpty: true)
+                    let primary = ErrorAction(
+                        title: NSLocalizedString("Error.repeat", comment: ""),
+                        style: .default
+                    ) { [weak self] in
+                        self?.reloadOrder()
+                    }
                     let model = ErrorModel(
                         message: NSLocalizedString("Error.network", comment: ""),
-                        actionText: NSLocalizedString("Error.later", comment: "")
-                    ) {
-                    }
+                        primaryAction: primary,
+                        secondaryAction: nil
+                    )
                     self?.view?.showError(model)
                 }
             }
@@ -116,12 +129,17 @@ final class BasketPresenterImpl: BasketPresenter {
                     self?.loadNfts(ids: order.nfts)
                 case .failure:
                     self?.view?.displayLoading(false)
-                    let model = ErrorModel(
-                        message: NSLocalizedString("Error.network", comment: ""),
-                        actionText: NSLocalizedString("Error.repeat", comment: "")
+                    let primary = ErrorAction(
+                        title: NSLocalizedString("Error.repeat", comment: ""),
+                        style: .default
                     ) { [weak self] in
                         self?.updateOrder()
                     }
+                    let model = ErrorModel(
+                        message: NSLocalizedString("Error.network", comment: ""),
+                        primaryAction: primary,
+                        secondaryAction: nil
+                    )
                     self?.view?.showError(model)
                 }
             }
@@ -165,12 +183,17 @@ final class BasketPresenterImpl: BasketPresenter {
                     
                     DispatchQueue.main.async {
                         self.view?.displayLoading(false)
-                        let model = ErrorModel(
-                            message: NSLocalizedString("Error.partial", comment: ""),
-                            actionText: NSLocalizedString("Error.repeat", comment: "")
+                        let primary = ErrorAction(
+                            title: NSLocalizedString("Error.repeat", comment: ""),
+                            style: .default
                         ) { [weak self] in
                             self?.loadNfts(ids: ids)
                         }
+                        let model = ErrorModel(
+                            message: NSLocalizedString("Error.network", comment: ""),
+                            primaryAction: primary,
+                            secondaryAction: nil
+                        )
                         self.view?.showError(model)
                     }
                 }

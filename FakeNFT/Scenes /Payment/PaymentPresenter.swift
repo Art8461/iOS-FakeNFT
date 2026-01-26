@@ -68,21 +68,31 @@ final class PaymentPresenterImpl: PaymentPresenter {
                     if response.success {
                         self.view?.showPaymentSuccess()
                     } else {
-                        let model = ErrorModel(
-                            message: NSLocalizedString("Error.network", comment: ""),
-                            actionText: NSLocalizedString("Error.repeat", comment: "")
+                        let primary = ErrorAction(
+                            title: NSLocalizedString("Error.repeat", comment: ""),
+                            style: .default
                         ) { [weak self] in
                             self?.didTapPay()
                         }
+                        let model = ErrorModel(
+                            message: NSLocalizedString("Error.network", comment: ""),
+                            primaryAction: primary,
+                            secondaryAction: nil
+                        )
                         self.view?.showError(model)
                     }
                 case .failure:
-                    let model = ErrorModel(
-                        message: NSLocalizedString("Error.network", comment: ""),
-                        actionText: NSLocalizedString("Error.repeat", comment: "")
+                    let primary = ErrorAction(
+                        title: NSLocalizedString("Error.repeat", comment: ""),
+                        style: .default
                     ) { [weak self] in
                         self?.didTapPay()
                     }
+                    let model = ErrorModel(
+                        message: NSLocalizedString("Error.network", comment: ""),
+                        primaryAction: primary,
+                        secondaryAction: nil
+                    )
                     self.view?.showError(model)
                 }
             }
@@ -124,12 +134,17 @@ final class PaymentPresenterImpl: PaymentPresenter {
                     }
                     self.view?.display(currencies: self.cellModels)
                 case .failure:
-                    let model = ErrorModel(
-                        message: NSLocalizedString("Error.network", comment: ""),
-                        actionText: NSLocalizedString("Error.repeat", comment: "")
+                    let primary = ErrorAction(
+                        title: NSLocalizedString("Error.repeat", comment: ""),
+                        style: .default
                     ) { [weak self] in
                         self?.loadCurrencies()
                     }
+                    let model = ErrorModel(
+                        message: NSLocalizedString("Error.network", comment: ""),
+                        primaryAction: primary,
+                        secondaryAction: nil
+                    )
                     self.view?.showError(model)
                 }
             }

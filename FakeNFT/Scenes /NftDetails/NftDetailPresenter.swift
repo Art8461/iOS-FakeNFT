@@ -75,10 +75,16 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
         default:
             message = NSLocalizedString("Error.unknown", comment: "")
         }
-
-        let actionText = NSLocalizedString("Error.repeat", comment: "")
-        return ErrorModel(message: message, actionText: actionText) { [weak self] in
+        let primary = ErrorAction(
+            title: NSLocalizedString("Error.repeat", comment: ""),
+            style: .default
+        ) { [weak self] in
             self?.state = .loading
         }
+        let secondary = ErrorAction(
+            title: NSLocalizedString("Закрыть", comment: ""),
+            style: .cancel
+        ) { }
+        return ErrorModel(message: message, primaryAction: primary, secondaryAction: secondary)
     }
 }

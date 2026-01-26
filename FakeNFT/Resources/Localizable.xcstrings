@@ -11,32 +11,12 @@
         }
       }
     },
-    "Error.later" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Повторить позже"
-          }
-        }
-      }
-    },
     "Error.network" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Произошла ошибка сети"
-          }
-        }
-      }
-    },
-    "Error.partial" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Не удалось загрузить часть NFT"
           }
         }
       }
