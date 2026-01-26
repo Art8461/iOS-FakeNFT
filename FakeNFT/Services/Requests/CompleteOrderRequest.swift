@@ -17,12 +17,12 @@ struct CompleteOrderRequest: NetworkRequest {
 }
 struct CompleteOrderDto: Dto {
     let id: String
-    let nfts: [String]
+    //let nfts: [String]
 
     func asDictionary() -> [String : String] {
         [
             "id": id, //как id order
-            "nfts": nfts.joined(separator: "") // пустой массив
+            //"nfts": nfts.joined(separator: "") // пустой массив
         ]
     }
 }
