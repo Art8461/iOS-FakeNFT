@@ -7,40 +7,27 @@
 
 import UIKit
 
+// MARK: - Protocols
+
 protocol MyNFTsViewProtocol: AnyObject {
     func closeScreen()
 }
 
+// MARK: - MyNFTsViewController
 
 final class MyNFTsViewController: UIViewController {
-    
+
+    // MARK: - Properties
+
     private let presenter: MyNFTsPresenterProtocol
-    
+
     var myNFTs: [NFTCartModel] = []
-    
-    init(presenter: MyNFTsPresenterProtocol) {
-        self.presenter = presenter
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .whiteApp
-        
-        setupNavigationBar()
-        addSubviews()
-        setupConstraints()
-        setupMocks()
-        updateUI()
-    }
-    
+
+    // MARK: - UI
+
     private lazy var emptyNFTLabel =
     UILabel.emptyStateLabel(text: "У Вас еще нет NFT")
-    
+
     private lazy var myNFTTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(MyNFTCell.self, forCellReuseIdentifier: "MyNFTCell")
@@ -50,55 +37,96 @@ final class MyNFTsViewController: UIViewController {
         tableView.separatorStyle = .none
         return tableView
     }()
-    
+
+    // MARK: - Initializers
+
+    init(presenter: MyNFTsPresenterProtocol) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Lifecycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .whiteApp
+
+        setupNavigationBar()
+        addSubviews()
+        setupConstraints()
+        setupMocks()
+        updateUI()
+    }
+
+    // MARK: - Setup
+
     private func setupNavigationBar() {
         setupBaseNavigationBar()
-        navigationItem.leftBarButtonItem = .backButton(target: self, action: #selector(tapBackButton))
-        navigationItem.rightBarButtonItem = .sortButton(target: self, action: #selector(tapSortButton))
+        navigationItem.leftBarButtonItem = .backButton(
+            target: self,
+            action: #selector(tapBackButton)
+        )
+        navigationItem.rightBarButtonItem = .sortButton(
+            target: self,
+            action: #selector(tapSortButton)
+        )
     }
-    
+
     private func addSubviews() {
-        [emptyNFTLabel, myNFTTableView].forEach { view.addSubview($0) }
+        [emptyNFTLabel, myNFTTableView].forEach {
+            view.addSubview($0)
+        }
     }
-    
+
     private func setupConstraints() {
-        [emptyNFTLabel, myNFTTableView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [emptyNFTLabel, myNFTTableView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+
         NSLayoutConstraint.activate([
             emptyNFTLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyNFTLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
+
             myNFTTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             myNFTTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             myNFTTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             myNFTTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
     }
-    
-    func setupMocks() {
+
+    private func setupMocks() {
         myNFTs = NFTMockData.myNFTs()
         myNFTTableView.reloadData()
     }
-    
+
     private func updateUI() {
         let isEmpty = myNFTs.isEmpty
         emptyNFTLabel.isHidden = !isEmpty
         myNFTTableView.isHidden = isEmpty
-        
+
         navigationItem.title = isEmpty ? nil : "Мои NFT"
-        navigationItem.rightBarButtonItem = isEmpty ? nil : .sortButton(target: self, action: #selector(tapSortButton))
-        
+        navigationItem.rightBarButtonItem = isEmpty
+            ? nil
+            : .sortButton(target: self, action: #selector(tapSortButton))
     }
-    
-    @objc func tapBackButton(){
+
+    // MARK: - Actions
+
+    @objc private func tapBackButton() {
         presenter.didTapBack()
         print("назад на главный экран")
     }
-    
-    @objc func tapSortButton(){
+
+    @objc private func tapSortButton() {
         print("сортировка")
     }
 }
+
+// MARK: - UITableViewDataSource & UITableViewDelegate
 
 extension MyNFTsViewController: UITableViewDataSource, UITableViewDelegate {
 
@@ -106,21 +134,33 @@ extension MyNFTsViewController: UITableViewDataSource, UITableViewDelegate {
         return myNFTs.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MyNFTCell.reuseIdentifier, for: indexPath) as? MyNFTCell else {
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: MyNFTCell.reuseIdentifier,
+            for: indexPath
+        ) as? MyNFTCell else {
             return UITableViewCell()
         }
+
         cell.configure(with: myNFTs[indexPath.row])
         return cell
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
         return 140
     }
 }
 
+// MARK: - MyNFTsViewProtocol
 
 extension MyNFTsViewController: MyNFTsViewProtocol {
+
     func closeScreen() {
         navigationController?.popViewController(animated: true)
     }

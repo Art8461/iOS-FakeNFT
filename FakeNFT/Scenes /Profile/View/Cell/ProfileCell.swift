@@ -4,25 +4,20 @@
 //
 //  Created by Андрей Пермяков on 21.01.2026.
 //
+
 import UIKit
 
 final class ProfileCell: UITableViewCell {
     
+    // MARK: - Properties
+    
     static let reuseIdentifier = "ProfileCell"
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .bold)
-        label.textColor = .blackApp
-        return label
-    }()
+    // MARK: - UI Elements
     
-    private let countLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .bold)
-        label.textColor = .blackApp
-        return label
-    }()
+    private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
+    private let countLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
+    
     
     private let stackView: UIStackView = {
         let stack = UIStackView()
@@ -40,17 +35,19 @@ final class ProfileCell: UITableViewCell {
         return imageLabel
     }()
     
+    // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubviews()
         setupConstraints()
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Setup
     
     private func addSubviews() {
         stackView.addArrangedSubview(titleLabel)
@@ -59,7 +56,7 @@ final class ProfileCell: UITableViewCell {
     }
     
     private func setupConstraints() {
-        [stackView, chevronImage].forEach{$0.translatesAutoresizingMaskIntoConstraints = false }
+        [stackView, chevronImage].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -69,9 +66,10 @@ final class ProfileCell: UITableViewCell {
         ])
     }
     
-    func configure(title:String, count:String){
+    // MARK: - Configure
+    
+    func configure(title: String, count: String) {
         titleLabel.text = title
         countLabel.text = count
     }
-    
 }

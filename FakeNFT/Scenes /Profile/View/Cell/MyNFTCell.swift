@@ -9,18 +9,11 @@ import UIKit
 
 final class MyNFTCell: UITableViewCell {
     
+    // MARK: - Properties
+    
     static let reuseIdentifier = "MyNFTCell"
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubviews()
-        setupConstraints()
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: - UI Elements
     
     private let containerView: UIView = {
         let view = UIView()
@@ -29,90 +22,44 @@ final class MyNFTCell: UITableViewCell {
         return view
     }()
     
-    //картинка NFT + лайк
-    private let imageNFTView: UIImageView = {
-        let imageNFTView = UIImageView()
-        imageNFTView.contentMode = .scaleAspectFill
-        imageNFTView.clipsToBounds = true
-        imageNFTView.layer.cornerRadius = 12
-        return imageNFTView
-    }()
+    private let imageNFTView: UIImageView = .baseNFTImage()
+    private let likeButton: UIButton = .likeButton()
+    private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
+    private let starsImageView: UIImageView = .starsImageView()
+    private let authorPrefixLabel: UILabel = .baseLabel(text: "от", font: .systemFont(ofSize: 15, weight: .regular))
+    private let nameAuthorLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 13, weight: .regular))
+    private let priceTitleLabel: UILabel = .baseLabel(text: "Цена", font: .systemFont(ofSize: 13, weight: .regular))
+    private let priceValueLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
     
-    private let likeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.tintColor = .white
-        button.backgroundColor = .clear
-        return button
-    }()
-    
-    //ИнфоСтек Имя + рейтинг + автор(от+имя)
-    private let titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        return titleLabel
-    }()
-    
-    private let starsImageView: UIImageView = {
-        let starsImageView = UIImageView()
-        starsImageView.contentMode = .scaleAspectFit
-        return starsImageView
-    }()
-    
-    private let authorPrefixLabel: UILabel = {
-        let label = UILabel()
-        label.text = "от"
-        label.font = .systemFont(ofSize: 15, weight: .regular)
-        label.textColor = .blackApp
-        return label
-    }()
-    
-    private let nameAuthorLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 13, weight: .regular)
-        label.textColor = .blackApp
-        return label
-    }()
-    
-    //цена + ценник
-    
-    private let priceTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Цена"
-        label.font = .systemFont(ofSize: 13, weight: .regular)
-        return label
-    }()
-    
-    private let priceValueLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .bold)
-        return label
-    }()
-    
-    //стеки
     private lazy var authorStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [
-            authorPrefixLabel,
-            nameAuthorLabel
-        ])
-        stack.axis = .horizontal
-        stack.spacing = 4
+        let stack = UIStackView.stackHorizontal(spacing: 4, views: [authorPrefixLabel, nameAuthorLabel])
         return stack
     }()
     
     private lazy var infoStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleLabel,starsImageView, authorStack ])
-        stack.axis = .vertical
-        stack.spacing = 4
+        let stack = UIStackView.stackVertical(spacing: 4, views: [titleLabel, starsImageView, authorStack])
         return stack
     }()
     
     private lazy var priceStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [priceTitleLabel,priceValueLabel])
-        stack.axis = .vertical
-        stack.spacing = 4
+        let stack = UIStackView.stackVertical(spacing: 4, views: [priceTitleLabel, priceValueLabel])
         stack.alignment = .trailing
         return stack
     }()
+    
+    // MARK: - Init
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        addSubviews()
+        setupConstraints()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Setup
     
     private func addSubviews() {
         contentView.addSubview(containerView)
@@ -120,7 +67,7 @@ final class MyNFTCell: UITableViewCell {
     }
     
     private func setupConstraints() {
-        [imageNFTView, likeButton, infoStack, priceStack,containerView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [imageNFTView, likeButton, infoStack, priceStack, containerView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
@@ -146,6 +93,8 @@ final class MyNFTCell: UITableViewCell {
         ])
     }
     
+    // MARK: - Configure
+    
     func configure(with model: NFTCartModel) {
         imageNFTView.image = UIImage(named: model.imageName)
         likeButton.setImage(UIImage(named: model.likeImageName), for: .normal)
@@ -154,7 +103,4 @@ final class MyNFTCell: UITableViewCell {
         nameAuthorLabel.text = model.authorName
         priceValueLabel.text = model.price
     }
-
-
-    
 }

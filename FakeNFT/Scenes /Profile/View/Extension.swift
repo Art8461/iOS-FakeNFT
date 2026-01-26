@@ -4,7 +4,10 @@
 //
 //  Created by Андрей Пермяков on 22.01.2026.
 //
+
 import UIKit
+
+// MARK: - UIViewController
 
 extension UIViewController {
     func setupBaseNavigationBar() {
@@ -15,16 +18,15 @@ extension UIViewController {
     }
 }
 
+// MARK: - UIImageView
 
 extension UIImageView {
-    
     static func baseAvatarImage() -> UIImageView {
         let image = UIImageView()
         image.layer.cornerRadius = 35
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
         image.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             image.widthAnchor.constraint(equalToConstant: 70),
             image.heightAnchor.constraint(equalToConstant: 70)
@@ -32,10 +34,26 @@ extension UIImageView {
         return image
     }
     
+    static func baseNFTImage() -> UIImageView {
+        let image = UIImageView()
+        image.layer.cornerRadius = 12
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }
+    
+    static func starsImageView() -> UIImageView {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }
 }
 
+// MARK: - UITextView
+
 extension UITextView {
-    
     static func baseTextView() -> UITextView {
         let textView = UITextView()
         textView.font = .systemFont(ofSize: 17, weight: .regular)
@@ -50,12 +68,19 @@ extension UITextView {
     }
 }
 
+// MARK: - UILabel
+
 extension UILabel {
-    
-    static func baseLabel() -> UILabel {
+    static func baseLabel(
+        text: String? = nil,
+        font: UIFont = .systemFont(ofSize: 17, weight: .regular),
+    ) -> UILabel {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.text = text
+        label.font = font
         label.textColor = .blackApp
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }
     
@@ -69,7 +94,25 @@ extension UILabel {
     }
 }
 
+// MARK: - UIStackView
+
 extension UIStackView {
+    static func stackVertical(spacing: CGFloat = 8 ,views: [UIView]
+    ) -> UIStackView {
+        let stack = UIStackView(arrangedSubviews: views)
+        stack.axis = .vertical
+        stack.spacing = spacing
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }
+
+    static func stackHorizontal(spacing: CGFloat = 8,views: [UIView]) -> UIStackView {
+        let stack = UIStackView(arrangedSubviews: views)
+        stack.axis = .horizontal
+        stack.spacing = spacing
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }
     
     static func stackVerticalEditProfile(labels: String, field: UIView) -> UIStackView {
         let titleLabel = UILabel()
@@ -82,6 +125,20 @@ extension UIStackView {
         return stack
     }
 }
+
+// MARK: - UIButton
+
+extension UIButton {
+    static func likeButton() -> UIButton {
+        let button = UIButton(type: .system)
+        button.tintColor = .white
+        button.backgroundColor = .clear
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }
+}
+
+// MARK: - UIBarButtonItem
 
 extension UIBarButtonItem {
     static func makeButton(image: UIImage, target: Any?, action: Selector?, tintColor: UIColor = .blackApp) -> UIBarButtonItem {
@@ -98,5 +155,3 @@ extension UIBarButtonItem {
         return .makeButton(image: UIImage(resource: .sort), target: target, action: action)
     }
 }
-
-
