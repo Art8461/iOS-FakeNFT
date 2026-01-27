@@ -139,7 +139,9 @@ final class OnboardingViewController: UIViewController {
 
     private func updateControls() {
         pageControl.selectedItem = currentIndex
-        actionButton.isHidden = currentIndex != items.count - 1
+        let isLast = currentIndex == items.count - 1
+        actionButton.isHidden = !isLast
+        closeButton.isHidden = isLast
     }
 
     @objc
