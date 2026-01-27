@@ -18,6 +18,13 @@ final class OnboardingImageCell: UICollectionViewCell {
         return imageView
     }()
 
+    private let gradientView: GradientView = {
+        let view = GradientView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.isUserInteractionEnabled = false
+        return view
+    }()
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -50,13 +57,27 @@ final class OnboardingImageCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(imageView)
+        contentView.addSubview(gradientView)
         contentView.addSubview(textStack)
+
+        gradientView.gradientLayer.colors = [
+            UIColor(resource: .blackUniversal).withAlphaComponent(1.0).cgColor,
+            UIColor(resource: .blackUniversal).withAlphaComponent(0.0).cgColor
+        ]
+        gradientView.gradientLayer.locations = [0.0, 1.0]
+        gradientView.gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientView.gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
 
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+            gradientView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            gradientView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            gradientView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            gradientView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
             textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -79,5 +100,15 @@ final class OnboardingImageCell: UICollectionViewCell {
         imageView.image = item.image
         titleLabel.text = item.title
         subtitleLabel.text = item.subtitle
+    }
+}
+
+private final class GradientView: UIView {
+    override class var layerClass: AnyClass {
+        CAGradientLayer.self
+    }
+
+    var gradientLayer: CAGradientLayer {
+        layer as! CAGradientLayer
     }
 }
