@@ -3,10 +3,27 @@
   "strings" : {
     "Catalog.openNft" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exit"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Открыть Nft"
+            "value" : "Выйти"
+          }
+        }
+      }
+    },
+    "Email" : {
+      "comment" : "email placeholder",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email"
           }
         }
       }
@@ -123,6 +140,28 @@
         }
       }
     },
+    "Введен неверный логин или пароль" : {
+      "comment" : "invalid credentials",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid login or password entered"
+          }
+        }
+      }
+    },
+    "Введите корректный email" : {
+      "comment" : "invalid email",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a correct email"
+          }
+        }
+      }
+    },
     "Вернуться" : {
       "comment" : "cancel button",
       "localizations" : {
@@ -141,6 +180,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Return to basket"
+          }
+        }
+      }
+    },
+    "Войти" : {
+      "comment" : "sign in button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in"
+          }
+        }
+      }
+    },
+    "Вход" : {
+      "comment" : "sign in",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login"
           }
         }
       }
@@ -167,8 +228,19 @@
         }
       }
     },
+    "Забыли пароль?" : {
+      "comment" : "forgot password",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forgot your password?"
+          }
+        }
+      }
+    },
     "Закрыть" : {
-      "comment" : "cancel sort",
+      "comment" : "cancel sort\nclose",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -178,8 +250,32 @@
         }
       }
     },
+<<<<<<< HEAD
     "Исследуйте" : {
       "comment" : "onboarding title 1"
+=======
+    "Зарегистрироваться" : {
+      "comment" : "sign up button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign up"
+          }
+        }
+      }
+    },
+    "Инструкции по восстановлению пароля высланы\nна указанный email" : {
+      "comment" : "reset password success",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instructions to reset your password were sent to the email address provided."
+          }
+        }
+      }
+>>>>>>> ArtemCart-Authorization
     },
     "К оплате" : {
       "comment" : "button for pay",
@@ -228,6 +324,50 @@
         }
       }
     },
+    "Не удалось войти в систему" : {
+      "comment" : "auth error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login failed"
+          }
+        }
+      }
+    },
+    "Неверный пароль" : {
+      "comment" : "auth error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid password"
+          }
+        }
+      }
+    },
+    "Неверный формат email" : {
+      "comment" : "auth error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid email address"
+          }
+        }
+      }
+    },
+    "Ок" : {
+      "comment" : "Ок",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ок"
+          }
+        }
+      }
+    },
     "Оплатить" : {
       "comment" : "pay button",
       "localizations" : {
@@ -235,6 +375,39 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pay"
+          }
+        }
+      }
+    },
+    "Пароли не совпадают" : {
+      "comment" : "password mismatch",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Passwords do not match"
+          }
+        }
+      }
+    },
+    "Пароль" : {
+      "comment" : "password placeholder",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password"
+          }
+        }
+      }
+    },
+    "Пароль должен быть не короче 6 символов" : {
+      "comment" : "weak password",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password must be minimum 6 characters"
           }
         }
       }
@@ -272,6 +445,28 @@
         }
       }
     },
+    "Повторите пароль" : {
+      "comment" : "confirm password placeholder",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat password"
+          }
+        }
+      }
+    },
+    "Пользователь не найден" : {
+      "comment" : "auth error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The user with this email was not found"
+          }
+        }
+      }
+    },
     "Пользовательского соглашения" : {
       "comment" : "user agreement",
       "localizations" : {
@@ -294,11 +489,35 @@
         }
       }
     },
+<<<<<<< HEAD
     "Пополняйте свою коллекцию эксклюзивными \nкартинками, созданными нейросетью!" : {
       "comment" : "onboarding subtitle 2"
     },
     "Присоединяйтесь и откройте новый мир \nуникальных NFT для коллекционеров" : {
       "comment" : "onboarding subtitle 1"
+=======
+    "Произошла неизвестная ошибка" : {
+      "comment" : "auth error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An unknown error occurred"
+          }
+        }
+      }
+    },
+    "Произошла ошибка сети" : {
+      "comment" : "auth error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network error"
+          }
+        }
+      }
+>>>>>>> ArtemCart-Authorization
     },
     "Профиль" : {
       "comment" : "tab title for profile",
@@ -311,8 +530,65 @@
         }
       }
     },
+<<<<<<< HEAD
     "Смотрите статистику других и покажите всем, \nчто у вас самая ценная коллекция" : {
       "comment" : "onboarding subtitle 3"
+=======
+    "Регистрация" : {
+      "comment" : "sign up title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign up"
+          }
+        }
+      }
+    },
+    "Сброс пароля" : {
+      "comment" : "basket is empty state",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password reset"
+          }
+        }
+      }
+    },
+    "Сбросить пароль" : {
+      "comment" : "reset password button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset your password"
+          }
+        }
+      }
+    },
+    "Слишком много попыток. Попробуйте позже" : {
+      "comment" : "auth error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Too many attempts. Try again later."
+          }
+        }
+      }
+    },
+    "Слишком простой пароль" : {
+      "comment" : "auth error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password is too weak"
+          }
+        }
+      }
+>>>>>>> ArtemCart-Authorization
     },
     "Совершая покупку, вы соглашаетесь с условиями" : {
       "comment" : "text agreement",
@@ -350,6 +626,17 @@
         }
       }
     },
+    "Такой email уже зарегистрирован" : {
+      "comment" : "auth error",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email already in use"
+          }
+        }
+      }
+    },
     "Удалить" : {
       "comment" : "delete button",
       "localizations" : {
@@ -379,6 +666,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Price"
+          }
+        }
+      }
+    },
+    "Что-то пошло не так(" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oops! Something went wrong"
           }
         }
       }

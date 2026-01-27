@@ -8,31 +8,40 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         nftStorage: NftStorageImpl()
     )
 
-    private enum OnboardingStorage {
-        static let hasSeenKey = "hasSeenOnboarding"
-    }
-
     func scene(_ scene: UIScene, willConnectTo _: UISceneSession, options _: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
 
+        configureNavigationBarAppearance()
+
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = makeRootViewController(window: window)
+        let rootViewController: UIViewController
+        if servicesAssembly.authService.isAuthorized {
+            rootViewController = TabBarController(servicesAssembly: servicesAssembly)
+        } else {
+            rootViewController = AuthAssembly(servicesAssembly: servicesAssembly).build()
+        }
+        window.rootViewController = rootViewController
         window.makeKeyAndVisible()
         self.window = window
     }
 
-    private func makeRootViewController(window: UIWindow) -> UIViewController {
-        if UserDefaults.standard.bool(forKey: OnboardingStorage.hasSeenKey) {
-            return TabBarController(servicesAssembly: servicesAssembly)
-        }
+    private func configureNavigationBarAppearance() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        
+        let backImage = UIImage(resource: .backward)
+        appearance.setBackIndicatorImage(backImage, transitionMaskImage: backImage)
 
-        let onboardingViewController = OnboardingAssembly().build()
-        onboardingViewController.onFinish = { [weak self, weak window] in
-            guard let self, let window else { return }
-            UserDefaults.standard.set(true, forKey: OnboardingStorage.hasSeenKey)
-            window.rootViewController = TabBarController(servicesAssembly: self.servicesAssembly)
-        }
+        let backButtonAppearance = UIBarButtonItemAppearance()
+        backButtonAppearance.normal.titleTextAttributes = [
+            .foregroundColor: UIColor.clear
+        ]
+        appearance.backButtonAppearance = backButtonAppearance
 
-        return onboardingViewController
+        let navBar = UINavigationBar.appearance()
+        navBar.standardAppearance = appearance
+        navBar.scrollEdgeAppearance = appearance
+        navBar.compactAppearance = appearance
+        navBar.tintColor = UIColor(resource: .blackApp)
     }
 }
