@@ -32,6 +32,7 @@ final class NftDetailPresenterImpl: NftDetailPresenter {
         service.loadNft(id: input.id) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self else { return }
+                assert(Thread.isMainThread)
                 self.view?.hideLoading()
                 switch result {
                 case .success(let nft):
