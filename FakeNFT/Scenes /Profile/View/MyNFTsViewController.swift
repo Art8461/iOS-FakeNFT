@@ -54,7 +54,6 @@ final class MyNFTsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .whiteApp
-
         setupNavigationBar()
         addSubviews()
         setupConstraints()

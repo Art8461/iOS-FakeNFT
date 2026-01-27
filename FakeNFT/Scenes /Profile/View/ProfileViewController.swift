@@ -103,6 +103,7 @@ final class ProfileViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
+        tableView.backgroundColor = .whiteApp
         return tableView
     }()
 

@@ -32,6 +32,7 @@ final class FavoritesNFTCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.backgroundColor = .whiteApp
         addSubviews()
         setupConstraints()
     }

@@ -61,7 +61,6 @@ final class FavoritesNFTViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .whiteApp
-
         setupNavigationBar()
         addSubviews()
         setupConstraints()
