@@ -21,6 +21,7 @@ final class NftServiceImpl: NftService {
     func loadNft(id: String, completion: @escaping NftCompletion)  -> NetworkTask?{
         if let nft = storage.getNft(with: id) {
             DispatchQueue.main.async{
+                assert(Thread.isMainThread)
                 completion(.success(nft))
             }
             return nil

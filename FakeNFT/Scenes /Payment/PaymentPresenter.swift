@@ -68,6 +68,7 @@ final class PaymentPresenterImpl: PaymentPresenter {
         paymentService.payOrder(currencyId: currencyId) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self else { return }
+                assert(Thread.isMainThread)
                 self.view?.displayLoading(false)
                 switch result {
                 case .success(let response):
@@ -120,6 +121,7 @@ final class PaymentPresenterImpl: PaymentPresenter {
         basketService.completeOrder(orderId: orderId) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self else { return }
+                assert(Thread.isMainThread)
                 self.view?.displayLoading(false)
                 // игнорируем любую ошибку
                 self.router.returnToBasket()
@@ -141,6 +143,7 @@ final class PaymentPresenterImpl: PaymentPresenter {
         currencyService.loadCurrencies { [weak self] result in
             DispatchQueue.main.async {
                 guard let self else { return }
+                assert(Thread.isMainThread)
                 self.view?.displayLoading(false)
                 switch result {
                 case .success(let currencies):

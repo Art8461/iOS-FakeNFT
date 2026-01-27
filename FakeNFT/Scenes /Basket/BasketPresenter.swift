@@ -83,6 +83,8 @@ final class BasketPresenterImpl: BasketPresenter {
         view?.displayLoading(true)
         basketService.loadOrder { [weak self] result in
             DispatchQueue.main.async {
+                assert(Thread.isMainThread)
+
                 switch result {
                 case .success(let order):
                     self?.orderId = order.id
@@ -124,6 +126,8 @@ final class BasketPresenterImpl: BasketPresenter {
         view?.displayLoading(true)
         basketService.updateOrder(nfts: nftIds) { [weak self] result in
             DispatchQueue.main.async{
+                assert(Thread.isMainThread)
+
                 switch result {
                 case .success(let order):
                     self?.nftIds = order.nfts
@@ -165,6 +169,8 @@ final class BasketPresenterImpl: BasketPresenter {
     private func loadNfts(ids: [String]) {
         guard !ids.isEmpty else {
             DispatchQueue.main.async {
+                assert(Thread.isMainThread)
+
                 self.view?.displayLoading(false)
                 self.currentNfts = []
                 self.view?.display(items: [])
@@ -194,6 +200,8 @@ final class BasketPresenterImpl: BasketPresenter {
                     tasks.forEach { $0.cancel() }
                     
                     DispatchQueue.main.async {
+                        assert(Thread.isMainThread)
+
                         self.view?.displayLoading(false)
                         let primary = ErrorAction(
                             title: NSLocalizedString("Error.repeat", comment: ""),
@@ -218,6 +226,8 @@ final class BasketPresenterImpl: BasketPresenter {
         }
         
         group.notify(queue: .main) { [weak self] in
+            assert(Thread.isMainThread)
+
             guard let self, !hasFailed else { return }
             self.view?.displayLoading(false)
             let orderedNfts = ids.compactMap { nftsById[$0] }
