@@ -5,11 +5,14 @@
 //  Created by Artem Kuzmenko on 24.01.2026.
 //
 
+import StoreKit
 import UIKit
 
 final class PaymentSuccessViewController: UIViewController {
     
     var onReturnToBasket: (() -> Void)?
+
+    private var didRequestReview = false
     
     private lazy var placeholderImageView: UIImageView = {
         let imageView = UIImageView()
@@ -64,6 +67,11 @@ final class PaymentSuccessViewController: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        requestReviewIfPossible()
+    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
@@ -93,5 +101,12 @@ final class PaymentSuccessViewController: UIViewController {
     
     @objc private func didTapReturnToBasket() {
         onReturnToBasket?()
+    }
+
+    private func requestReviewIfPossible() {
+        guard !didRequestReview else { return }
+        didRequestReview = true
+        guard let scene = view.window?.windowScene else { return }
+        SKStoreReviewController.requestReview(in: scene)
     }
 }
