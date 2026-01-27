@@ -32,8 +32,8 @@ final class BasketServiceImpl: BasketService {
     }
     
     func completeOrder(orderId: String, completion: @escaping CompleteOrderCompletion) {
-        let dto = CompleteOrderDto(id: orderId)//, nfts: [])
-        let request = CompleteOrderRequest(dto: dto) // URL остаётся /orders/1
+        let dto = CompleteOrderDto(id: orderId)
+        let request = CompleteOrderRequest(dto: dto)
         networkClient.send(request: request) { result in
             switch result {
             case .success:

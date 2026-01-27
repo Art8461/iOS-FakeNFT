@@ -3,7 +3,7 @@ import UIKit
 struct ErrorModel {
     let message: String
     let primaryAction: ErrorAction
-    let secondaryAction: ErrorAction? // опционально, nil-одна кнопка
+    let secondaryAction: ErrorAction?
 }
 
 struct ErrorAction {

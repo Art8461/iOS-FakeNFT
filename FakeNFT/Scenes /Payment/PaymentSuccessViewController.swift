@@ -55,7 +55,7 @@ final class PaymentSuccessViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor(resource: .whiteApp)
         setupLayout()
         returnButton.addTarget(self, action: #selector(didTapReturnToBasket), for: .touchUpInside)
     }

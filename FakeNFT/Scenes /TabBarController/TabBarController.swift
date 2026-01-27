@@ -82,7 +82,7 @@ final class TabBarController: UITabBarController {
 
         viewControllers = [profileVC, catalogVC, basketNav, statitisticsVC]
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor(resource: .whiteApp)
         setupTabBarAppearance()
         
     }
