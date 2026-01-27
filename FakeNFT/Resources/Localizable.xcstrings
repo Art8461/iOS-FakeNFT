@@ -178,6 +178,9 @@
         }
       }
     },
+    "Исследуйте" : {
+      "comment" : "onboarding title 1"
+    },
     "К оплате" : {
       "comment" : "button for pay",
       "localizations" : {
@@ -199,6 +202,9 @@
           }
         }
       }
+    },
+    "Коллекционируйте" : {
+      "comment" : "onboarding title 2"
     },
     "Корзина" : {
       "comment" : "tab title for basket",
@@ -288,6 +294,12 @@
         }
       }
     },
+    "Пополняйте свою коллекцию эксклюзивными \nкартинками, созданными нейросетью!" : {
+      "comment" : "onboarding subtitle 2"
+    },
+    "Присоединяйтесь и откройте новый мир \nуникальных NFT для коллекционеров" : {
+      "comment" : "onboarding subtitle 1"
+    },
     "Профиль" : {
       "comment" : "tab title for profile",
       "localizations" : {
@@ -298,6 +310,9 @@
           }
         }
       }
+    },
+    "Смотрите статистику других и покажите всем, \nчто у вас самая ценная коллекция" : {
+      "comment" : "onboarding subtitle 3"
     },
     "Совершая покупку, вы соглашаетесь с условиями" : {
       "comment" : "text agreement",
@@ -320,6 +335,9 @@
           }
         }
       }
+    },
+    "Состязайтесь" : {
+      "comment" : "onboarding title 3"
     },
     "Статистика" : {
       "comment" : "tab title for statistics",
