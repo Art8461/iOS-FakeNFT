@@ -20,7 +20,9 @@ final class NftServiceImpl: NftService {
     @discardableResult
     func loadNft(id: String, completion: @escaping NftCompletion)  -> NetworkTask?{
         if let nft = storage.getNft(with: id) {
-            completion(.success(nft))
+            DispatchQueue.main.async{
+                completion(.success(nft))
+            }
             return nil
         }
 
