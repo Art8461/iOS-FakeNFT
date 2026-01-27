@@ -239,7 +239,6 @@
 				CBA28F7D2F220BB000C78A2F /* View */,
 				CBA28F802F220BDE00C78A2F /* Presenter */,
 				CB1A31EF2F23AE4800737B09 /* Model */,
-				CB1A32052F2808AD00737B09 /* DecompositionProfile.md */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -293,6 +292,7 @@
 				3F6806C729CBBC5B00B4F915 /* Scenes  */,
 				3F6806C629CBBC4E00B4F915 /* Services */,
 				3F6806A429CBBAF200B4F915 /* Info.plist */,
+				CB9F331D2F292FE1001DEF76 /* docs */,
 			);
 			path = FakeNFT;
 			sourceTree = "<group>";
@@ -414,6 +414,14 @@
 				CB1A31F62F23CBD100737B09 /* MyNFTCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		CB9F331D2F292FE1001DEF76 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				CB1A32052F2808AD00737B09 /* DecompositionProfile.md */,
+			);
+			path = docs;
 			sourceTree = "<group>";
 		};
 		CBA28F7D2F220BB000C78A2F /* View */ = {
