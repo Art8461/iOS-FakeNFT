@@ -17,7 +17,7 @@ enum NFTMockData {
                 title: "Test",
                 starsImageName: "Rating3",
                 authorName: "Andrey P",
-                price: "1.78 ETH"
+                price: 1.78
             ),
             NFTCartModel(
                 imageName: "NFTCardTest2",
@@ -25,7 +25,7 @@ enum NFTMockData {
                 title: "Test 2",
                 starsImageName: "Rating3",
                 authorName: "Andrey P",
-                price: "2.50 ETH"
+                price: 2.50
             ),
             NFTCartModel(
                 imageName: "NFTCardTest3",
@@ -33,21 +33,8 @@ enum NFTMockData {
                 title: "Test 3",
                 starsImageName: "Rating3",
                 authorName: "Andrey P",
-                price: "3.12 ETH"
+                price: 3.12
             )
         ]
-    }
-
-    static func favoriteNFTs() -> [NFTCartModel] {
-        myNFTs().map {
-            NFTCartModel(
-                imageName: $0.imageName,
-                likeImageName: $0.likeImageName,
-                title: $0.title,
-                starsImageName: $0.starsImageName,
-                authorName: nil,
-                price: $0.price
-            )
-        }
     }
 }

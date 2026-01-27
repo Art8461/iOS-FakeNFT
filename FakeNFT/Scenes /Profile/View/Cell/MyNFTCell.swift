@@ -23,7 +23,7 @@ final class MyNFTCell: UITableViewCell {
     }()
     
     private let imageNFTView: UIImageView = .baseNFTImage()
-    private let likeButton: UIButton = .likeButton()
+    private let likeButton: UIButton = .likeButton(color: .whiteUniversal)
     private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
     private let starsImageView: UIImageView = .starsImageView()
     private let authorPrefixLabel: UILabel = .baseLabel(text: "от", font: .systemFont(ofSize: 15, weight: .regular))
@@ -101,6 +101,6 @@ final class MyNFTCell: UITableViewCell {
         titleLabel.text = model.title
         starsImageView.image = UIImage(named: model.starsImageName)
         nameAuthorLabel.text = model.authorName
-        priceValueLabel.text = model.price
+        priceValueLabel.text = String(format: "%.2f ETH", model.price)
     }
 }

@@ -129,9 +129,9 @@ extension UIStackView {
 // MARK: - UIButton
 
 extension UIButton {
-    static func likeButton() -> UIButton {
+    static func likeButton(color: UIColor) -> UIButton {
         let button = UIButton(type: .system)
-        button.tintColor = .white
+        button.tintColor = color
         button.backgroundColor = .clear
         button.translatesAutoresizingMaskIntoConstraints = false
         return button

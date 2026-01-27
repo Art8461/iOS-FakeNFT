@@ -16,7 +16,7 @@ final class FavoritesNFTCell: UICollectionViewCell {
     // MARK: - UI Elements
     
     private let imageNFTView: UIImageView = .baseNFTImage()
-    private let likeButton: UIButton = .likeButton()
+    private let likeButton: UIButton = .likeButton(color: .redUniversal)
     private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
     private let starsImageView: UIImageView = .starsImageView()
     private let priceValueLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 15, weight: .regular))
@@ -72,6 +72,6 @@ final class FavoritesNFTCell: UICollectionViewCell {
         likeButton.setImage(UIImage(named: model.likeImageName), for: .normal)
         titleLabel.text = model.title
         starsImageView.image = UIImage(named: model.starsImageName)
-        priceValueLabel.text = model.price
+        priceValueLabel.text = String(format: "%.2f ETH", model.price)
     }
 }
