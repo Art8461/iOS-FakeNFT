@@ -48,8 +48,14 @@ final class BasketPresenterImpl: BasketPresenter {
     private var sortOption: BasketSortOption?
 
     func didTapDelete(id: String) {
+        let previousIds = nftIds
+        let previousNfts = currentNfts
+
         nftIds.removeAll { $0 == id }
-        updateOrder()
+        currentNfts.removeAll { $0.id == id }
+        applySortAndDisplay()
+
+        updateOrder(removedId: id, previousIds: previousIds, previousNfts: previousNfts)
     }
     
     func refresh() {
@@ -122,8 +128,7 @@ final class BasketPresenterImpl: BasketPresenter {
         }
     }
     
-    private func updateOrder() {
-        view?.displayLoading(true)
+    private func updateOrder(removedId: String, previousIds: [String], previousNfts: [Nft]) {
         basketService.updateOrder(nfts: nftIds) { [weak self] result in
             DispatchQueue.main.async{
                 assert(Thread.isMainThread)
@@ -133,19 +138,20 @@ final class BasketPresenterImpl: BasketPresenter {
                     self?.nftIds = order.nfts
                     if order.nfts.isEmpty {
                         self?.currentNfts = []
-                        self?.view?.displayLoading(false)
                         self?.view?.display(isEmpty: true)
                         self?.view?.display(items: [])
                         return
                     }
                     self?.loadNfts(ids: order.nfts)
                 case .failure:
-                    self?.view?.displayLoading(false)
+                    self?.nftIds = previousIds
+                    self?.currentNfts = previousNfts
+                    self?.applySortAndDisplay()
                     let primary = ErrorAction(
                         title: NSLocalizedString("Error.repeat", comment: ""),
                         style: .default
                     ) { [weak self] in
-                        self?.updateOrder()
+                        self?.didTapDelete(id: removedId)
                     }
                     let secondary = ErrorAction(
                         title: NSLocalizedString("Error.close", comment: ""),
