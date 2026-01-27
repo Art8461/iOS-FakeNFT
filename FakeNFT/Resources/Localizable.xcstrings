@@ -1,685 +1,727 @@
 {
-  "sourceLanguage" : "ru",
-  "strings" : {
-    "Catalog.openNft" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exit"
-          }
+    "sourceLanguage" : "ru",
+    "strings" : {
+        "Catalog.openNft" : {
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Exit"
+                    }
+                },
+                "ru" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Выйти"
+                    }
+                }
+            }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Выйти"
-          }
-        }
-      }
-    },
-    "Email" : {
-      "comment" : "email placeholder",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Email"
-          }
-        }
-      }
-    },
-    "Error.close" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel"
-          }
+        "Email" : {
+            "comment" : "email placeholder",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Email"
+                    }
+                }
+            }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Отмена"
-          }
-        }
-      }
-    },
-    "Error.network" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A network error has occurred"
-          }
+        "Error.close" : {
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Cancel"
+                    }
+                },
+                "ru" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Отмена"
+                    }
+                }
+            }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Произошла ошибка сети"
-          }
-        }
-      }
-    },
-    "Error.partial" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Failed to load part of the NFT"
-          }
+        "Error.network" : {
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "A network error has occurred"
+                    }
+                },
+                "ru" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Произошла ошибка сети"
+                    }
+                }
+            }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Не удалось загрузить часть NFT"
-          }
-        }
-      }
-    },
-    "Error.paymentFailed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Failed to make payment"
-          }
+        "Error.partial" : {
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Failed to load part of the NFT"
+                    }
+                },
+                "ru" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Не удалось загрузить часть NFT"
+                    }
+                }
+            }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Не удалось произвести оплату"
-          }
-        }
-      }
-    },
-    "Error.repeat" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Repeat"
-          }
+        "Error.paymentFailed" : {
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Failed to make payment"
+                    }
+                },
+                "ru" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Не удалось произвести оплату"
+                    }
+                }
+            }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Повторить"
-          }
-        }
-      }
-    },
-    "Error.title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Error"
-          }
+        "Error.repeat" : {
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Repeat"
+                    }
+                },
+                "ru" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Повторить"
+                    }
+                }
+            }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ошибка"
-          }
-        }
-      }
-    },
-    "Error.unknown" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "An unknown error has occurred"
-          }
+        "Error.title" : {
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Error"
+                    }
+                },
+                "ru" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Ошибка"
+                    }
+                }
+            }
         },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Произошла неизвестная ошибка"
-          }
+        "Error.unknown" : {
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "An unknown error has occurred"
+                    }
+                },
+                "ru" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Произошла неизвестная ошибка"
+                    }
+                }
+            }
+        },
+        "Введен неверный логин или пароль" : {
+            "comment" : "invalid credentials",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Invalid login or password entered"
+                    }
+                }
+            }
+        },
+        "Введите корректный email" : {
+            "comment" : "invalid email",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Enter a correct email"
+                    }
+                }
+            }
+        },
+        "Вернуться" : {
+            "comment" : "cancel button",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Back"
+                    }
+                }
+            }
+        },
+        "Вернуться в корзину" : {
+            "comment" : "return to basket button",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Return to basket"
+                    }
+                }
+            }
+        },
+        "Войти" : {
+            "comment" : "sign in button",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Sign in"
+                    }
+                }
+            }
+        },
+        "Вход" : {
+            "comment" : "sign in",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Login"
+                    }
+                }
+            }
+        },
+        "Вы уверены, что хотите \nудалить объект из корзины?" : {
+            "comment" : "Confirmation title",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Are you sure you want to remove the item from the Trash?"
+                    }
+                }
+            }
+        },
+        "Выберите способ оплаты" : {
+            "comment" : "payment title",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Select payment method"
+                    }
+                }
+            }
+        },
+        "Забыли пароль?" : {
+            "comment" : "forgot password",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Forgot your password?"
+                    }
+                }
+            }
+        },
+        "Закрыть" : {
+            "comment" : "cancel sort\nclose",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Cancel"
+                    }
+                }
+            }
+        },
+        "Исследуйте" : {
+            "comment" : "onboarding title 1",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Explore"
+                    }
+                }
+            }
+        },
+        "Присоединяйтесь и откройте новый мир \nуникальных NFT для коллекционеров" : {
+            "comment" : "onboarding subtitle 1",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Join and discover a new world\nof unique NFTs for collectors"
+                    }
+                }
+            }
+        },
+        "Зарегистрироваться" : {
+                "comment" : "sign up button",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Sign up"
+                        }
+                    }
+                }
+            },
+            "Инструкции по восстановлению пароля высланы\nна указанный email" : {
+                "comment" : "reset password success",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Instructions to reset your password were sent to the email address provided."
+                        }
+                    }
+                }
+            },
+            "К оплате" : {
+                "comment" : "button for pay",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "For payment"
+                        }
+                    }
+                }
+            },
+            "Каталог" : {
+                "comment" : "tab title for catalog",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Catalog"
+                        }
+                    }
+                }
+            },
+        "Коллекционируйте" : {
+            "comment" : "onboarding title 2",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Collect"
+                    }
+                }
+            }
+        },
+        "Пополняйте свою коллекцию эксклюзивными \nкартинками, созданными нейросетью!" : {
+            "comment" : "onboarding subtitle 2",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Grow your collection with exclusive\nAI-generated images!"
+                    }
+                }
+            }
+        },
+            "Корзина" : {
+                "comment" : "tab title for basket",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Basket"
+                        }
+                    }
+                }
+            },
+            "Корзина пуста" : {
+                "comment" : "basket is empty state",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Basket is empty state"
+                        }
+                    }
+                }
+            },
+            "Не удалось войти в систему" : {
+                "comment" : "auth error",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Login failed"
+                        }
+                    }
+                }
+            },
+            "Неверный пароль" : {
+                "comment" : "auth error",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Invalid password"
+                        }
+                    }
+                }
+            },
+            "Неверный формат email" : {
+                "comment" : "auth error",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Invalid email address"
+                        }
+                    }
+                }
+            },
+            "Ок" : {
+                "comment" : "Ок",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Ок"
+                        }
+                    }
+                }
+            },
+            "Оплатить" : {
+                "comment" : "pay button",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Pay"
+                        }
+                    }
+                }
+            },
+            "Пароли не совпадают" : {
+                "comment" : "password mismatch",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Passwords do not match"
+                        }
+                    }
+                }
+            },
+            "Пароль" : {
+                "comment" : "password placeholder",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Password"
+                        }
+                    }
+                }
+            },
+            "Пароль должен быть не короче 6 символов" : {
+                "comment" : "weak password",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Password must be minimum 6 characters"
+                        }
+                    }
+                }
+            },
+            "По названию" : {
+                "comment" : "sort by name",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "By name"
+                        }
+                    }
+                }
+            },
+            "По рейтингу" : {
+                "comment" : "sort by rating",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "By rating"
+                        }
+                    }
+                }
+            },
+            "По цене" : {
+                "comment" : "sort by price",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "By price"
+                        }
+                    }
+                }
+            },
+            "Повторите пароль" : {
+                "comment" : "confirm password placeholder",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Repeat password"
+                        }
+                    }
+                }
+            },
+            "Пользователь не найден" : {
+                "comment" : "auth error",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "The user with this email was not found"
+                        }
+                    }
+                }
+            },
+            "Пользовательского соглашения" : {
+                "comment" : "user agreement",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "User Agreement"
+                        }
+                    }
+                }
+            },
+            "Пользовательское соглашение" : {
+                "comment" : "title user agreement",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "User Agreement"
+                        }
+                    }
+                }
+            },
+            "Произошла неизвестная ошибка" : {
+                "comment" : "auth error",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "An unknown error occurred"
+                        }
+                    }
+                }
+            },
+            "Произошла ошибка сети" : {
+                "comment" : "auth error",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Network error"
+                        }
+                    }
+                }
+            },
+            "Профиль" : {
+                "comment" : "tab title for profile",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Profile"
+                        }
+                    }
+                }
+            },
+        "Смотрите статистику других и покажите всем, \nчто у вас самая ценная коллекция" : {
+            "comment" : "onboarding subtitle 3",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "See others' stats and show everyone\nthat you have the most valuable collection"
+                    }
+                }
+            }
+        },
+            "Регистрация" : {
+                "comment" : "sign up title",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Sign up"
+                        }
+                    }
+                }
+            },
+            "Сброс пароля" : {
+                "comment" : "basket is empty state",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Password reset"
+                        }
+                    }
+                }
+            },
+            "Сбросить пароль" : {
+                "comment" : "reset password button",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Reset your password"
+                        }
+                    }
+                }
+            },
+            "Слишком много попыток. Попробуйте позже" : {
+                "comment" : "auth error",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Too many attempts. Try again later."
+                        }
+                    }
+                }
+            },
+            "Слишком простой пароль" : {
+                "comment" : "auth error",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Password is too weak"
+                        }
+                    }
+                }
+            },
+            "Совершая покупку, вы соглашаетесь с условиями" : {
+                "comment" : "text agreement",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "By making a purchase, you agree to the terms and conditions"
+                        }
+                    }
+                }
+            },
+            "Сортировка" : {
+                "comment" : "sort action sheet title",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Sorting"
+                        }
+                    }
+                }
+            },
+        "Состязайтесь" : {
+            "comment" : "onboarding title 3",
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Compete"
+                    }
+                }
+            }
+        },
+            "Статистика" : {
+                "comment" : "tab title for statistics",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Statistics"
+                        }
+                    }
+                }
+            },
+            "Такой email уже зарегистрирован" : {
+                "comment" : "auth error",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Email already in use"
+                        }
+                    }
+                }
+            },
+            "Удалить" : {
+                "comment" : "delete button",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Delete"
+                        }
+                    }
+                }
+            },
+            "Успех! Оплата прошла,\nпоздравляем с покупкой!" : {
+                "comment" : "payment success text",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Success! The payment went through\nCongratulations on your purchase!"
+                        }
+                    }
+                }
+            },
+            "Цена" : {
+                "comment" : "price title",
+                "localizations" : {
+                    "en" : {
+                        "stringUnit" : {
+                            "state" : "translated",
+                            "value" : "Price"
+                        }
+                    }
+                }
+            },
+        "Что-то пошло не так(" : {
+            "localizations" : {
+                "en" : {
+                    "stringUnit" : {
+                        "state" : "translated",
+                        "value" : "Oops! Something went wrong"
+                    }
+                }
+            }
         }
-      }
     },
-    "Введен неверный логин или пароль" : {
-      "comment" : "invalid credentials",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invalid login or password entered"
-          }
-        }
-      }
-    },
-    "Введите корректный email" : {
-      "comment" : "invalid email",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter a correct email"
-          }
-        }
-      }
-    },
-    "Вернуться" : {
-      "comment" : "cancel button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Back"
-          }
-        }
-      }
-    },
-    "Вернуться в корзину" : {
-      "comment" : "return to basket button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Return to basket"
-          }
-        }
-      }
-    },
-    "Войти" : {
-      "comment" : "sign in button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign in"
-          }
-        }
-      }
-    },
-    "Вход" : {
-      "comment" : "sign in",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Login"
-          }
-        }
-      }
-    },
-    "Вы уверены, что хотите \nудалить объект из корзины?" : {
-      "comment" : "Confirmation title",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Are you sure you want to remove the item from the Trash?"
-          }
-        }
-      }
-    },
-    "Выберите способ оплаты" : {
-      "comment" : "payment title",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Select payment method"
-          }
-        }
-      }
-    },
-    "Забыли пароль?" : {
-      "comment" : "forgot password",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Forgot your password?"
-          }
-        }
-      }
-    },
-    "Закрыть" : {
-      "comment" : "cancel sort\nclose",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel"
-          }
-        }
-      }
-    },
-<<<<<<< HEAD
-    "Исследуйте" : {
-      "comment" : "onboarding title 1"
-=======
-    "Зарегистрироваться" : {
-      "comment" : "sign up button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign up"
-          }
-        }
-      }
-    },
-    "Инструкции по восстановлению пароля высланы\nна указанный email" : {
-      "comment" : "reset password success",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Instructions to reset your password were sent to the email address provided."
-          }
-        }
-      }
->>>>>>> ArtemCart-Authorization
-    },
-    "К оплате" : {
-      "comment" : "button for pay",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "For payment"
-          }
-        }
-      }
-    },
-    "Каталог" : {
-      "comment" : "tab title for catalog",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Catalog"
-          }
-        }
-      }
-    },
-    "Коллекционируйте" : {
-      "comment" : "onboarding title 2"
-    },
-    "Корзина" : {
-      "comment" : "tab title for basket",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Basket"
-          }
-        }
-      }
-    },
-    "Корзина пуста" : {
-      "comment" : "basket is empty state",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Basket is empty state"
-          }
-        }
-      }
-    },
-    "Не удалось войти в систему" : {
-      "comment" : "auth error",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Login failed"
-          }
-        }
-      }
-    },
-    "Неверный пароль" : {
-      "comment" : "auth error",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invalid password"
-          }
-        }
-      }
-    },
-    "Неверный формат email" : {
-      "comment" : "auth error",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invalid email address"
-          }
-        }
-      }
-    },
-    "Ок" : {
-      "comment" : "Ок",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ок"
-          }
-        }
-      }
-    },
-    "Оплатить" : {
-      "comment" : "pay button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pay"
-          }
-        }
-      }
-    },
-    "Пароли не совпадают" : {
-      "comment" : "password mismatch",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Passwords do not match"
-          }
-        }
-      }
-    },
-    "Пароль" : {
-      "comment" : "password placeholder",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Password"
-          }
-        }
-      }
-    },
-    "Пароль должен быть не короче 6 символов" : {
-      "comment" : "weak password",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Password must be minimum 6 characters"
-          }
-        }
-      }
-    },
-    "По названию" : {
-      "comment" : "sort by name",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "By name"
-          }
-        }
-      }
-    },
-    "По рейтингу" : {
-      "comment" : "sort by rating",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "By rating"
-          }
-        }
-      }
-    },
-    "По цене" : {
-      "comment" : "sort by price",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "By price"
-          }
-        }
-      }
-    },
-    "Повторите пароль" : {
-      "comment" : "confirm password placeholder",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Repeat password"
-          }
-        }
-      }
-    },
-    "Пользователь не найден" : {
-      "comment" : "auth error",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The user with this email was not found"
-          }
-        }
-      }
-    },
-    "Пользовательского соглашения" : {
-      "comment" : "user agreement",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "User Agreement"
-          }
-        }
-      }
-    },
-    "Пользовательское соглашение" : {
-      "comment" : "title user agreement",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "User Agreement"
-          }
-        }
-      }
-    },
-<<<<<<< HEAD
-    "Пополняйте свою коллекцию эксклюзивными \nкартинками, созданными нейросетью!" : {
-      "comment" : "onboarding subtitle 2"
-    },
-    "Присоединяйтесь и откройте новый мир \nуникальных NFT для коллекционеров" : {
-      "comment" : "onboarding subtitle 1"
-=======
-    "Произошла неизвестная ошибка" : {
-      "comment" : "auth error",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "An unknown error occurred"
-          }
-        }
-      }
-    },
-    "Произошла ошибка сети" : {
-      "comment" : "auth error",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Network error"
-          }
-        }
-      }
->>>>>>> ArtemCart-Authorization
-    },
-    "Профиль" : {
-      "comment" : "tab title for profile",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Profile"
-          }
-        }
-      }
-    },
-<<<<<<< HEAD
-    "Смотрите статистику других и покажите всем, \nчто у вас самая ценная коллекция" : {
-      "comment" : "onboarding subtitle 3"
-=======
-    "Регистрация" : {
-      "comment" : "sign up title",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign up"
-          }
-        }
-      }
-    },
-    "Сброс пароля" : {
-      "comment" : "basket is empty state",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Password reset"
-          }
-        }
-      }
-    },
-    "Сбросить пароль" : {
-      "comment" : "reset password button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset your password"
-          }
-        }
-      }
-    },
-    "Слишком много попыток. Попробуйте позже" : {
-      "comment" : "auth error",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Too many attempts. Try again later."
-          }
-        }
-      }
-    },
-    "Слишком простой пароль" : {
-      "comment" : "auth error",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Password is too weak"
-          }
-        }
-      }
->>>>>>> ArtemCart-Authorization
-    },
-    "Совершая покупку, вы соглашаетесь с условиями" : {
-      "comment" : "text agreement",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "By making a purchase, you agree to the terms and conditions"
-          }
-        }
-      }
-    },
-    "Сортировка" : {
-      "comment" : "sort action sheet title",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sorting"
-          }
-        }
-      }
-    },
-    "Состязайтесь" : {
-      "comment" : "onboarding title 3"
-    },
-    "Статистика" : {
-      "comment" : "tab title for statistics",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Statistics"
-          }
-        }
-      }
-    },
-    "Такой email уже зарегистрирован" : {
-      "comment" : "auth error",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Email already in use"
-          }
-        }
-      }
-    },
-    "Удалить" : {
-      "comment" : "delete button",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete"
-          }
-        }
-      }
-    },
-    "Успех! Оплата прошла,\nпоздравляем с покупкой!" : {
-      "comment" : "payment success text",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Success! The payment went through\nCongratulations on your purchase!"
-          }
-        }
-      }
-    },
-    "Цена" : {
-      "comment" : "price title",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Price"
-          }
-        }
-      }
-    },
-    "Что-то пошло не так(" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oops! Something went wrong"
-          }
-        }
-      }
-    }
-  },
-  "version" : "1.1"
+    "version" : "1.1"
 }
