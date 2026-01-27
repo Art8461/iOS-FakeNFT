@@ -11,6 +11,7 @@ import Kingfisher
 final class CurrencyCell: UICollectionViewListCell, ReuseIdentifying {
 
     private let containerView = UIView()
+    private let containerIconImage = UIView()
     private let iconImageView = UIImageView()
     private let titleLabel = UILabel()
     private let nameLabel = UILabel()
@@ -61,14 +62,20 @@ final class CurrencyCell: UICollectionViewListCell, ReuseIdentifying {
         textStack.addArrangedSubview(titleLabel)
         textStack.addArrangedSubview(nameLabel)
 
+        containerIconImage.backgroundColor = UIColor(resource: .blackUniversal)
+        containerIconImage.layer.cornerRadius = 6
+        containerIconImage.layer.masksToBounds = true
+        containerIconImage.addSubview(iconImageView)
+
         contentView.addSubview(containerView)
-        
-        containerView.addSubview(iconImageView)
+
+        containerView.addSubview(containerIconImage)
         containerView.addSubview(textStack)
     }
 
     private func setupLayout() {
         containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerIconImage.translatesAutoresizingMaskIntoConstraints = false
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         textStack.translatesAutoresizingMaskIntoConstraints = false
 
@@ -78,12 +85,17 @@ final class CurrencyCell: UICollectionViewListCell, ReuseIdentifying {
             containerView.widthAnchor.constraint(equalToConstant: 168),
             containerView.heightAnchor.constraint(equalToConstant: 46),
 
-            iconImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
-            iconImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: 36),
-            iconImageView.heightAnchor.constraint(equalToConstant: 36),
+            containerIconImage.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
+            containerIconImage.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            containerIconImage.widthAnchor.constraint(equalToConstant: 36),
+            containerIconImage.heightAnchor.constraint(equalToConstant: 36),
+            
+            iconImageView.topAnchor.constraint(equalTo: containerIconImage.topAnchor),
+            iconImageView.leadingAnchor.constraint(equalTo: containerIconImage.leadingAnchor),
+            iconImageView.trailingAnchor.constraint(equalTo: containerIconImage.trailingAnchor),
+            iconImageView.bottomAnchor.constraint(equalTo: containerIconImage.bottomAnchor),
 
-            textStack.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 4),
+            textStack.leadingAnchor.constraint(equalTo: containerIconImage.trailingAnchor, constant: 12),
             textStack.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             textStack.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor, constant: -12)
         ])

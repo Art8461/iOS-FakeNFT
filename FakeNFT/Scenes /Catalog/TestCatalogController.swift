@@ -17,7 +17,7 @@ final class TestCatalogViewController: UIViewController, ErrorView {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor(resource: .whiteApp)
 
         view.addSubview(testNftButton)
         testNftButton.constraintCenters(to: view)

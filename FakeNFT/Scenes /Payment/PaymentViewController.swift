@@ -132,7 +132,7 @@ final class PaymentViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor(resource: .whiteApp)
 
         collectionView.delegate = self
         userAgreementButton.addTarget(self, action: #selector(didTapUserAgreement), for: .touchUpInside)

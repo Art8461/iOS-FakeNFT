@@ -48,8 +48,14 @@ final class BasketPresenterImpl: BasketPresenter {
     private var sortOption: BasketSortOption?
 
     func didTapDelete(id: String) {
+        let previousIds = nftIds
+        let previousNfts = currentNfts
+
         nftIds.removeAll { $0 == id }
-        updateOrder()
+        currentNfts.removeAll { $0.id == id }
+        applySortAndDisplay()
+
+        updateOrder(removedId: id, previousIds: previousIds, previousNfts: previousNfts)
     }
     
     func refresh() {
@@ -83,6 +89,8 @@ final class BasketPresenterImpl: BasketPresenter {
         view?.displayLoading(true)
         basketService.loadOrder { [weak self] result in
             DispatchQueue.main.async {
+                assert(Thread.isMainThread)
+
                 switch result {
                 case .success(let order):
                     self?.orderId = order.id
@@ -120,28 +128,30 @@ final class BasketPresenterImpl: BasketPresenter {
         }
     }
     
-    private func updateOrder() {
-        view?.displayLoading(true)
+    private func updateOrder(removedId: String, previousIds: [String], previousNfts: [Nft]) {
         basketService.updateOrder(nfts: nftIds) { [weak self] result in
             DispatchQueue.main.async{
+                assert(Thread.isMainThread)
+
                 switch result {
                 case .success(let order):
                     self?.nftIds = order.nfts
                     if order.nfts.isEmpty {
                         self?.currentNfts = []
-                        self?.view?.displayLoading(false)
                         self?.view?.display(isEmpty: true)
                         self?.view?.display(items: [])
                         return
                     }
                     self?.loadNfts(ids: order.nfts)
                 case .failure:
-                    self?.view?.displayLoading(false)
+                    self?.nftIds = previousIds
+                    self?.currentNfts = previousNfts
+                    self?.applySortAndDisplay()
                     let primary = ErrorAction(
                         title: NSLocalizedString("Error.repeat", comment: ""),
                         style: .default
                     ) { [weak self] in
-                        self?.updateOrder()
+                        self?.didTapDelete(id: removedId)
                     }
                     let secondary = ErrorAction(
                         title: NSLocalizedString("Error.close", comment: ""),
@@ -165,6 +175,8 @@ final class BasketPresenterImpl: BasketPresenter {
     private func loadNfts(ids: [String]) {
         guard !ids.isEmpty else {
             DispatchQueue.main.async {
+                assert(Thread.isMainThread)
+
                 self.view?.displayLoading(false)
                 self.currentNfts = []
                 self.view?.display(items: [])
@@ -194,6 +206,8 @@ final class BasketPresenterImpl: BasketPresenter {
                     tasks.forEach { $0.cancel() }
                     
                     DispatchQueue.main.async {
+                        assert(Thread.isMainThread)
+
                         self.view?.displayLoading(false)
                         let primary = ErrorAction(
                             title: NSLocalizedString("Error.repeat", comment: ""),
@@ -218,6 +232,8 @@ final class BasketPresenterImpl: BasketPresenter {
         }
         
         group.notify(queue: .main) { [weak self] in
+            assert(Thread.isMainThread)
+
             guard let self, !hasFailed else { return }
             self.view?.displayLoading(false)
             let orderedNfts = ids.compactMap { nftsById[$0] }

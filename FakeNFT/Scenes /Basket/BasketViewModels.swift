@@ -11,7 +11,7 @@ struct BasketItemCellModel {
     let id: String
     let title: String
     let priceText: String
-    let rating: Int   // 0...5
+    let rating: Int
     let imageURL: URL?
 }
 

@@ -4,7 +4,7 @@ struct ErrorModel {
     let title: String?
     let message: String
     let primaryAction: ErrorAction
-    let secondaryAction: ErrorAction? // опционально, nil-одна кнопка
+    let secondaryAction: ErrorAction?
 
     init(
         title: String? = nil,
