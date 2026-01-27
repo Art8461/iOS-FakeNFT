@@ -21,8 +21,7 @@ struct CompleteOrderDto: Dto {
 
     func asDictionary() -> [String : String] {
         [
-            "id": id, //как id order
-            //"nfts": nfts.joined(separator: "") // пустой массив
+            "id": id,
         ]
     }
 }

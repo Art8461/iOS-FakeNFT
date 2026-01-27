@@ -123,7 +123,6 @@ final class PaymentPresenterImpl: PaymentPresenter {
                 guard let self else { return }
                 assert(Thread.isMainThread)
                 self.view?.displayLoading(false)
-                // игнорируем любую ошибку
                 self.router.returnToBasket()
             }
         }
