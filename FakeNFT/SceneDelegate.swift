@@ -3,6 +3,8 @@ import UIKit
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
+    private static let onboardingHasSeenKey = "Onboarding.hasSeen"
+
     let servicesAssembly = ServicesAssembly(
         networkClient: DefaultNetworkClient(),
         nftStorage: NftStorageImpl()
@@ -14,15 +16,49 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         configureNavigationBarAppearance()
 
         let window = UIWindow(windowScene: windowScene)
+        window.makeKeyAndVisible()
+        self.window = window
+
+        if hasSeenOnboarding {
+            showMainFlow(in: window)
+        } else {
+            showOnboarding(in: window)
+        }
+    }
+
+    private func showOnboarding(in window: UIWindow) {
+        let onboardingViewController = OnboardingAssembly().build()
+        onboardingViewController.onFinish = { [weak self, weak window] in
+            guard let self, let window else { return }
+            self.markOnboardingSeen()
+            self.showMainFlow(in: window)
+        }
+        window.rootViewController = onboardingViewController
+    }
+
+    private var hasSeenOnboarding: Bool {
+        UserDefaults.standard.bool(forKey: Self.onboardingHasSeenKey)
+    }
+
+    private func markOnboardingSeen() {
+        UserDefaults.standard.set(true, forKey: Self.onboardingHasSeenKey)
+    }
+
+    private func showMainFlow(in window: UIWindow) {
         let rootViewController: UIViewController
         if servicesAssembly.authService.isAuthorized {
             rootViewController = TabBarController(servicesAssembly: servicesAssembly)
         } else {
             rootViewController = AuthAssembly(servicesAssembly: servicesAssembly).build()
         }
-        window.rootViewController = rootViewController
-        window.makeKeyAndVisible()
-        self.window = window
+        UIView.transition(
+            with: window,
+            duration: 0.25,
+            options: .transitionCrossDissolve,
+            animations: {
+                window.rootViewController = rootViewController
+            }
+        )
     }
 
     private func configureNavigationBarAppearance() {
