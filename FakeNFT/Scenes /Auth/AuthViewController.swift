@@ -162,7 +162,7 @@ final class AuthViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .whiteApp
 
         setupTextFields()
         setupLayout()
@@ -428,7 +428,7 @@ final class ResetPasswordViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .whiteApp
         setupTextField()
         setupLayout()
         setupKeyboardDismiss()
