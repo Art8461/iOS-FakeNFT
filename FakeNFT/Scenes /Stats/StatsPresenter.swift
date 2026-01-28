@@ -14,6 +14,7 @@ protocol StatsView: AnyObject, ErrorView {
 
 protocol StatsPresenter {
     func viewDidLoad()
+    func refresh()
     func didSelectSort(option: StatsSortOption)
 }
 
@@ -35,6 +36,10 @@ final class StatsPresenterImpl: StatsPresenter {
     }
     
     func viewDidLoad() {
+        view?.display(items: [])
+    }
+    
+    func refresh() {
         loadUsers()
     }
     

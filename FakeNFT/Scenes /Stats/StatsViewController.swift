@@ -44,6 +44,11 @@ final class StatsViewController: UIViewController {
         presenter.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter.refresh()
+    }
+    
     private func setupNavigation() {
         navigationItem.rightBarButtonItem = sortActionSheet.barButtonItem
     }
