@@ -81,15 +81,15 @@ final class StatsViewController: UIViewController {
         presentingViewController: self,
         options: [
             SortActionSheetOption(
-                title: NSLocalizedString("По рейтингу", comment: "sort by rating"),
-                handler: { [weak self] in
-                    self?.presenter.didSelectSort(option: .rating)
-                }
-            ),
-            SortActionSheetOption(
                 title: NSLocalizedString("По имени", comment: "sort by name"),
                 handler: { [weak self] in
                     self?.presenter.didSelectSort(option: .name)
+                }
+            ),
+            SortActionSheetOption(
+                title: NSLocalizedString("По рейтингу", comment: "sort by rating"),
+                handler: { [weak self] in
+                    self?.presenter.didSelectSort(option: .rating)
                 }
             )
         ]
