@@ -248,9 +248,9 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func openWebView(url: URL) {
-        let presenter = ProfileEditPresenter(model: getProfileEditModel())
+        let presenter = WebViewPresenter()
         let webVC = WebViewProfile(url: url, presenter: presenter)
-        presenter.view = webVC 
+        presenter.view = webVC
         navigationController?.pushViewController(webVC, animated: true)
     }
 
