@@ -94,6 +94,22 @@ final class ProfileEditViewController: UIViewController {
         return stack
     }()
     
+    //логика пока не реализована, кнопка скрыта
+    private lazy var saveButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Сохранить", for: .normal)
+        button.backgroundColor = .blackApp
+        button.tintColor = .whiteApp
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        button.layer.cornerRadius = 16
+        button.clipsToBounds = true
+        button.isHidden = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(tapSaveButton), for: .touchUpInside)
+        return button
+    }()
+
+    
     // MARK: - Initializers
     
     init(presenter: ProfileEditPresenterProtocol) {
@@ -126,13 +142,13 @@ final class ProfileEditViewController: UIViewController {
     }
     
     private func addSubviews() {
-        [avatarButton, editIcon, bigStackView].forEach {
+        [avatarButton, editIcon, bigStackView,saveButton].forEach {
             view.addSubview($0)
         }
     }
     
     private func setupConstraints() {
-        [avatarButton, editIcon, bigStackView].forEach {
+        [avatarButton, editIcon, bigStackView, saveButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -147,20 +163,41 @@ final class ProfileEditViewController: UIViewController {
             
             bigStackView.topAnchor.constraint(equalTo: avatarButton.bottomAnchor, constant: 24),
             bigStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            bigStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            bigStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16.5),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15.5),
+            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            saveButton.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
     // MARK: - Actions
     
     @objc private func tapBackButton() {
-        presenter.didTapBack()
-        print("назад к профилю")
+        let alert = UIAlertController(
+            title: "Уверены, что хотите выйти?",
+            message: nil,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Остаться", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Выйти", style: .default) { _ in
+            self.presenter.didTapBack()
+            print("назад к профилю")
+        })
+        
+        present(alert, animated: true)
+        
     }
     
     @objc private func tapAvatar() {
         print("редактирование аватарки")
     }
+    
+    @objc private func tapSaveButton() {
+        print("сохранение и выход")
+    }
+    //логика пока не реализована, кнопка скрыта
 }
 
 // MARK: - ProfileEditViewProtocol
