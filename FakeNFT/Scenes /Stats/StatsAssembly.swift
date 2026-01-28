@@ -15,7 +15,9 @@ final class StatsAssembly {
     }
 
     func build() -> UIViewController {
-        let vc = StatsViewController(servicesAssembly: servicesAssembly)
+        let presenter = StatsPresenterImpl(usersService: servicesAssembly.usersService)
+        let vc = StatsViewController(presenter: presenter)
+        presenter.view = vc
         return vc
     }
 }

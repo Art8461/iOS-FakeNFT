@@ -28,4 +28,8 @@ final class ServicesAssembly {
     var paymentService: PaymentService {
         PaymentServiceImpl(networkClient: networkClient)
     }
+    
+    var usersService: UsersService {
+        UsersServiceImpl(networkClient: networkClient)
+    }
 }
