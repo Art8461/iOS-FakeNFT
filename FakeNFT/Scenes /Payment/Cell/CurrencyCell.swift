@@ -49,11 +49,11 @@ final class CurrencyCell: UICollectionViewListCell, ReuseIdentifying {
         
         iconImageView.contentMode = .scaleAspectFit
 
-        titleLabel.font = .bodyBold
+        titleLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         titleLabel.textColor = UIColor(resource: .blackApp)
         titleLabel.numberOfLines = 1
 
-        nameLabel.font = .caption2
+        nameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         nameLabel.textColor = UIColor(resource: .greenUniversal)
         nameLabel.numberOfLines = 1
 
