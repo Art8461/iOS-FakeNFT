@@ -49,7 +49,7 @@ final class StatsPresenterImpl: StatsPresenter {
         page = 0
         hasMore = true
         users = []
-        loadUsers(page: page, showLoading: true)
+        loadAllPages()
     }
     
     func loadNextPage() {
@@ -59,6 +59,54 @@ final class StatsPresenterImpl: StatsPresenter {
     func didSelectSort(option: StatsSortOption) {
         sortOption = option
         applySortAndDisplay()
+    }
+    
+    private func loadAllPages() {
+        guard !isLoading else { return }
+        isLoading = true
+        view?.displayLoading(true)
+
+        func loadPage(_ page: Int) {
+            usersService.loadUsers(page: page) { [weak self] result in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let usersPage):
+                        self.users.append(contentsOf: usersPage)
+
+                        if usersPage.count < self.pageSize {
+                            self.isLoading = false
+                            self.view?.displayLoading(false)
+                            self.applySortAndDisplay()
+                        } else {
+                            loadPage(page + 1)
+                        }
+
+                    case .failure:
+                        self.isLoading = false
+                        self.view?.displayLoading(false)
+                        let primary = ErrorAction(
+                            title: NSLocalizedString("Error.repeat", comment: ""),
+                            style: .default
+                        ) { [weak self] in
+                            self?.loadUsers(page: self?.page ?? 0, showLoading: true)
+                        }
+                        let secondary = ErrorAction(
+                            title: NSLocalizedString("Error.close", comment: ""),
+                            style: .cancel
+                        ) { }
+                        let model = ErrorModel(
+                            message: NSLocalizedString("Error.network", comment: ""),
+                            primaryAction: primary,
+                            secondaryAction: secondary
+                        )
+                        self.view?.showError(model)
+                    }
+                }
+            }
+        }
+
+        loadPage(page)
     }
     
     private func loadUsers(page: Int, showLoading: Bool) {
