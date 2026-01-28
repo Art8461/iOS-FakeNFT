@@ -89,8 +89,6 @@ final class StatsPresenterImpl: StatsPresenter {
                 id: user.id,
                 name: user.name,
                 avatar: user.avatar,
-                description: user.description,
-                website: user.website,
                 nfts: user.nfts,
                 rating: ratingsById[user.id] ?? 0
             )

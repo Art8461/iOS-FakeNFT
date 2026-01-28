@@ -11,8 +11,6 @@ struct StatsItemCellModel {
     let id: String
     let name: String
     let avatar: URL?
-    let description: String
-    let website: String
     let nfts: Array<String>
     let rating: Int
 }

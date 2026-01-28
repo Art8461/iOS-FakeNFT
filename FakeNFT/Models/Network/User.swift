@@ -11,7 +11,5 @@ struct User: Decodable {
     let id: String
     let name: String
     let avatar: URL?
-    let description: String
-    let website: String
     let nfts: [String]
 }
