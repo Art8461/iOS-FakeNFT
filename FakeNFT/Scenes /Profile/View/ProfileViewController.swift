@@ -15,6 +15,7 @@ protocol ProfileViewProtocol: AnyObject {
     func getProfileEditModel() -> ProfileEditModel
     func openMyNFTs()
     func openFavoritesNFTs()
+    func openWebView(url: URL)
 }
 
 // MARK: - ProfileViewController
@@ -28,7 +29,7 @@ final class ProfileViewController: UIViewController {
 
     let name = "Joaquin Phoenix"
     let descriptionText = "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям."
-    let sait = "google.com"
+    let sait = "https://www.drive2.ru/experience/bmw/m287#results"
 
     private var profileCellName: [ProfileItem] = [
         ProfileItem(type: .myNFT, count: 0),
@@ -169,7 +170,8 @@ final class ProfileViewController: UIViewController {
     }
 
     @objc private func tapWebSiteLabel() {
-        print("переход к Веб Вью")
+        guard let url = webSiteLabel.text else { return }
+        presenter.didTapWebSite(url: url)
     }
 }
 
@@ -244,4 +246,12 @@ extension ProfileViewController: ProfileViewProtocol {
         presenter.view = myNFTsVC
         navigationController?.pushViewController(myNFTsVC, animated: true)
     }
+    
+    func openWebView(url: URL) {
+        let presenter = ProfileEditPresenter(model: getProfileEditModel())
+        let webVC = WebViewProfile(url: url, presenter: presenter)
+        presenter.view = webVC 
+        navigationController?.pushViewController(webVC, animated: true)
+    }
+
 }

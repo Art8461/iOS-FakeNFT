@@ -14,6 +14,7 @@ protocol ProfileEditPresenterProtocol: AnyObject {
     func didTapAvatar()
     func didSelectChangePhoto()
     func didSelectDeletePhoto()
+    func didTapWebBack()
 }
 
 final class ProfileEditPresenter: ProfileEditPresenterProtocol {
@@ -33,7 +34,6 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
         view?.showExitAlert()
     }
     
-    // Пользователь подтвердил выход
     func didTapExit() {
         view?.closeSave()
     }
@@ -42,13 +42,15 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
         view?.showAvatarAlert()
     }
     
-    // Пользователь выбрал изменить фото
     func didSelectChangePhoto() {
         print("Логика изменения фото")
     }
     
-    // Пользователь выбрал удалить фото
     func didSelectDeletePhoto() {
         print("Логика удаления фото")
     }
+    
+    func didTapWebBack() {
+         view?.closeWebView()
+     }
 }

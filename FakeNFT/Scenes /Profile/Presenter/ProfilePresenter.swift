@@ -11,6 +11,7 @@ protocol ProfilePresenterProtocol: AnyObject {
     func didTapEdit()
     func openMyNFTs()
     func openFavoritesNFC()
+    func didTapWebSite(url: String)
 }
 
 
@@ -30,6 +31,14 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     
     func openFavoritesNFC() {
         view?.openFavoritesNFTs()
+    }
+    
+    func didTapWebSite(url: String) {
+        guard let url = URL(string: url) else {
+            print("Некорректный URL: \(url)")
+            return
+        }
+        view?.openWebView(url: url)
     }
 }
 

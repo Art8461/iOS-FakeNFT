@@ -14,6 +14,7 @@ protocol ProfileEditViewProtocol: AnyObject {
     func closeSave() // пока только переход назад к экрану профиля
     func showExitAlert()
     func showAvatarAlert()
+    func closeWebView()  
 }
 
 // MARK: - ProfileEditViewController
@@ -193,6 +194,7 @@ final class ProfileEditViewController: UIViewController {
 // MARK: - ProfileEditViewProtocol
 
 extension ProfileEditViewController: ProfileEditViewProtocol {
+    
     func showExitAlert() {
         let alert = UIAlertController(
             title: "Уверены, что хотите выйти?",
@@ -228,4 +230,6 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
         descriptionTextView.text = model.description
         siteTextView.text = model.site
     }
+    
+    func closeWebView() {}
 }
