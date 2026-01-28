@@ -108,7 +108,7 @@ final class ProfileEditViewController: UIViewController {
         button.addTarget(self, action: #selector(tapSaveButton), for: .touchUpInside)
         return button
     }()
-
+    
     
     // MARK: - Initializers
     
@@ -191,6 +191,16 @@ final class ProfileEditViewController: UIViewController {
     }
     
     @objc private func tapAvatar() {
+        let alert = UIAlertController(title: "Фото профиля", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Изменить фото", style: .default, handler: { _ in
+            print("Изменить фото")
+        }))
+        alert.addAction(UIAlertAction(title: "Удалить фото", style: .destructive, handler: { _ in
+            print("Удалить фото")
+        }))
+        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel))
+        
+        present(alert, animated: true)
         print("редактирование аватарки")
     }
     
