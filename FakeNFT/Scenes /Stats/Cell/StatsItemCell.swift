@@ -50,9 +50,17 @@ final class StatsItemCell: UICollectionViewListCell, ReuseIdentifying {
     private func setupViews() {
         backgroundConfiguration = .clear()
         
+        countRaitLanel.font = .systemFont(ofSize: 15, weight: .regular)
+        countRaitLanel.textColor = .blackApp
+        countRaitLanel.textAlignment = .center
+        
+        containerProfileView.backgroundColor = UIColor(resource: .lightGreyApp)
+        containerProfileView.layer.cornerRadius = 12
+        containerProfileView.layer.masksToBounds = true
+        
         previewAvatarImgView.contentMode = .scaleAspectFill
         previewAvatarImgView.clipsToBounds = true
-        previewAvatarImgView.layer.cornerRadius = 28
+        previewAvatarImgView.layer.cornerRadius = 14
         
         nameLabel.font = .systemFont(ofSize: 22, weight: .bold)
         nameLabel.textColor = .blackApp
@@ -84,9 +92,13 @@ final class StatsItemCell: UICollectionViewListCell, ReuseIdentifying {
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
+            countRaitLanel.widthAnchor.constraint(equalToConstant: 27),
+            countRaitLanel.heightAnchor.constraint(equalToConstant: 20),
             countRaitLanel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             countRaitLanel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             
+            containerProfileView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            containerProfileView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             containerProfileView.leadingAnchor.constraint(equalTo: countRaitLanel.trailingAnchor, constant: 8),
             containerProfileView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
             containerProfileView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),

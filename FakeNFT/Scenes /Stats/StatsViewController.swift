@@ -12,10 +12,16 @@ final class StatsViewController: UIViewController {
     private let presenter: StatsPresenter
     
     private lazy var collectionView: UICollectionView = {
-        var config = UICollectionLayoutListConfiguration(appearance: .plain)
-        config.backgroundColor = .clear
-        config.showsSeparators = false
-        let layout = UICollectionViewCompositionalLayout.list(using: config)
+        let layout = UICollectionViewCompositionalLayout { _, environment in
+            var config = UICollectionLayoutListConfiguration(appearance: .plain)
+            config.backgroundColor = .clear
+            config.showsSeparators = false
+            
+            let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
+            section.interGroupSpacing = 8
+            return section
+        }
+        
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
