@@ -25,6 +25,7 @@ final class StatsViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
+        view.delegate = self
         view.dataSource = self
         return view
     }()
@@ -107,6 +108,16 @@ extension StatsViewController: UICollectionViewDataSource {
         cell.backgroundColor = .clear
         cell.configure(with: cellModels[indexPath.row])
         return cell
+    }
+}
+
+extension StatsViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+        if indexPath.item == cellModels.count - 1 {
+            presenter.loadNextPage()
+        }
     }
 }
 

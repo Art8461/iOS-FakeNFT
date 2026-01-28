@@ -8,7 +8,7 @@
 typealias UsersCompletion = (Result<[User], Error>) -> Void
 
 protocol UsersService {
-    func loadUsers(completion: @escaping UsersCompletion)
+    func loadUsers(page: Int, completion: @escaping UsersCompletion)
 }
 
 final class UsersServiceImpl: UsersService {
@@ -18,7 +18,11 @@ final class UsersServiceImpl: UsersService {
         self.networkClient = networkClient
     }
     
-    func loadUsers(completion: @escaping UsersCompletion) {
-        networkClient.send(request: UsersRequest(), type: [User].self, onResponse: completion)
+    func loadUsers(page: Int, completion: @escaping UsersCompletion) {
+        networkClient.send(
+            request: UsersRequest(page: page),
+            type: [User].self,
+            onResponse: completion
+        )
     }
 }

@@ -16,6 +16,7 @@ protocol StatsPresenter {
     func viewDidLoad()
     func refresh()
     func didSelectSort(option: StatsSortOption)
+    func loadNextPage()
 }
 
 enum StatsSortOption {
@@ -31,6 +32,11 @@ final class StatsPresenterImpl: StatsPresenter {
     private var users: [User] = []
     private var sortOption: StatsSortOption = .rating
     
+    private var page = 0
+    private var isLoading = false
+    private var hasMore = true
+    private let pageSize = 25
+    
     init(usersService: UsersService) {
         self.usersService = usersService
     }
@@ -40,7 +46,14 @@ final class StatsPresenterImpl: StatsPresenter {
     }
     
     func refresh() {
-        loadUsers()
+        page = 0
+        hasMore = true
+        users = []
+        loadUsers(page: page, showLoading: true)
+    }
+    
+    func loadNextPage() {
+        loadUsers(page: page, showLoading: false)
     }
     
     func didSelectSort(option: StatsSortOption) {
@@ -48,23 +61,40 @@ final class StatsPresenterImpl: StatsPresenter {
         applySortAndDisplay()
     }
     
-    private func loadUsers() {
-        view?.displayLoading(true)
-        usersService.loadUsers { [weak self] result in
+    private func loadUsers(page: Int, showLoading: Bool) {
+        guard !isLoading, hasMore else { return }
+        isLoading = true
+        if showLoading { view?.displayLoading(true) }
+
+        usersService.loadUsers(page: page) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self else { return }
                 assert(Thread.isMainThread)
-                self.view?.displayLoading(false)
+                if showLoading { self.view?.displayLoading(false) }
+                self.isLoading = false
+
                 switch result {
-                case .success(let users):
-                    self.users = users
+                case .success(let usersPage):
+                    if page == 0 {
+                        self.users = usersPage
+                    } else {
+                        self.users.append(contentsOf: usersPage)
+                    }
+
+                    if usersPage.count < self.pageSize {
+                        self.hasMore = false
+                    } else {
+                        self.page += 1
+                    }
+
                     self.applySortAndDisplay()
+
                 case .failure:
                     let primary = ErrorAction(
                         title: NSLocalizedString("Error.repeat", comment: ""),
                         style: .default
                     ) { [weak self] in
-                        self?.loadUsers()
+                        self?.loadUsers(page: self?.page ?? 0, showLoading: true)
                     }
                     let secondary = ErrorAction(
                         title: NSLocalizedString("Error.close", comment: ""),

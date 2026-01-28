@@ -8,9 +8,10 @@
 import Foundation
 
 struct UsersRequest: NetworkRequest {
+    let page: Int
     var dto: Dto? { nil }
     
     var endpoint: URL? {
-        URL(string: "\(RequestConstants.baseURL)/api/v1/users")
+        URL(string: "\(RequestConstants.baseURL)/api/v1/users?page=\(page)")
     }
 }
