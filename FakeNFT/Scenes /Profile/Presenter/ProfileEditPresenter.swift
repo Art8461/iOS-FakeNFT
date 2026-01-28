@@ -42,7 +42,8 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
     }
     
     func didSelectChangePhoto() {
-        print("Логика изменения фото")
+        view?.showPhotoLinkAlert()
+        print("Алерт для ввода ссылки на фото показан")
     }
     
     func didSelectDeletePhoto() {

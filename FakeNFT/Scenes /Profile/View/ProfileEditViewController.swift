@@ -11,9 +11,10 @@ import UIKit
 
 protocol ProfileEditViewProtocol: AnyObject {
     func showProfile(model: ProfileEditModel)
-    func closeSave() // пока только переход назад к экрану профиля
+    func closeSave()
     func showExitAlert()
     func showAvatarAlert()
+    func showPhotoLinkAlert()
 }
 
 // MARK: - ProfileEditViewController
@@ -219,6 +220,22 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
         present(alert, animated: true)
     }
     
+    func showPhotoLinkAlert() {
+        let alert = UIAlertController(title: "Ссылка на фото", message: nil, preferredStyle: .alert)       
+        alert.addTextField { textField in
+            textField.placeholder = "Введите ссылку на фото"
+            textField.keyboardType = .URL
+        }
+        
+        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Сохранить", style: .default) { [weak alert] _ in
+            if let text = alert?.textFields?.first?.text {
+                print("Введена ссылка: \(text)")
+            }
+        })
+        present(alert, animated: true)
+    }
+
     
     func closeSave() {
         navigationController?.popViewController(animated: true)
