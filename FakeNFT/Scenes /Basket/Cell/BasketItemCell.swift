@@ -165,7 +165,7 @@ final class StarRatingView: UIView {
         let clamped = min(max(rating, 0), 5)
         for (index, iv) in stars.enumerated() {
             iv.image = UIImage(resource: .star)
-            iv.tintColor = index < clamped ? .systemYellow : .lightGray
+            iv.tintColor = index < clamped ? .yellowUniversal : .lightGreyApp
         }
     }
 }
