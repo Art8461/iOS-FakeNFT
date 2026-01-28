@@ -26,6 +26,7 @@
 		28399CCA2F2A13BE0084BE01 /* StatsAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28399CC92F2A13AB0084BE01 /* StatsAssembly.swift */; };
 		28399CCC2F2A13DA0084BE01 /* StatsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28399CCB2F2A13CD0084BE01 /* StatsPresenter.swift */; };
 		28399CCE2F2A13F60084BE01 /* StatsViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28399CCD2F2A13EF0084BE01 /* StatsViewModels.swift */; };
+		28399CD12F2A18EE0084BE01 /* StatsItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28399CD02F2A18EA0084BE01 /* StatsItemCell.swift */; };
 		287AB1A22F20A8DF0064446E /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB1A02F20A8DF0064446E /* StatsViewController.swift */; };
 		287AB1A32F20A8DF0064446E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB19E2F20A8DF0064446E /* ProfileViewController.swift */; };
 		287AB1A42F20A8DF0064446E /* BasketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB19C2F20A8DF0064446E /* BasketViewController.swift */; };
@@ -106,6 +107,7 @@
 		28399CC92F2A13AB0084BE01 /* StatsAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsAssembly.swift; sourceTree = "<group>"; };
 		28399CCB2F2A13CD0084BE01 /* StatsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsPresenter.swift; sourceTree = "<group>"; };
 		28399CCD2F2A13EF0084BE01 /* StatsViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewModels.swift; sourceTree = "<group>"; };
+		28399CD02F2A18EA0084BE01 /* StatsItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsItemCell.swift; sourceTree = "<group>"; };
 		287AB19C2F20A8DF0064446E /* BasketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketViewController.swift; sourceTree = "<group>"; };
 		287AB19E2F20A8DF0064446E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		287AB1A02F20A8DF0064446E /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
@@ -238,6 +240,14 @@
 			path = MemoryStorage;
 			sourceTree = "<group>";
 		};
+		28399CCF2F2A18D30084BE01 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				28399CD02F2A18EA0084BE01 /* StatsItemCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		287AB19D2F20A8DF0064446E /* Basket */ = {
 			isa = PBXGroup;
 			children = (
@@ -263,6 +273,7 @@
 		287AB1A12F20A8DF0064446E /* Stats */ = {
 			isa = PBXGroup;
 			children = (
+				28399CCF2F2A18D30084BE01 /* Cell */,
 				28399CCD2F2A13EF0084BE01 /* StatsViewModels.swift */,
 				28399CCB2F2A13CD0084BE01 /* StatsPresenter.swift */,
 				28399CC92F2A13AB0084BE01 /* StatsAssembly.swift */,
@@ -620,6 +631,7 @@
 				28F47F472F265CA90070F809 /* PaymentService.swift in Sources */,
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
+				28399CD12F2A18EE0084BE01 /* StatsItemCell.swift in Sources */,
 				558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */,
 				3F68069729CBBAF100B4F915 /* AppDelegate.swift in Sources */,
 				28399CCE2F2A13F60084BE01 /* StatsViewModels.swift in Sources */,
