@@ -13,7 +13,6 @@ final class StatsAssembly {
     init(servicesAssembly: ServicesAssembly) {
         self.servicesAssembly = servicesAssembly
     }
-
     func build() -> UIViewController {
         let presenter = StatsPresenterImpl(usersService: servicesAssembly.usersService)
         let vc = StatsViewController(presenter: presenter)

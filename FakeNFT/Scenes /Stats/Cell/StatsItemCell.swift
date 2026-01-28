@@ -68,7 +68,14 @@ final class StatsItemCell: UICollectionViewListCell, ReuseIdentifying {
         
         nameLabel.font = .systemFont(ofSize: 22, weight: .bold)
         nameLabel.textColor = .blackApp
-        nameLabel.numberOfLines = 0
+        nameLabel.numberOfLines = 1
+        nameLabel.lineBreakMode = .byTruncatingTail
+
+        countNftLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        countNftLabel.setContentHuggingPriority(.required, for: .horizontal)
+
+        nameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        nameLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         
         countNftLabel.font = .systemFont(ofSize: 22, weight: .bold)
         

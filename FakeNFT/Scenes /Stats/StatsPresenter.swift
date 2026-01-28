@@ -56,7 +56,7 @@ final class StatsPresenterImpl: StatsPresenter {
         guard !isLoading else { return }
         isLoading = true
         view?.displayLoading(true)
-
+        
         func loadPage(_ page: Int) {
             usersService.loadUsers(page: page) { [weak self] result in
                 guard let self else { return }
@@ -64,7 +64,6 @@ final class StatsPresenterImpl: StatsPresenter {
                     switch result {
                     case .success(let usersPage):
                         self.users.append(contentsOf: usersPage)
-
                         if usersPage.count < self.pageSize-1 {
                             self.isLoading = false
                             self.view?.displayLoading(false)
@@ -72,7 +71,6 @@ final class StatsPresenterImpl: StatsPresenter {
                         } else {
                             loadPage(page + 1)
                         }
-
                     case .failure:
                         self.isLoading = false
                         self.view?.displayLoading(false)
@@ -96,7 +94,6 @@ final class StatsPresenterImpl: StatsPresenter {
                 }
             }
         }
-
         loadPage(0)
     }
     
