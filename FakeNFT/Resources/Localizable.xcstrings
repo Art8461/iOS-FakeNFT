@@ -322,7 +322,7 @@
       }
     },
     "Статистика" : {
-      "comment" : "tab title for statistics",
+      "comment" : "nav title\ntab title for statistics",
       "localizations" : {
         "en" : {
           "stringUnit" : {
