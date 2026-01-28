@@ -19,6 +19,8 @@ protocol BasketPresenter {
     func refresh()
     func didSelectSort(option: BasketSortOption)
     func didTapDelete(id: String)
+    func didTapPay()
+    var orderId: String? { get }
 }
 
 enum BasketSortOption {
@@ -29,25 +31,69 @@ enum BasketSortOption {
 
 final class BasketPresenterImpl: BasketPresenter {
     
+    weak var view: BasketView?
+    private let basketService: BasketService
+    private let nftService: NftService
+    private let router: BasketRouting
+    
+    init(basketService: BasketService, nftService: NftService, router: BasketRouting) {
+        self.basketService = basketService
+        self.nftService = nftService
+        self.router = router
+    }
+    
+    internal var orderId: String?
     private var nftIds: [String] = []
     private var currentNfts: [Nft] = []
     private var sortOption: BasketSortOption?
 
     func didTapDelete(id: String) {
+        let previousIds = nftIds
+        let previousNfts = currentNfts
+
         nftIds.removeAll { $0 == id }
-        updateOrder()
+        currentNfts.removeAll { $0.id == id }
+        applySortAndDisplay()
+
+        updateOrder(removedId: id, previousIds: previousIds, previousNfts: previousNfts)
     }
     
     func refresh() {
         reloadOrder()
     }
     
+    func didTapPay() {
+        guard let orderId else {
+            let primary = ErrorAction(
+                title: NSLocalizedString("Error.repeat", comment: ""),
+                style: .default
+            ) { [weak self] in
+                self?.didTapPay()
+            }
+            let secondary = ErrorAction(
+                title: NSLocalizedString("Error.close", comment: ""),
+                style: .cancel
+            ) { }
+            let model = ErrorModel(
+                message: NSLocalizedString("Error.network", comment: ""),
+                primaryAction: primary,
+                secondaryAction: secondary
+            )
+            self.view?.showError(model)
+            return
+        }
+        router.showPayment(orderId: orderId)
+    }
+    
     private func reloadOrder() {
         view?.displayLoading(true)
         basketService.loadOrder { [weak self] result in
             DispatchQueue.main.async {
+                assert(Thread.isMainThread)
+
                 switch result {
                 case .success(let order):
+                    self?.orderId = order.id
                     self?.nftIds = order.nfts
                     if order.nfts.isEmpty {
                         self?.currentNfts = []
@@ -61,53 +107,65 @@ final class BasketPresenterImpl: BasketPresenter {
                     self?.currentNfts = []
                     self?.view?.displayLoading(false)
                     self?.view?.display(isEmpty: true)
+                    let primary = ErrorAction(
+                        title: NSLocalizedString("Error.repeat", comment: ""),
+                        style: .default
+                    ) { [weak self] in
+                        self?.reloadOrder()
+                    }
+                    let secondary = ErrorAction(
+                        title: NSLocalizedString("Error.close", comment: ""),
+                        style: .cancel
+                    ) { }
                     let model = ErrorModel(
                         message: NSLocalizedString("Error.network", comment: ""),
-                        actionText: NSLocalizedString("Error.later", comment: "")
-                    ) {
-                    }
+                        primaryAction: primary,
+                        secondaryAction: secondary
+                    )
                     self?.view?.showError(model)
                 }
             }
         }
     }
     
-    private func updateOrder() {
-        view?.displayLoading(true)
+    private func updateOrder(removedId: String, previousIds: [String], previousNfts: [Nft]) {
         basketService.updateOrder(nfts: nftIds) { [weak self] result in
             DispatchQueue.main.async{
+                assert(Thread.isMainThread)
+
                 switch result {
                 case .success(let order):
                     self?.nftIds = order.nfts
                     if order.nfts.isEmpty {
                         self?.currentNfts = []
-                        self?.view?.displayLoading(false)
                         self?.view?.display(isEmpty: true)
                         self?.view?.display(items: [])
                         return
                     }
                     self?.loadNfts(ids: order.nfts)
                 case .failure:
-                    self?.view?.displayLoading(false)
+                    self?.nftIds = previousIds
+                    self?.currentNfts = previousNfts
+                    self?.applySortAndDisplay()
+                    let primary = ErrorAction(
+                        title: NSLocalizedString("Error.repeat", comment: ""),
+                        style: .default
+                    ) { [weak self] in
+                        self?.didTapDelete(id: removedId)
+                    }
+                    let secondary = ErrorAction(
+                        title: NSLocalizedString("Error.close", comment: ""),
+                        style: .cancel
+                    ) { }
                     let model = ErrorModel(
                         message: NSLocalizedString("Error.network", comment: ""),
-                        actionText: NSLocalizedString("Error.repeat", comment: "")
-                    ) { [weak self] in
-                        self?.updateOrder()
-                    }
+                        primaryAction: primary,
+                        secondaryAction: secondary
+                    )
                     self?.view?.showError(model)
                 }
             }
         }
-    }
-    
-    weak var view: BasketView?
-    private let basketService: BasketService
-    private let nftService: NftService
-    
-    init(basketService: BasketService, nftService: NftService) {
-        self.basketService = basketService
-        self.nftService = nftService
     }
     
     func viewDidLoad() {
@@ -117,6 +175,8 @@ final class BasketPresenterImpl: BasketPresenter {
     private func loadNfts(ids: [String]) {
         guard !ids.isEmpty else {
             DispatchQueue.main.async {
+                assert(Thread.isMainThread)
+
                 self.view?.displayLoading(false)
                 self.currentNfts = []
                 self.view?.display(items: [])
@@ -146,13 +206,24 @@ final class BasketPresenterImpl: BasketPresenter {
                     tasks.forEach { $0.cancel() }
                     
                     DispatchQueue.main.async {
+                        assert(Thread.isMainThread)
+
                         self.view?.displayLoading(false)
-                        let model = ErrorModel(
-                            message: NSLocalizedString("Error.partial", comment: ""),
-                            actionText: NSLocalizedString("Error.repeat", comment: "")
+                        let primary = ErrorAction(
+                            title: NSLocalizedString("Error.repeat", comment: ""),
+                            style: .default
                         ) { [weak self] in
                             self?.loadNfts(ids: ids)
                         }
+                        let secondary = ErrorAction(
+                            title: NSLocalizedString("Error.close", comment: ""),
+                            style: .cancel
+                        ) { }
+                        let model = ErrorModel(
+                            message: NSLocalizedString("Error.partial", comment: ""),
+                            primaryAction: primary,
+                            secondaryAction: secondary
+                        )
                         self.view?.showError(model)
                     }
                 }
@@ -161,6 +232,8 @@ final class BasketPresenterImpl: BasketPresenter {
         }
         
         group.notify(queue: .main) { [weak self] in
+            assert(Thread.isMainThread)
+
             guard let self, !hasFailed else { return }
             self.view?.displayLoading(false)
             let orderedNfts = ids.compactMap { nftsById[$0] }

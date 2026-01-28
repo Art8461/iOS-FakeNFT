@@ -44,6 +44,7 @@ final class BasketViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
+        config.backgroundColor = .clear
         config.showsSeparators = false
         let layout = UICollectionViewCompositionalLayout.list(using: config)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -68,7 +69,7 @@ final class BasketViewController: UIViewController {
         
         collectionView.register(BasketItemCell.self)
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor(resource: .whiteApp)
         setupNavigation()
         setupSummary()
         setupLayout()
@@ -149,6 +150,7 @@ final class BasketViewController: UIViewController {
         payButton.clipsToBounds = true
         payButton.setTitle(NSLocalizedString("К оплате", comment: "button for pay"), for: .normal)
         payButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        payButton.addTarget(self, action: #selector(didTapPay), for: .touchUpInside)
         
         summaryContainer.addSubview(summaryLeftStack)
         summaryLeftStack.addArrangedSubview(countLabel)
@@ -219,6 +221,10 @@ final class BasketViewController: UIViewController {
         }
         present(controller, animated: true)
     }
+    
+    @objc private func didTapPay() {
+        presenter.didTapPay()
+    }
 }
 
 extension BasketViewController: BasketView {
@@ -259,6 +265,7 @@ extension BasketViewController: UICollectionViewDataSource {
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: BasketItemCell = collectionView.dequeueReusableCell(indexPath: indexPath)
         let model = cellModels[indexPath.row]
+        cell.backgroundColor = .clear
         cell.configure(with: model)
         cell.onDelete = { [weak self] in
             self?.presentDeleteConfirmation(for: model)

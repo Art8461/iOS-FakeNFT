@@ -11,18 +11,30 @@
         }
       }
     },
-    "Error.later" : {
+    "Error.close" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Повторить позже"
+            "value" : "Отмена"
           }
         }
       }
     },
     "Error.network" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A network error has occurred"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -33,6 +45,12 @@
     },
     "Error.partial" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to load part of the NFT"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -41,8 +59,30 @@
         }
       }
     },
+    "Error.paymentFailed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to make payment"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось произвести оплату"
+          }
+        }
+      }
+    },
     "Error.repeat" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -53,6 +93,12 @@
     },
     "Error.title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -63,6 +109,12 @@
     },
     "Error.unknown" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An unknown error has occurred"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -82,6 +134,17 @@
         }
       }
     },
+    "Вернуться в корзину" : {
+      "comment" : "return to basket button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Return to basket"
+          }
+        }
+      }
+    },
     "Вы уверены, что хотите \nудалить объект из корзины?" : {
       "comment" : "Confirmation title",
       "localizations" : {
@@ -89,6 +152,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Are you sure you want to remove the item from the Trash?"
+          }
+        }
+      }
+    },
+    "Выберите способ оплаты" : {
+      "comment" : "payment title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select payment method"
           }
         }
       }
@@ -148,6 +222,17 @@
         }
       }
     },
+    "Оплатить" : {
+      "comment" : "pay button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pay"
+          }
+        }
+      }
+    },
     "По названию" : {
       "comment" : "sort by name",
       "localizations" : {
@@ -181,6 +266,28 @@
         }
       }
     },
+    "Пользовательского соглашения" : {
+      "comment" : "user agreement",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Agreement"
+          }
+        }
+      }
+    },
+    "Пользовательское соглашение" : {
+      "comment" : "title user agreement",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Agreement"
+          }
+        }
+      }
+    },
     "Профиль" : {
       "comment" : "tab title for profile",
       "localizations" : {
@@ -188,6 +295,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Profile"
+          }
+        }
+      }
+    },
+    "Совершая покупку, вы соглашаетесь с условиями" : {
+      "comment" : "text agreement",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By making a purchase, you agree to the terms and conditions"
           }
         }
       }
@@ -221,6 +339,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Delete"
+          }
+        }
+      }
+    },
+    "Успех! Оплата прошла,\nпоздравляем с покупкой!" : {
+      "comment" : "payment success text",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Success! The payment went through\nCongratulations on your purchase!"
           }
         }
       }

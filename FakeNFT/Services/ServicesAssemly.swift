@@ -20,4 +20,12 @@ final class ServicesAssembly {
     var basketService: BasketService {
         BasketServiceImpl(networkClient: networkClient)
     }
+    
+    var currenciesService: CurrenciesService {
+        CurrenciesServiceImpl(networkClient: networkClient)
+    }
+    
+    var paymentService: PaymentService {
+        PaymentServiceImpl(networkClient: networkClient)
+    }
 }
