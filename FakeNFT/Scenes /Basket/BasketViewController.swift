@@ -31,17 +31,6 @@ final class BasketViewController: UIViewController {
         return label
     }()
     
-    private lazy var sortButton: UIBarButtonItem = {
-        let item = UIBarButtonItem(
-            image: UIImage(resource: .sort),
-            style: .plain,
-            target: self,
-            action: #selector(didTapSort)
-        )
-        item.tintColor = UIColor(resource: .blackApp)
-        return item
-    }()
-
     private lazy var collectionView: UICollectionView = {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.backgroundColor = .clear
@@ -127,7 +116,7 @@ final class BasketViewController: UIViewController {
     }
     
     private func setupNavigation() {
-        navigationItem.rightBarButtonItem = sortButton
+        navigationItem.rightBarButtonItem = sortActionSheet.barButtonItem
     }
     
     private func setupSummary() {
@@ -163,7 +152,7 @@ final class BasketViewController: UIViewController {
         emptyStateLabel.isHidden = !isEmpty
         collectionView.isHidden = isEmpty
         summaryContainer.isHidden = isEmpty
-        navigationItem.rightBarButtonItem = isEmpty ? nil : sortButton
+        navigationItem.rightBarButtonItem = isEmpty ? nil : sortActionSheet.barButtonItem
     }
     
     private func presentDeleteConfirmation(for model: BasketItemCellModel) {
@@ -181,50 +170,33 @@ final class BasketViewController: UIViewController {
         present(vc, animated: true)
     }
     
-    @objc
-    private func didTapSort() {
-        let controller = UIAlertController(
-            title: NSLocalizedString("Сортировка", comment: "sort action sheet title"),
-            message: nil,
-            preferredStyle: .actionSheet
-        )
-        let sortByPrice = UIAlertAction(
-            title: NSLocalizedString("По цене", comment: "sort by price"),
-            style: .default
-        ) { [weak self] _ in
-            self?.presenter.didSelectSort(option: .price)
-        }
-        let sortByRating = UIAlertAction(
-            title: NSLocalizedString("По рейтингу", comment: "sort by rating"),
-            style: .default
-        ) { [weak self] _ in
-            self?.presenter.didSelectSort(option: .rating)
-        }
-        let sortByName = UIAlertAction(
-            title: NSLocalizedString("По названию", comment: "sort by name"),
-            style: .default
-        ) { [weak self] _ in
-            self?.presenter.didSelectSort(option: .name)
-        }
-        let cancel = UIAlertAction(
-            title: NSLocalizedString("Закрыть", comment: "cancel sort"),
-            style: .cancel
-        )
-        
-        controller.addAction(sortByPrice)
-        controller.addAction(sortByRating)
-        controller.addAction(sortByName)
-        controller.addAction(cancel)
-        
-        if let popover = controller.popoverPresentationController {
-            popover.barButtonItem = sortButton
-        }
-        present(controller, animated: true)
-    }
-    
     @objc private func didTapPay() {
         presenter.didTapPay()
     }
+    
+    private lazy var sortActionSheet = SortActionSheetViewController(
+        presentingViewController: self,
+        options: [
+            SortActionSheetOption(
+                title: NSLocalizedString("По цене", comment: "sort by price"),
+                handler: { [weak self] in
+                    self?.presenter.didSelectSort(option: .price)
+                }
+            ),
+            SortActionSheetOption(
+                title: NSLocalizedString("По рейтингу", comment: "sort by rating"),
+                handler: { [weak self] in
+                    self?.presenter.didSelectSort(option: .rating)
+                }
+            ),
+            SortActionSheetOption(
+                title: NSLocalizedString("По названию", comment: "sort by name"),
+                handler: { [weak self] in
+                    self?.presenter.didSelectSort(option: .name)
+                }
+            )
+        ]
+    )
 }
 
 extension BasketViewController: BasketView {

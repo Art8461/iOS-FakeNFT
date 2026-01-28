@@ -11,17 +11,6 @@ final class StatsViewController: UIViewController {
     
     let servicesAssembly: ServicesAssembly
     
-    private lazy var sortButton: UIBarButtonItem = {
-        let item = UIBarButtonItem(
-            image: UIImage(resource: .sort),
-            style: .plain,
-            target: self,
-            action: #selector(didTapSort)
-        )
-        item.tintColor = UIColor(resource: .blackApp)
-        return item
-    }()
-    
     private lazy var collectionView: UICollectionView = {
         var config = UICollectionLayoutListConfiguration(appearance: .plain)
         config.backgroundColor = .clear
@@ -51,7 +40,7 @@ final class StatsViewController: UIViewController {
     }
     
     private func setupNavigation() {
-        navigationItem.rightBarButtonItem = sortButton
+        navigationItem.rightBarButtonItem = sortActionSheet.barButtonItem
     }
     
     private func setupLayout() {
@@ -64,37 +53,19 @@ final class StatsViewController: UIViewController {
         ])
     }
     
-    @objc
-    private func didTapSort() {
-        let controller = UIAlertController(
-            title: NSLocalizedString("Сортировка", comment: "sort action sheet title"),
-            message: nil,
-            preferredStyle: .actionSheet
-        )
-        let sortByRating = UIAlertAction(
-            title: NSLocalizedString("По рейтингу", comment: "sort by rating"),
-            style: .default,
-            handler: nil
-        )
-        let sortByName = UIAlertAction(
-            title: NSLocalizedString("По имени", comment: "sort by name"),
-            style: .default,
-            handler: nil
-        )
-        let cancel = UIAlertAction(
-            title: NSLocalizedString("Закрыть", comment: "cancel sort"),
-            style: .cancel
-        )
-        
-        controller.addAction(sortByRating)
-        controller.addAction(sortByName)
-        controller.addAction(cancel)
-        
-        if let popover = controller.popoverPresentationController {
-            popover.barButtonItem = sortButton
-        }
-        present(controller, animated: true)
-    }
+    private lazy var sortActionSheet = SortActionSheetViewController(
+        presentingViewController: self,
+        options: [
+            SortActionSheetOption(
+                title: NSLocalizedString("По имени", comment: "sort by name"),
+                handler: { }
+            ),
+            SortActionSheetOption(
+                title: NSLocalizedString("По рейтингу", comment: "sort by rating"),
+                handler: { }
+            )
+        ]
+    )
 }
 
 extension StatsViewController: UICollectionViewDataSource {
