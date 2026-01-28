@@ -43,7 +43,7 @@ final class MyNFTCell: UITableViewCell {
     
     private lazy var priceStack: UIStackView = {
         let stack = UIStackView.stackVertical(spacing: 4, views: [priceTitleLabel, priceValueLabel])
-        stack.alignment = .trailing
+        stack.alignment = .leading
         return stack
     }()
     

@@ -11,7 +11,6 @@ protocol FavoritesNFTPresenterProtocol: AnyObject {
     func didTapBack()
 }
 
-
 final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
     
     weak var view: FavoritesNFTViewProtocol?
@@ -19,6 +18,5 @@ final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
     func didTapBack() {
         view?.closeScreen()
     }
-    
     
 }

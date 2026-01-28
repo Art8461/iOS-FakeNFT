@@ -21,7 +21,7 @@ final class FavoritesNFTViewController: UIViewController {
 
     private let presenter: FavoritesNFTPresenterProtocol
 
-    var myFavoritesNFT: [NFTCartModel] = []
+    private var myFavoritesNFT: [NFTCartModel] = []
 
     // MARK: - UI
 

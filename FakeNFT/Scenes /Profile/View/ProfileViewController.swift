@@ -93,7 +93,7 @@ final class ProfileViewController: UIViewController {
         let stack = UIStackView(arrangedSubviews: [personStack, descriptionLabel, webSiteLabel])
         stack.axis = .vertical
         stack.alignment = .leading
-        stack.spacing = 20
+        stack.setCustomSpacing(20, after: personStack)
         stack.setCustomSpacing(8, after: descriptionLabel)
         return stack
     }()
@@ -143,12 +143,12 @@ final class ProfileViewController: UIViewController {
 
     private func setupConstraints() {
         [bigStack, profileTableView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-
+        //bigStack.setCustomSpacing(8, after: descriptionLabel)
         NSLayoutConstraint.activate([
             bigStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             bigStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             bigStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            bigStack.heightAnchor.constraint(equalToConstant: 198),
+         //   bigStack.heightAnchor.constraint(equalToConstant: 198),
 
             personStack.topAnchor.constraint(equalTo: bigStack.topAnchor),
             personStack.leadingAnchor.constraint(equalTo: bigStack.leadingAnchor),
@@ -195,7 +195,7 @@ extension ProfileViewController: UITableViewDataSource {
         }
 
         let item = profileCellName[indexPath.row]
-        cell.configure(title: item.type.title, count: "\(item.count)")
+        cell.configure(title: item.type.title, count: "(\(item.count))")
         return cell
     }
 }

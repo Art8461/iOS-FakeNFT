@@ -11,6 +11,7 @@ import UIKit
 
 protocol MyNFTsViewProtocol: AnyObject {
     func closeScreen()
+    func showSortAlert(options: [Sorting])
 }
 
 // MARK: - MyNFTsViewController
@@ -21,7 +22,7 @@ final class MyNFTsViewController: UIViewController {
 
     private let presenter: MyNFTsPresenterProtocol
 
-    var myNFTs: [NFTCartModel] = []
+    private var myNFTs: [NFTCartModel] = []
 
     // MARK: - UI
 
@@ -121,8 +122,10 @@ final class MyNFTsViewController: UIViewController {
     }
 
     @objc private func tapSortButton() {
+        presenter.didTapSort()
         print("сортировка")
     }
+    
 }
 
 // MARK: - UITableViewDataSource & UITableViewDelegate
@@ -130,7 +133,7 @@ final class MyNFTsViewController: UIViewController {
 extension MyNFTsViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return myNFTs.count
+        myNFTs.count
     }
 
     func tableView(
@@ -152,7 +155,7 @@ extension MyNFTsViewController: UITableViewDataSource, UITableViewDelegate {
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
-        return 140
+        140
     }
 }
 
@@ -162,5 +165,19 @@ extension MyNFTsViewController: MyNFTsViewProtocol {
 
     func closeScreen() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    func showSortAlert(options: [Sorting]) {
+        let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+        
+        for option in options {
+            alert.addAction(UIAlertAction(title: option.title, style: .default) { [weak self] _ in
+                self?.presenter.didSelectSortOption(option)
+            })
+        }
+        
+        alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
+        
+        present(alert, animated: true)
     }
 }

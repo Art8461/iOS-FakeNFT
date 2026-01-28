@@ -187,7 +187,6 @@ final class ProfileEditViewController: UIViewController {
     @objc private func tapSaveButton() {
         print("сохранение и выход")
     }
-    //логика пока не реализована, кнопка скрыта
 }
 
 // MARK: - ProfileEditViewProtocol
@@ -201,19 +200,20 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "Остаться", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Выйти", style: .default) { _ in
-            self.presenter.didTapExit()
+        alert.addAction(UIAlertAction(title: "Выйти", style: .default) { [weak self] _ in
+            self?.presenter.didTapExit()
         })
         present(alert, animated: true)
     }
     
     func showAvatarAlert() {
         let alert = UIAlertController(title: "Фото профиля", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Изменить фото", style: .default) { _ in
-            self.presenter.didSelectChangePhoto()
+        alert.addAction(UIAlertAction(title: "Изменить фото", style: .default) { [weak self] _ in
+            self?.presenter.didSelectChangePhoto()
         })
-        alert.addAction(UIAlertAction(title: "Удалить фото", style: .destructive) { _ in
-            self.presenter.didSelectDeletePhoto()
+        
+        alert.addAction(UIAlertAction(title: "Удалить фото", style: .destructive) { [weak self] _ in
+            self?.presenter.didSelectDeletePhoto()
         })
         alert.addAction(UIAlertAction(title: "Отменить", style: .cancel))
         present(alert, animated: true)
