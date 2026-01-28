@@ -28,7 +28,11 @@ final class StatsItemCell: UICollectionViewListCell, ReuseIdentifying {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     func configure(with model: StatsItemCellModel) {
-        previewAvatarImgView.kf.setImage(with: model.avatar)
+        previewAvatarImgView.tintColor = .greyUniversal
+        previewAvatarImgView.kf.setImage(
+            with: model.avatar,
+            placeholder: UIImage(resource: .profile)
+        )
         nameLabel.text = String(model.name)
         countNftLabel.text = String(model.nfts.count)
         countRaitLanel.text = String(model.rating)
