@@ -35,7 +35,7 @@ final class StatsPresenterImpl: StatsPresenter {
     private var page = 0
     private var isLoading = false
     private var hasMore = true
-    private let pageSize = 25
+    private let pageSize = 20
     
     init(usersService: UsersService) {
         self.usersService = usersService
@@ -157,4 +157,3 @@ final class StatsPresenterImpl: StatsPresenter {
         }
     }
 }
-
