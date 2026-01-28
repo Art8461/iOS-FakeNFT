@@ -12,6 +12,8 @@ import UIKit
 protocol ProfileEditViewProtocol: AnyObject {
     func showProfile(model: ProfileEditModel)
     func closeSave() // пока только переход назад к экрану профиля
+    func showExitAlert()
+    func showAvatarAlert()
 }
 
 // MARK: - ProfileEditViewController
@@ -175,33 +177,11 @@ final class ProfileEditViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func tapBackButton() {
-        let alert = UIAlertController(
-            title: "Уверены, что хотите выйти?",
-            message: nil,
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "Остаться", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Выйти", style: .default) { _ in
-            self.presenter.didTapBack()
-            print("назад к профилю")
-        })
-        
-        present(alert, animated: true)
-        
+        presenter.didTapBack()
     }
     
     @objc private func tapAvatar() {
-        let alert = UIAlertController(title: "Фото профиля", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Изменить фото", style: .default, handler: { _ in
-            print("Изменить фото")
-        }))
-        alert.addAction(UIAlertAction(title: "Удалить фото", style: .destructive, handler: { _ in
-            print("Удалить фото")
-        }))
-        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel))
-        
-        present(alert, animated: true)
-        print("редактирование аватарки")
+        presenter.didTapAvatar()
     }
     
     @objc private func tapSaveButton() {
@@ -213,6 +193,31 @@ final class ProfileEditViewController: UIViewController {
 // MARK: - ProfileEditViewProtocol
 
 extension ProfileEditViewController: ProfileEditViewProtocol {
+    func showExitAlert() {
+        let alert = UIAlertController(
+            title: "Уверены, что хотите выйти?",
+            message: nil,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "Остаться", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Выйти", style: .default) { _ in
+            self.presenter.didTapExit()
+        })
+        present(alert, animated: true)
+    }
+    
+    func showAvatarAlert() {
+        let alert = UIAlertController(title: "Фото профиля", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Изменить фото", style: .default) { _ in
+            self.presenter.didSelectChangePhoto()
+        })
+        alert.addAction(UIAlertAction(title: "Удалить фото", style: .destructive) { _ in
+            self.presenter.didSelectDeletePhoto()
+        })
+        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel))
+        present(alert, animated: true)
+    }
+    
     
     func closeSave() {
         navigationController?.popViewController(animated: true)

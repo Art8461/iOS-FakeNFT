@@ -10,7 +10,10 @@ import Foundation
 protocol ProfileEditPresenterProtocol: AnyObject {
     func viewDidLoad()
     func didTapBack()
-    
+    func didTapExit()
+    func didTapAvatar()
+    func didSelectChangePhoto()
+    func didSelectDeletePhoto()
 }
 
 final class ProfileEditPresenter: ProfileEditPresenterProtocol {
@@ -27,6 +30,25 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
     }
     
     func didTapBack() {
+        view?.showExitAlert()
+    }
+    
+    // Пользователь подтвердил выход
+    func didTapExit() {
         view?.closeSave()
+    }
+    
+    func didTapAvatar() {
+        view?.showAvatarAlert()
+    }
+    
+    // Пользователь выбрал изменить фото
+    func didSelectChangePhoto() {
+        print("Логика изменения фото")
+    }
+    
+    // Пользователь выбрал удалить фото
+    func didSelectDeletePhoto() {
+        print("Логика удаления фото")
     }
 }
