@@ -233,6 +233,9 @@
         }
       }
     },
+    "По имени" : {
+      "comment" : "sort by name"
+    },
     "По названию" : {
       "comment" : "sort by name",
       "localizations" : {
@@ -322,7 +325,7 @@
       }
     },
     "Статистика" : {
-      "comment" : "nav title\ntab title for statistics",
+      "comment" : "tab title for statistics",
       "localizations" : {
         "en" : {
           "stringUnit" : {
