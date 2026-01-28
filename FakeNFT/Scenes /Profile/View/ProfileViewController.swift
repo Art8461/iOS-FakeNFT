@@ -105,6 +105,7 @@ final class ProfileViewController: UIViewController {
         tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.backgroundColor = .whiteApp
+        tableView.isScrollEnabled = false
         return tableView
     }()
 
