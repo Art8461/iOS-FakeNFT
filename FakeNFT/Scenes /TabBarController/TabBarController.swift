@@ -1,19 +1,19 @@
 import UIKit
 
 final class TabBarController: UITabBarController {
-
+    
     private let servicesAssembly: ServicesAssembly
-
+    
     init(servicesAssembly: ServicesAssembly) {
         self.servicesAssembly = servicesAssembly
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     private let profileTabBarItem = UITabBarItem(
         title: NSLocalizedString("Профиль", comment: "tab title for profile"),
         image: UIImage(resource: .profile),
@@ -31,7 +31,7 @@ final class TabBarController: UITabBarController {
         image: UIImage(resource: .basket),
         selectedImage: UIImage(resource: .basket),
     )
-
+    
     private let statTabBarItem = UITabBarItem(
         title: NSLocalizedString("Статистика", comment: "tab title for statistics"),
         image: UIImage(resource: .statistics),
@@ -42,27 +42,30 @@ final class TabBarController: UITabBarController {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor(resource: .whiteApp)
-
+        
         // Неактивное состояние
         let unselectedColor = UIColor(resource: .blackApp)
         appearance.stackedLayoutAppearance.normal.iconColor = unselectedColor
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: unselectedColor]
-
+        
         // Активное состояние
         let selectedColor = UIColor(resource: .blueUniversal)
         appearance.stackedLayoutAppearance.selected.iconColor = selectedColor
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: selectedColor]
-
+        
         tabBar.standardAppearance = appearance
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        let profilePresenter = ProfilePresenter()
         let profileVC = ProfileViewController(
-            servicesAssembly: servicesAssembly
+            servicesAssembly: servicesAssembly,
+            presenter: profilePresenter
         )
+        profilePresenter.view = profileVC
         
         let catalogVC = TestCatalogViewController(
             servicesAssembly: servicesAssembly
@@ -74,16 +77,17 @@ final class TabBarController: UITabBarController {
         let statsVC = StatsAssembly(servicesAssembly: servicesAssembly).build()
         let statsNav = UINavigationController(rootViewController: statsVC)
         
-        profileVC.tabBarItem = profileTabBarItem
+        let profileNavController = UINavigationController(rootViewController: profileVC)
+        profileNavController.tabBarItem = profileTabBarItem
+        
         catalogVC.tabBarItem = catalogTabBarItem
         basketNav.tabBarItem = basketTabBarItem
         statsNav.tabBarItem = statTabBarItem
 
-        viewControllers = [profileVC, catalogVC, basketNav, statsNav]
+        viewControllers = [profileNavController, catalogVC, basketNav, statsNav]
 
         view.backgroundColor = UIColor(resource: .whiteApp)
         setupTabBarAppearance()
-        
     }
 }
 
