@@ -16,6 +16,7 @@ protocol ProfileViewProtocol: AnyObject {
     func openMyNFTs()
     func openFavoritesNFTs()
     func openWebView(url: URL)
+    func setEditVisible(_ isVisible: Bool)
 }
 
 // MARK: - ProfileViewController
@@ -127,6 +128,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .whiteApp
         setupNavigationBar()
+        presenter.viewDidLoad()
         addSubviews()
         setupConstraints()
         navigationItem.title = nil
@@ -253,6 +255,10 @@ extension ProfileViewController: ProfileViewProtocol {
         let webVC = WebViewProfile(url: url, presenter: presenter)
         presenter.view = webVC
         navigationController?.pushViewController(webVC, animated: true)
+    }
+    
+    func setEditVisible(_ isVisible: Bool) {
+        navigationItem.rightBarButtonItem = isVisible ? editButton : nil
     }
 
 }

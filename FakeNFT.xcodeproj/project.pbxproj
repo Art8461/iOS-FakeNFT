@@ -28,6 +28,8 @@
 		28399CCE2F2A13F60084BE01 /* StatsViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28399CCD2F2A13EF0084BE01 /* StatsViewModels.swift */; };
 		28399CD12F2A18EE0084BE01 /* StatsItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28399CD02F2A18EA0084BE01 /* StatsItemCell.swift */; };
 		28399CD42F2A491A0084BE01 /* SortActionSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28399CD32F2A49180084BE01 /* SortActionSheetViewController.swift */; };
+		28399EB72F2BAD560084BE01 /* ProfileAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28399EB62F2BAD480084BE01 /* ProfileAssembly.swift */; };
+		28399EBB2F2BAF4A0084BE01 /* StatsRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28399EBA2F2BAF450084BE01 /* StatsRouter.swift */; };
 		287AB1A22F20A8DF0064446E /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB1A02F20A8DF0064446E /* StatsViewController.swift */; };
 		287AB1A32F20A8DF0064446E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB19E2F20A8DF0064446E /* ProfileViewController.swift */; };
 		287AB1A42F20A8DF0064446E /* BasketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287AB19C2F20A8DF0064446E /* BasketViewController.swift */; };
@@ -82,7 +84,6 @@
 		CB1A31FE2F252A1D00737B09 /* FavoritesNFTCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1A31FD2F252A1A00737B09 /* FavoritesNFTCell.swift */; };
 		CB1A32002F252E6900737B09 /* FavoritesNFTPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1A31FF2F252E5C00737B09 /* FavoritesNFTPresenter.swift */; };
 		CB1A32022F277A4000737B09 /* MyNFTCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1A32012F277A3100737B09 /* MyNFTCardModel.swift */; };
-		CB1A32042F27B0C500737B09 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1A32032F27B0B100737B09 /* Mocks.swift */; };
 		CB1A32062F2808AD00737B09 /* DecompositionProfile.md in Resources */ = {isa = PBXBuildFile; fileRef = CB1A32052F2808AD00737B09 /* DecompositionProfile.md */; };
 		CBA28F7C2F21320D00C78A2F /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA28F7B2F2131FE00C78A2F /* ProfileCell.swift */; };
 		CBA28F7F2F220BD800C78A2F /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBA28F7E2F220BCF00C78A2F /* ProfilePresenter.swift */; };
@@ -131,6 +132,8 @@
 		28399CCD2F2A13EF0084BE01 /* StatsViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewModels.swift; sourceTree = "<group>"; };
 		28399CD02F2A18EA0084BE01 /* StatsItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsItemCell.swift; sourceTree = "<group>"; };
 		28399CD32F2A49180084BE01 /* SortActionSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortActionSheetViewController.swift; sourceTree = "<group>"; };
+		28399EB62F2BAD480084BE01 /* ProfileAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAssembly.swift; sourceTree = "<group>"; };
+		28399EBA2F2BAF450084BE01 /* StatsRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsRouter.swift; sourceTree = "<group>"; };
 		287AB19C2F20A8DF0064446E /* BasketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketViewController.swift; sourceTree = "<group>"; };
 		287AB19E2F20A8DF0064446E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		287AB1A02F20A8DF0064446E /* StatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
@@ -310,6 +313,7 @@
 		287AB19F2F20A8DF0064446E /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				28399EB62F2BAD480084BE01 /* ProfileAssembly.swift */,
 				CBA28F7D2F220BB000C78A2F /* View */,
 				CBA28F802F220BDE00C78A2F /* Presenter */,
 				CB1A31EF2F23AE4800737B09 /* Model */,
@@ -320,6 +324,7 @@
 		287AB1A12F20A8DF0064446E /* Stats */ = {
 			isa = PBXGroup;
 			children = (
+				28399EBA2F2BAF450084BE01 /* StatsRouter.swift */,
 				28399CCF2F2A18D30084BE01 /* Cell */,
 				28399CCD2F2A13EF0084BE01 /* StatsViewModels.swift */,
 				28399CCB2F2A13CD0084BE01 /* StatsPresenter.swift */,
@@ -725,6 +730,8 @@
 				3F478ED129DB476500F6D39E /* Fonts.swift in Sources */,
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
 				CB07BA212F2A325400E989D0 /* WebViewProfile.swift in Sources */,
+				28399EBB2F2BAF4A0084BE01 /* StatsRouter.swift in Sources */,
+				28399EB72F2BAD560084BE01 /* ProfileAssembly.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
 				28F47F6E2F28F1000070F809 /* User.swift in Sources */,

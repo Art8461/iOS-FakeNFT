@@ -60,13 +60,6 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let profilePresenter = ProfilePresenter()
-        let profileVC = ProfileViewController(
-            servicesAssembly: servicesAssembly,
-            presenter: profilePresenter
-        )
-        profilePresenter.view = profileVC
-        
         let catalogVC = TestCatalogViewController(
             servicesAssembly: servicesAssembly
         )
@@ -77,14 +70,15 @@ final class TabBarController: UITabBarController {
         let statsVC = StatsAssembly(servicesAssembly: servicesAssembly).build()
         let statsNav = UINavigationController(rootViewController: statsVC)
         
-        let profileNavController = UINavigationController(rootViewController: profileVC)
-        profileNavController.tabBarItem = profileTabBarItem
+        let profileVC = ProfileAssembly(servicesAssembly: servicesAssembly).build(mode: .myProfile)
+        let profileNav = UINavigationController(rootViewController: profileVC)
+        profileNav.tabBarItem = profileTabBarItem
         
         catalogVC.tabBarItem = catalogTabBarItem
         basketNav.tabBarItem = basketTabBarItem
         statsNav.tabBarItem = statTabBarItem
 
-        viewControllers = [profileNavController, catalogVC, basketNav, statsNav]
+        viewControllers = [profileNav, catalogVC, basketNav, statsNav]
 
         view.backgroundColor = UIColor(resource: .whiteApp)
         setupTabBarAppearance()

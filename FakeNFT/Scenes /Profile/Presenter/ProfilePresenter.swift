@@ -8,6 +8,7 @@
 import Foundation
 
 protocol ProfilePresenterProtocol: AnyObject {
+    func viewDidLoad()
     func didTapEdit()
     func openMyNFTs()
     func openFavoritesNFC()
@@ -17,10 +18,23 @@ protocol ProfilePresenterProtocol: AnyObject {
 
 
 final class ProfilePresenter: ProfilePresenterProtocol {
-    
+
     weak var view: ProfileViewProtocol?
+
+    private let mode: ProfileMode
+
+    init(mode: ProfileMode = .myProfile) {
+        self.mode = mode
+    }
+    
+    func viewDidLoad() {
+        // тут позже: загрузка профиля и обновление UI
+        // минимум для старта: скрыть edit если это чужой профиль
+        view?.setEditVisible(mode == .myProfile)
+    }
     
     func didTapEdit() {
+        guard mode == .myProfile else { return }
         guard let model = view?.getProfileEditModel() else { return }
         view?.openEditProfile(model: model)
     }
@@ -30,6 +44,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     }
     
     func openFavoritesNFC() {
+        guard mode == .myProfile else { return }
         view?.openFavoritesNFTs()
     }
     

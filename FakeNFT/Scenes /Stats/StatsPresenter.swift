@@ -10,6 +10,7 @@ import Foundation
 protocol StatsView: AnyObject, ErrorView {
     func display(items: [StatsItemCellModel])
     func displayLoading(_ isLoading: Bool)
+    func openProfile(userId: String)
 }
 
 protocol StatsPresenter {
@@ -25,26 +26,29 @@ enum StatsSortOption {
 }
 
 final class StatsPresenterImpl: StatsPresenter {
-    
+
     weak var view: StatsView?
-    
+
     private let usersService: UsersService
+    private let router: StatsRouting
+
+    init(usersService: UsersService, router: StatsRouting) {
+        self.usersService = usersService
+        self.router = router
+    }
+
+    func didSelectUser(id: String) {
+        router.showProfile(userId: id)
+    }
+    
     private var users: [User] = []
     private var sortOption: StatsSortOption = .rating
     
     private var isLoading = false
     private let pageSize = 25
     
-    init(usersService: UsersService) {
-        self.usersService = usersService
-    }
-    
     func viewDidLoad() {
         view?.display(items: [])
-    }
-    
-    func didSelectUser(id: String) {
-        // TODO: open user profile when feature is ready
     }
     
     func refresh() {

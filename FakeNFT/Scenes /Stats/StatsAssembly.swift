@@ -14,9 +14,17 @@ final class StatsAssembly {
         self.servicesAssembly = servicesAssembly
     }
     func build() -> UIViewController {
-        let presenter = StatsPresenterImpl(usersService: servicesAssembly.usersService)
+        let profileAssembly = ProfileAssembly(servicesAssembly: servicesAssembly)
+        let router = StatsRouter(profileAssembly: profileAssembly)
+
+        let presenter = StatsPresenterImpl(
+            usersService: servicesAssembly.usersService,
+            router: router
+        )
+
         let vc = StatsViewController(presenter: presenter)
         presenter.view = vc
+        router.viewController = vc
         return vc
     }
 }

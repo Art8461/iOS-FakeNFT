@@ -10,7 +10,7 @@ import Foundation
 enum ProfileItemType {
     case myNFT
     case myFavorites
-
+    
     var title: String {
         switch self {
         case .myNFT:
@@ -19,6 +19,11 @@ enum ProfileItemType {
             return "Избранные NFT"
         }
     }
+}
+
+enum ProfileMode: Equatable{
+    case myProfile
+    case user(id: String)
 }
 
 struct ProfileItem {
