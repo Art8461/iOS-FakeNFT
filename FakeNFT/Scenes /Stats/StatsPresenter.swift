@@ -16,6 +16,7 @@ protocol StatsPresenter {
     func viewDidLoad()
     func refresh()
     func didSelectSort(option: StatsSortOption)
+    func didSelectUser(id: String)
 }
 
 enum StatsSortOption {
@@ -40,6 +41,10 @@ final class StatsPresenterImpl: StatsPresenter {
     
     func viewDidLoad() {
         view?.display(items: [])
+    }
+    
+    func didSelectUser(id: String) {
+        // TODO: open user profile when feature is ready
     }
     
     func refresh() {

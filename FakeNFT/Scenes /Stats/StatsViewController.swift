@@ -25,6 +25,7 @@ final class StatsViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
+        view.delegate = self
         view.dataSource = self
         return view
     }()
@@ -105,7 +106,7 @@ extension StatsViewController: UICollectionViewDataSource {
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: StatsItemCell = collectionView.dequeueReusableCell(indexPath: indexPath)
         cell.backgroundColor = .clear
-        cell.configure(with: cellModels[indexPath.row])
+        cell.configure(with: cellModels[indexPath.item])
         return cell
     }
 }
@@ -124,5 +125,13 @@ extension StatsViewController: StatsView {
             activityIndicator.stopAnimating()
             collectionView.isHidden = false
         }
+    }
+}
+
+extension StatsViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let userId = cellModels[indexPath.item].id
+        presenter.didSelectUser(id: userId)
     }
 }
