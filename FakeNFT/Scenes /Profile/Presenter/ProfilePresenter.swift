@@ -31,6 +31,13 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         let isMyProfile = (mode == .myProfile)
         view?.setEditVisible(isMyProfile)
 
+        if isMyProfile {
+            view?.configureWebsite(isButton: false, spacingAfterDescription: 8)
+        } else {
+            view?.configureWebsite(isButton: true, spacingAfterDescription: 28)
+        }
+        view?.setWebsiteAsButton(mode != .myProfile)
+
         let items: [ProfileItem] = isMyProfile
         ? [ProfileItem(type: .myNFT, count: 0), ProfileItem(type: .myFavorites, count: 0)]
         : [ProfileItem(type: .myNFT, count: 0)]

@@ -18,6 +18,8 @@ protocol ProfileViewProtocol: AnyObject {
     func openWebView(url: URL)
     func setEditVisible(_ isVisible: Bool)
     func setMenuItems(_ items: [ProfileItem])
+    func setWebsiteAsButton(_ isButton: Bool)
+    func configureWebsite(isButton: Bool, spacingAfterDescription: CGFloat)
 }
 
 // MARK: - ProfileViewController
@@ -90,11 +92,28 @@ final class ProfileViewController: UIViewController {
         label.text = sait
         return label
     }()
+    
+    private lazy var websiteButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.isHidden = true
+        button.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        button.contentHorizontalAlignment = .center
+        button.addTarget(self, action: #selector(tapWebsiteButton), for: .touchUpInside)
+        button.titleLabel?.font = .systemFont(ofSize: 15, weight: .regular)
+        var config = UIButton.Configuration.plain()
+        config.title = "Перейти на сайт пользователя"
+        config.baseForegroundColor = .blackApp
+        config.background.strokeColor = .blackApp
+        config.background.strokeWidth = 1
+        config.background.cornerRadius = 12
+        button.configuration = config
+        return button
+    }()
 
     private lazy var bigStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [personStack, descriptionLabel, webSiteLabel])
+        let stack = UIStackView(arrangedSubviews: [personStack, descriptionLabel, webSiteLabel, websiteButton])
         stack.axis = .vertical
-        stack.alignment = .leading
+        stack.alignment = .fill
         stack.setCustomSpacing(20, after: personStack)
         stack.setCustomSpacing(8, after: descriptionLabel)
         return stack
@@ -174,6 +193,11 @@ final class ProfileViewController: UIViewController {
     }
 
     @objc private func tapWebSiteLabel() {
+        guard let url = webSiteLabel.text else { return }
+        presenter.didTapWebSite(url: url)
+    }
+    
+    @objc private func tapWebsiteButton() {
         guard let url = webSiteLabel.text else { return }
         presenter.didTapWebSite(url: url)
     }
@@ -265,5 +289,16 @@ extension ProfileViewController: ProfileViewProtocol {
     func setMenuItems(_ items: [ProfileItem]) {
         profileCellName = items
         profileTableView.reloadData()
+    }
+    
+    func setWebsiteAsButton(_ isButton: Bool) {
+        webSiteLabel.isHidden = isButton
+        websiteButton.isHidden = !isButton
+    }
+    
+    func configureWebsite(isButton: Bool, spacingAfterDescription: CGFloat) {
+        webSiteLabel.isHidden = isButton
+        websiteButton.isHidden = !isButton
+        bigStack.setCustomSpacing(spacingAfterDescription, after: descriptionLabel)
     }
 }
