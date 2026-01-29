@@ -20,6 +20,7 @@ protocol ProfileViewProtocol: AnyObject {
     func setMenuItems(_ items: [ProfileItem])
     func setWebsiteAsButton(_ isButton: Bool)
     func configureWebsite(isButton: Bool, spacingAfterDescription: CGFloat)
+    func setBackButtonVisible(_ isVisible: Bool)
 }
 
 // MARK: - ProfileViewController
@@ -300,5 +301,27 @@ extension ProfileViewController: ProfileViewProtocol {
         webSiteLabel.isHidden = isButton
         websiteButton.isHidden = !isButton
         bigStack.setCustomSpacing(spacingAfterDescription, after: descriptionLabel)
+    }
+    
+    func setBackButtonVisible(_ isVisible: Bool) {
+        if isVisible {
+            let image = UIImage(resource: .backward).withRenderingMode(.alwaysTemplate)
+            let backButton = UIBarButtonItem(
+                image: image,
+                style: .plain,
+                target: self,
+                action: #selector(didTapBack)
+            )
+            backButton.tintColor = UIColor(resource: .blackApp)
+            navigationItem.leftBarButtonItem = backButton
+            navigationItem.hidesBackButton = true
+        } else {
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.hidesBackButton = true
+        }
+    }
+
+    @objc private func didTapBack() {
+        navigationController?.popViewController(animated: true)
     }
 }

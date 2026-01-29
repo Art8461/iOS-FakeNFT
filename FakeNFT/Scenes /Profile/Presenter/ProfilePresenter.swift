@@ -30,6 +30,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     func viewDidLoad() {
         let isMyProfile = (mode == .myProfile)
         view?.setEditVisible(isMyProfile)
+        view?.setBackButtonVisible(!isMyProfile)
 
         if isMyProfile {
             view?.configureWebsite(isButton: false, spacingAfterDescription: 8)
