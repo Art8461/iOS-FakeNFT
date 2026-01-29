@@ -28,9 +28,14 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     }
     
     func viewDidLoad() {
-        // тут позже: загрузка профиля и обновление UI
-        // минимум для старта: скрыть edit если это чужой профиль
-        view?.setEditVisible(mode == .myProfile)
+        let isMyProfile = (mode == .myProfile)
+        view?.setEditVisible(isMyProfile)
+
+        let items: [ProfileItem] = isMyProfile
+        ? [ProfileItem(type: .myNFT, count: 0), ProfileItem(type: .myFavorites, count: 0)]
+        : [ProfileItem(type: .myNFT, count: 0)]
+
+        view?.setMenuItems(items)
     }
     
     func didTapEdit() {

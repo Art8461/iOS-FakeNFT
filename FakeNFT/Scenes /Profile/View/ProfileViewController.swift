@@ -17,6 +17,7 @@ protocol ProfileViewProtocol: AnyObject {
     func openFavoritesNFTs()
     func openWebView(url: URL)
     func setEditVisible(_ isVisible: Bool)
+    func setMenuItems(_ items: [ProfileItem])
 }
 
 // MARK: - ProfileViewController
@@ -260,5 +261,9 @@ extension ProfileViewController: ProfileViewProtocol {
     func setEditVisible(_ isVisible: Bool) {
         navigationItem.rightBarButtonItem = isVisible ? editButton : nil
     }
-
+    
+    func setMenuItems(_ items: [ProfileItem]) {
+        profileCellName = items
+        profileTableView.reloadData()
+    }
 }
