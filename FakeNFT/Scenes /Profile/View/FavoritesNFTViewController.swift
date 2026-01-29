@@ -101,7 +101,6 @@ final class FavoritesNFTViewController: UIViewController {
     }
 
     private func setupMocks() {
-        myFavoritesNFT = NFTMockData.myNFTs()
         favoritesNFTCollection.reloadData()
     }
 

@@ -99,7 +99,6 @@ final class MyNFTsViewController: UIViewController {
     }
 
     private func setupMocks() {
-        myNFTs = NFTMockData.myNFTs()
         myNFTTableView.reloadData()
     }
 
