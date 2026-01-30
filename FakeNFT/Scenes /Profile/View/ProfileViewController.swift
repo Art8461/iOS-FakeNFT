@@ -144,12 +144,10 @@ final class ProfileViewController: UIViewController {
 
     private func setupConstraints() {
         [bigStack, profileTableView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        //bigStack.setCustomSpacing(8, after: descriptionLabel)
         NSLayoutConstraint.activate([
             bigStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             bigStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             bigStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-         //   bigStack.heightAnchor.constraint(equalToConstant: 198),
 
             personStack.topAnchor.constraint(equalTo: bigStack.topAnchor),
             personStack.leadingAnchor.constraint(equalTo: bigStack.leadingAnchor),
