@@ -23,6 +23,8 @@ extension UIViewController {
 extension UIImageView {
     static func baseAvatarImage() -> UIImageView {
         let image = UIImageView()
+        image.tintColor = .greyUniversal
+        image.image = UIImage(resource: .profile)
         image.layer.cornerRadius = 35
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true

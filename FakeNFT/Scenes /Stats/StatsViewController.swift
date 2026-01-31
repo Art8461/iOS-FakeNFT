@@ -127,9 +127,6 @@ extension StatsViewController: StatsView {
         }
     }
     
-    func openProfile(userId: String) {
-        // понадобится доступ к servicesAssembly — см. следующий пункт
-    }
 }
 
 extension StatsViewController: UICollectionViewDelegate {

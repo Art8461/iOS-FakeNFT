@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 // MARK: - Protocols
 
@@ -27,21 +28,21 @@ final class ProfileEditViewController: UIViewController {
     
     // MARK: - UI
     
+    private let avatarImageView: UIImageView = UIImageView.baseAvatarImage()
+
     private lazy var avatarButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 35
         button.clipsToBounds = true
         
-        let image = UIImageView.baseAvatarImage()
-        image.image = UIImage(resource: .joaquinPhoenix)
-        button.addSubview(image)
+        button.addSubview(avatarImageView)
         
         NSLayoutConstraint.activate([
-            image.topAnchor.constraint(equalTo: button.topAnchor),
-            image.bottomAnchor.constraint(equalTo: button.bottomAnchor),
-            image.leadingAnchor.constraint(equalTo: button.leadingAnchor),
-            image.trailingAnchor.constraint(equalTo: button.trailingAnchor)
+            avatarImageView.topAnchor.constraint(equalTo: button.topAnchor),
+            avatarImageView.bottomAnchor.constraint(equalTo: button.bottomAnchor),
+            avatarImageView.leadingAnchor.constraint(equalTo: button.leadingAnchor),
+            avatarImageView.trailingAnchor.constraint(equalTo: button.trailingAnchor)
         ])
         
         button.addTarget(self, action: #selector(tapAvatar), for: .touchUpInside)
@@ -245,6 +246,17 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
         nameTextView.text = model.name
         descriptionTextView.text = model.description
         siteTextView.text = model.site
+        let placeholder = UIImage(resource: .profile)
+        avatarImageView.tintColor = .greyUniversal
+        if let url = model.avatar {
+            avatarImageView.kf.setImage(
+                with: url,
+                placeholder: placeholder,
+                options: [.onFailureImage(placeholder)]
+            )
+        } else {
+            avatarImageView.image = placeholder
+        }
     }
     
 }

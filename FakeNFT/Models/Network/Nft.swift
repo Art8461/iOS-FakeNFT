@@ -6,4 +6,5 @@ struct Nft: Decodable {
     let images: [URL]
     let rating: Int
     let price: Double
+    let author: String
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class MyNFTCell: UITableViewCell {
     
@@ -97,11 +98,32 @@ final class MyNFTCell: UITableViewCell {
     // MARK: - Configure
     
     func configure(with model: NFTCartModel) {
-        imageNFTView.image = UIImage(named: model.imageName)
+        if let url = model.imageURL {
+            imageNFTView.kf.setImage(
+                with: url,
+                placeholder: UIImage(resource: .placeholderpayment)
+            )
+        } else {
+            imageNFTView.image = UIImage(named: model.imageName)
+        }
         likeButton.setImage(UIImage(named: model.likeImageName), for: .normal)
         titleLabel.text = model.title
         starsImageView.image = UIImage(named: model.starsImageName)
-        nameAuthorLabel.text = model.authorName
+        let authorName = model.authorName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        nameAuthorLabel.text = authorName
+        authorStack.isHidden = authorName.isEmpty
         priceValueLabel.text = String(format: "%.2f ETH", model.price)
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageNFTView.kf.cancelDownloadTask()
+        imageNFTView.image = nil
+        likeButton.setImage(nil, for: .normal)
+        titleLabel.text = nil
+        starsImageView.image = nil
+        nameAuthorLabel.text = nil
+        authorStack.isHidden = false
+        priceValueLabel.text = nil
     }
 }

@@ -10,7 +10,6 @@ import Foundation
 protocol StatsView: AnyObject, ErrorView {
     func display(items: [StatsItemCellModel])
     func displayLoading(_ isLoading: Bool)
-    func openProfile(userId: String)
 }
 
 protocol StatsPresenter {

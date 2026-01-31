@@ -15,7 +15,10 @@ final class ProfileAssembly {
     }
 
     func build(mode: ProfileMode) -> UIViewController {
-        let presenter = ProfilePresenter(mode: mode)
+        let presenter = ProfilePresenter(
+            mode: mode,
+            profileService: servicesAssembly.profileService
+        )
         let vc = ProfileViewController(servicesAssembly: servicesAssembly, presenter: presenter)
         presenter.view = vc
         return vc

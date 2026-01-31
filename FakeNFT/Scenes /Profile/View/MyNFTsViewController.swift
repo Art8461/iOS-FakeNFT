@@ -12,6 +12,7 @@ import UIKit
 protocol MyNFTsViewProtocol: AnyObject {
     func closeScreen()
     func showSortAlert(options: [Sorting])
+    func display(items: [NFTCartModel])
 }
 
 // MARK: - MyNFTsViewController
@@ -58,7 +59,7 @@ final class MyNFTsViewController: UIViewController {
         setupNavigationBar()
         addSubviews()
         setupConstraints()
-        setupMocks()
+        presenter.viewDidLoad()
         updateUI()
     }
 
@@ -96,10 +97,6 @@ final class MyNFTsViewController: UIViewController {
             myNFTTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             myNFTTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-
-    private func setupMocks() {
-        myNFTTableView.reloadData()
     }
 
     private func updateUI() {
@@ -178,5 +175,11 @@ extension MyNFTsViewController: MyNFTsViewProtocol {
         alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
         
         present(alert, animated: true)
+    }
+
+    func display(items: [NFTCartModel]) {
+        myNFTs = items
+        myNFTTableView.reloadData()
+        updateUI()
     }
 }

@@ -11,6 +11,7 @@ import UIKit
 
 protocol FavoritesNFTViewProtocol: AnyObject {
     func closeScreen()
+    func display(items: [NFTCartModel])
 }
 
 // MARK: - FavoritesNFTViewController
@@ -64,7 +65,7 @@ final class FavoritesNFTViewController: UIViewController {
         setupNavigationBar()
         addSubviews()
         setupConstraints()
-        setupMocks()
+        presenter.viewDidLoad()
         updateUI()
     }
 
@@ -98,10 +99,6 @@ final class FavoritesNFTViewController: UIViewController {
             favoritesNFTCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             favoritesNFTCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-
-    private func setupMocks() {
-        favoritesNFTCollection.reloadData()
     }
 
     private func updateUI() {
@@ -170,5 +167,11 @@ extension FavoritesNFTViewController: FavoritesNFTViewProtocol {
 
     func closeScreen() {
         navigationController?.popViewController(animated: true)
+    }
+
+    func display(items: [NFTCartModel]) {
+        myFavoritesNFT = items
+        favoritesNFTCollection.reloadData()
+        updateUI()
     }
 }

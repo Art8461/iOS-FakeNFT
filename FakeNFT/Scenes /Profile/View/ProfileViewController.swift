@@ -10,7 +10,7 @@ import Kingfisher
 
 // MARK: - Protocols
 
-protocol ProfileViewProtocol: AnyObject {
+protocol ProfileViewProtocol: AnyObject, ErrorView {
     func openEditProfile(model: ProfileEditModel)
     func getProfileEditModel() -> ProfileEditModel
     func openMyNFTs()
@@ -21,6 +21,7 @@ protocol ProfileViewProtocol: AnyObject {
     func setWebsiteAsButton(_ isButton: Bool)
     func configureWebsite(isButton: Bool, spacingAfterDescription: CGFloat)
     func setBackButtonVisible(_ isVisible: Bool)
+    func display(profile: ProfilUserItem)
 }
 
 // MARK: - ProfileViewController
@@ -32,9 +33,7 @@ final class ProfileViewController: UIViewController {
     private let presenter: ProfilePresenterProtocol
     let servicesAssembly: ServicesAssembly
 
-    let name = "Joaquin Phoenix"
-    let descriptionText = "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям."
-    let sait = "https://www.drive2.ru/experience/bmw/m287#results"
+    private var currentProfile: ProfilUserItem?
 
     private var profileCellName: [ProfileItem] = [
         ProfileItem(type: .myNFT, count: 0),
@@ -52,13 +51,11 @@ final class ProfileViewController: UIViewController {
 
     private lazy var avatarImage: UIImageView = {
         let image = UIImageView.baseAvatarImage()
-        image.image = UIImage(resource: .joaquinPhoenix)
         return image
     }()
 
     private lazy var avatarName: UILabel = {
         let label = UILabel()
-        label.text = name
         label.font = .systemFont(ofSize: 22, weight: .bold)
         label.textColor = .blackApp
         return label
@@ -79,7 +76,6 @@ final class ProfileViewController: UIViewController {
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .left
         label.textColor = .blackApp
-        label.text = descriptionText
         return label
     }()
 
@@ -90,7 +86,6 @@ final class ProfileViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapWebSiteLabel))
         label.addGestureRecognizer(tap)
         label.isUserInteractionEnabled = true
-        label.text = sait
         return label
     }()
     
@@ -154,6 +149,11 @@ final class ProfileViewController: UIViewController {
         setupConstraints()
         navigationItem.title = nil
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter.refresh()
+    }
 
     // MARK: - Setup
 
@@ -194,12 +194,12 @@ final class ProfileViewController: UIViewController {
     }
 
     @objc private func tapWebSiteLabel() {
-        guard let url = webSiteLabel.text else { return }
+        guard let url = webSiteLabel.text, !url.isEmpty else { return }
         presenter.didTapWebSite(url: url)
     }
     
     @objc private func tapWebsiteButton() {
-        guard let url = webSiteLabel.text else { return }
+        guard let url = webSiteLabel.text, !url.isEmpty else { return }
         presenter.didTapWebSite(url: url)
     }
 }
@@ -250,6 +250,37 @@ extension ProfileViewController: UITableViewDelegate {
 // MARK: - ProfileViewProtocol
 
 extension ProfileViewController: ProfileViewProtocol {
+    
+    func display(profile: ProfilUserItem) {
+        currentProfile = profile
+        avatarName.text = profile.name
+        descriptionLabel.text = profile.description ?? ""
+        let website = profile.website?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        webSiteLabel.text = website
+        let hasWebsite = !website.isEmpty
+        webSiteLabel.isUserInteractionEnabled = hasWebsite
+        webSiteLabel.textColor = hasWebsite ? .blueUniversal : .greyUniversal
+        websiteButton.isEnabled = hasWebsite
+        websiteButton.alpha = hasWebsite ? 1 : 0.5
+        if var config = websiteButton.configuration {
+            config.baseForegroundColor = hasWebsite ? .blackApp : .greyUniversal
+            config.background.strokeColor = hasWebsite ? .blackApp : .greyUniversal
+            websiteButton.configuration = config
+        }
+        
+        let placeholder = UIImage(resource: .profile)
+        avatarImage.tintColor = .greyUniversal
+        if let url = profile.avatar {
+            avatarImage.kf.setImage(
+                with: url,
+                placeholder: placeholder,
+                options: [.onFailureImage(placeholder)]
+            )
+        } else {
+            avatarImage.image = placeholder
+        }
+    }
+    
 
     func openEditProfile(model: ProfileEditModel) {
         let presenter = ProfileEditPresenter(model: model)
@@ -259,18 +290,33 @@ extension ProfileViewController: ProfileViewProtocol {
     }
 
     func getProfileEditModel() -> ProfileEditModel {
-        ProfileEditModel(name: name, description: descriptionText, site: sait)
+        ProfileEditModel(
+                name: avatarName.text ?? "",
+                description: descriptionLabel.text ?? "",
+                site: webSiteLabel.text ?? "",
+                avatar: currentProfile?.avatar
+            )
     }
 
     func openMyNFTs() {
-        let presenter = MyNFTsPresenter()
+        let nftIds = currentProfile?.nfts ?? []
+        let likedIds = currentProfile?.likes ?? []
+        let presenter = MyNFTsPresenter(
+            nftIds: nftIds,
+            likedIds: likedIds,
+            nftService: servicesAssembly.nftService
+        )
         let myNFTsVC = MyNFTsViewController(presenter: presenter)
         presenter.view = myNFTsVC
         navigationController?.pushViewController(myNFTsVC, animated: true)
     }
 
     func openFavoritesNFTs() {
-        let presenter = FavoritesNFTPresenter()
+        let nftIds = currentProfile?.likes ?? []
+        let presenter = FavoritesNFTPresenter(
+            nftIds: nftIds,
+            nftService: servicesAssembly.nftService
+        )
         let myNFTsVC = FavoritesNFTViewController(presenter: presenter)
         presenter.view = myNFTsVC
         navigationController?.pushViewController(myNFTsVC, animated: true)

@@ -26,6 +26,16 @@ enum ProfileMode: Equatable{
     case user(id: String)
 }
 
+struct ProfilUserItem{
+    let id: String
+    let name: String
+    let avatar: URL?
+    let description: String?
+    let website: String?
+    let nfts: [String]
+    let likes: [String]?
+}
+
 struct ProfileItem {
     let type: ProfileItemType
     let count: Int
@@ -35,4 +45,5 @@ struct ProfileEditModel {
     let name: String
     let description: String
     let site: String
+    let avatar: URL?
 }
