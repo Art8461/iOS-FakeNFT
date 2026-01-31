@@ -8,7 +8,7 @@
 import UIKit
 
 protocol BasketRouting {
-    func showPayment(orderId: String)
+    func showPayment(orderId: String, nftIds: [String])
 }
 
 final class BasketRouter: BasketRouting {
@@ -19,8 +19,8 @@ final class BasketRouter: BasketRouting {
         self.paymentAssembly = paymentAssembly
     }
 
-    func showPayment(orderId: String) {
-        let vc = paymentAssembly.build(orderId: orderId)
+    func showPayment(orderId: String, nftIds: [String]) {
+        let vc = paymentAssembly.build(orderId: orderId, nftIds: nftIds)
         vc.hidesBottomBarWhenPushed = true
         if let nav = viewController?.navigationController {
             nav.pushViewController(vc, animated: true)

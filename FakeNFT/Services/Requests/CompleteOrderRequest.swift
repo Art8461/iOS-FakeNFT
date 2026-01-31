@@ -17,11 +17,11 @@ struct CompleteOrderRequest: NetworkRequest {
 }
 struct CompleteOrderDto: Dto {
     let id: String
-    //let nfts: [String]
+    let nfts: [String]
 
-    func asDictionary() -> [String : String] {
-        [
-            "id": id,
-        ]
+    func asQueryItems() -> [URLQueryItem] {
+        var items = [URLQueryItem(name: "id", value: id)]
+        items += nfts.map { URLQueryItem(name: "nfts", value: $0) }
+        return items
     }
 }

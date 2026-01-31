@@ -10,8 +10,8 @@ typealias CompleteOrderCompletion = (Result<Void, Error>) -> Void
 
 protocol BasketService {
     func loadOrder(completion: @escaping OrderCompletion)
-    func updateOrder(nfts: [String], completion: @escaping OrderCompletion)
-    func completeOrder(orderId: String, completion: @escaping CompleteOrderCompletion)
+    func updateOrder(orderId: String, nfts: [String], completion: @escaping OrderCompletion)
+    func completeOrder(orderId: String, nfts: [String], completion: @escaping CompleteOrderCompletion)
 }
 
 final class BasketServiceImpl: BasketService {
@@ -25,14 +25,14 @@ final class BasketServiceImpl: BasketService {
         networkClient.send(request: OrderRequest(), type: Order.self, onResponse: completion)
     }
     
-    func updateOrder(nfts: [String], completion: @escaping OrderCompletion) {
-        let dto = UpdateOrderDto(nfts: nfts)
+    func updateOrder(orderId: String, nfts: [String], completion: @escaping OrderCompletion) {
+        let dto = UpdateOrderDto(id: orderId, nfts: nfts)
         let request = UpdateOrderRequest(dto: dto)
         networkClient.send(request: request, type: Order.self, onResponse: completion)
     }
     
-    func completeOrder(orderId: String, completion: @escaping CompleteOrderCompletion) {
-        let dto = CompleteOrderDto(id: orderId)
+    func completeOrder(orderId: String, nfts: [String], completion: @escaping CompleteOrderCompletion) {
+        let dto = CompleteOrderDto(id: orderId, nfts: nfts)
         let request = CompleteOrderRequest(dto: dto)
         networkClient.send(request: request) { result in
             switch result {
@@ -43,4 +43,5 @@ final class BasketServiceImpl: BasketService {
             }
         }
     }
+
 }

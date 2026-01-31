@@ -27,6 +27,7 @@ final class PaymentPresenterImpl: PaymentPresenter {
     weak var view: PaymentView?
 
     private let orderId: String
+    private let nftIds: [String]
     
     private let currencyService: CurrenciesService
     private let paymentService: PaymentService
@@ -41,12 +42,14 @@ final class PaymentPresenterImpl: PaymentPresenter {
         paymentService: PaymentService,
         basketService: BasketService,
         orderId: String,
+        nftIds: [String],
         router: PaymentRouting
     ) {
         self.currencyService = currencyService
         self.paymentService = paymentService
         self.basketService = basketService
         self.orderId = orderId
+        self.nftIds = nftIds
         self.router = router
     }
 
@@ -69,14 +72,12 @@ final class PaymentPresenterImpl: PaymentPresenter {
             DispatchQueue.main.async {
                 guard let self else { return }
                 assert(Thread.isMainThread)
-                self.view?.displayLoading(false)
                 switch result {
                 case .success(let response):
                     if response.success {
-                        self.router.showPaymentSuccess { [weak self] in
-                            self?.didTapReturnToBasket()
-                        }
+                        self.completeOrderAfterPayment()
                     } else {
+                        self.view?.displayLoading(false)
                         let primary = ErrorAction(
                             title: NSLocalizedString("Error.repeat", comment: ""),
                             style: .default
@@ -95,37 +96,17 @@ final class PaymentPresenterImpl: PaymentPresenter {
                         self.view?.showError(model)
                     }
                 case .failure:
-                    let primary = ErrorAction(
-                        title: NSLocalizedString("Error.repeat", comment: ""),
-                        style: .default
-                    ) { [weak self] in
+                    self.view?.displayLoading(false)
+                    self.showNetworkError(retry: { [weak self] in
                         self?.didTapPay()
-                    }
-                    let secondary = ErrorAction(
-                        title: NSLocalizedString("Error.close", comment: ""),
-                        style: .cancel
-                    ) { }
-                    let model = ErrorModel(
-                        message: NSLocalizedString("Error.network", comment: ""),
-                        primaryAction: primary,
-                        secondaryAction: secondary
-                    )
-                    self.view?.showError(model)
+                    })
                 }
             }
         }
     }
 
     func didTapReturnToBasket() {
-        view?.displayLoading(true)
-        basketService.completeOrder(orderId: orderId) { [weak self] result in
-            DispatchQueue.main.async {
-                guard let self else { return }
-                assert(Thread.isMainThread)
-                self.view?.displayLoading(false)
-                self.router.returnToBasket()
-            }
-        }
+        router.returnToBasket()
     }
     
     func didTapUserAgreement() {
@@ -175,5 +156,59 @@ final class PaymentPresenterImpl: PaymentPresenter {
                 }
             }
         }
+    }
+
+    private func completeOrderAfterPayment() {
+        view?.displayLoading(true)
+        basketService.completeOrder(orderId: orderId, nfts: nftIds) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                assert(Thread.isMainThread)
+                switch result {
+                case .success:
+                    self.basketService.updateOrder(orderId: self.orderId, nfts: []) { [weak self] result in
+                        DispatchQueue.main.async {
+                            guard let self else { return }
+                            assert(Thread.isMainThread)
+                            self.view?.displayLoading(false)
+                            switch result {
+                            case .success:
+                                self.router.showPaymentSuccess { [weak self] in
+                                    self?.didTapReturnToBasket()
+                                }
+                            case .failure:
+                                self.showNetworkError(retry: { [weak self] in
+                                    self?.completeOrderAfterPayment()
+                                })
+                            }
+                        }
+                    }
+                case .failure:
+                    self.view?.displayLoading(false)
+                    self.showNetworkError(retry: { [weak self] in
+                        self?.completeOrderAfterPayment()
+                    })
+                }
+            }
+        }
+    }
+
+    private func showNetworkError(retry: @escaping () -> Void) {
+        let primary = ErrorAction(
+            title: NSLocalizedString("Error.repeat", comment: ""),
+            style: .default
+        ) {
+            retry()
+        }
+        let secondary = ErrorAction(
+            title: NSLocalizedString("Error.close", comment: ""),
+            style: .cancel
+        ) { }
+        let model = ErrorModel(
+            message: NSLocalizedString("Error.network", comment: ""),
+            primaryAction: primary,
+            secondaryAction: secondary
+        )
+        view?.showError(model)
     }
 }

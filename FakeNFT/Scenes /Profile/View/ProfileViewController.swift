@@ -330,6 +330,7 @@ extension ProfileViewController: ProfileViewProtocol {
 
     private func makeProfileUpdateData() -> ProfileUpdateData {
         ProfileUpdateData(
+            id: currentProfile?.id ?? "",
             name: currentProfile?.name ?? avatarName.text ?? "",
             description: currentProfile?.description ?? descriptionLabel.text ?? "",
             avatar: currentProfile?.avatar?.absoluteString ?? "",

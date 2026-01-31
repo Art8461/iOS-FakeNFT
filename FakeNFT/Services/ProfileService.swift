@@ -31,6 +31,7 @@ final class ProfileServiceImpl: ProfileService {
     }
 
     func updateProfile(data: ProfileUpdateData, likes: [String], completion: @escaping ProfileCompletion) {
+        guard !data.id.isEmpty else { return }
         let dto = ProfileUpdateDto(
             name: data.name,
             description: data.description,
@@ -38,7 +39,7 @@ final class ProfileServiceImpl: ProfileService {
             website: data.website,
             likes: likes
         )
-        let request = ProfileUpdateRequest(dto: dto)
+        let request = ProfileUpdateRequest(dto: dto, userId: data.id)
         networkClient.send(request: request, type: ProfilUser.self, onResponse: completion)
     }
 }

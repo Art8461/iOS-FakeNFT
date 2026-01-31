@@ -49,6 +49,7 @@ struct ProfileEditModel {
 }
 
 struct ProfileUpdateData {
+    let id: String
     let name: String
     let description: String
     let avatar: String

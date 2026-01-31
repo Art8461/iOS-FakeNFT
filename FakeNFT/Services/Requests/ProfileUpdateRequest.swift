@@ -3,6 +3,7 @@ import Foundation
 struct ProfileUpdateRequest: NetworkRequest {
     var dto: Dto?
     var httpMethod: HttpMethod = .put
+    let userId: String
     
     var endpoint: URL? {
         URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1")
@@ -16,14 +17,14 @@ struct ProfileUpdateDto: Dto {
     let website: String
     let likes: [String]
     
-    func asDictionary() -> [String : String] {
+    func asQueryItems() -> [URLQueryItem] {
         let likesValue = likes.joined(separator: ",")
         return [
-            "name": name,
-            "description": description,
-            "avatar": avatar,
-            "website": website,
-            "likes": likesValue
+            URLQueryItem(name: "name", value: name),
+            URLQueryItem(name: "description", value: description),
+            URLQueryItem(name: "avatar", value: avatar),
+            URLQueryItem(name: "website", value: website),
+            URLQueryItem(name: "likes", value: likesValue)
         ]
     }
 }
