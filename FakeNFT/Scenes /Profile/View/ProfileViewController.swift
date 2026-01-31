@@ -162,16 +162,15 @@ final class ProfileViewController: UIViewController {
     }
     
     private func showAvatar(_ avatar: String?) {
-        if
-            let avatar = avatar,
-            !avatar.isEmpty,
-            let url = URL(string: avatar)
-        {
-            avatarImage.kf.setImage(with: url)
+        if let avatar = avatar,
+           !avatar.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+           let url = URL(string: avatar) {
+            avatarImage.kf.setImage(with: url, placeholder: UIImage(resource: .userPic))
         } else {
             avatarImage.image = UIImage(resource: .userPic)
         }
     }
+
     
     // MARK: - Actions
     

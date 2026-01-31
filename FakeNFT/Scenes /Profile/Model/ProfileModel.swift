@@ -9,7 +9,7 @@ import Foundation
 
 struct ProfileResponse: Decodable {
     let name: String
-    let avatar: String
+    let avatar: String?
     let description: String
     let website: String
     let nfts: [String]

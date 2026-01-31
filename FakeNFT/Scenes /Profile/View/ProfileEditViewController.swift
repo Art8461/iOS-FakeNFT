@@ -276,15 +276,16 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
         nameTextView.text = model.name
         descriptionTextView.text = model.description
         siteTextView.text = model.site
-        
+
         if let imageView = avatarButton.subviews.compactMap({ $0 as? UIImageView }).first {
-            if let avatar = model.avatar, let url = URL(string: avatar) {
-                imageView.kf.setImage(with: url)
-            } else {
-                imageView.image = UIImage(resource: .userPic)
+            imageView.image = UIImage(resource: .userPic)
+            if let avatar = model.avatar,
+               !avatar.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+               let url = URL(string: avatar) {
+                imageView.kf.setImage(with: url, placeholder: UIImage(resource: .userPic))
             }
         }
-        
+
         saveButton.isHidden = true
     }
     
