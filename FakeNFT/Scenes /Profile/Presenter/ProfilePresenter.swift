@@ -8,17 +8,36 @@
 import Foundation
 
 protocol ProfilePresenterProtocol: AnyObject {
+    func viewDidLoad()
     func didTapEdit()
     func openMyNFTs()
     func openFavoritesNFC()
     func didTapWebSite(url: String)
 }
 
-
-
 final class ProfilePresenter: ProfilePresenterProtocol {
     
     weak var view: ProfileViewProtocol?
+    private let service: ProfileServiceProtocol
+    private var profile: ProfileResponse?
+    
+    init(service: ProfileServiceProtocol) {
+        self.service = service
+    }
+    
+    func viewDidLoad() {
+        service.fetchProfile { [weak self] result in
+            switch result {
+            case .success(let profile):
+                DispatchQueue.main.async {
+                    self?.profile = profile
+                    self?.view?.updateProfile(profile)
+                }
+            case .failure(let error):
+                print("Ошибка загрузки профиля:", error)
+            }
+        }
+    }
     
     func didTapEdit() {
         guard let model = view?.getProfileEditModel() else { return }
@@ -41,5 +60,3 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         view?.openWebView(url: url)
     }
 }
-
-

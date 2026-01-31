@@ -7,6 +7,16 @@
 
 import Foundation
 
+struct ProfileResponse: Decodable {
+    let name: String
+    let avatar: String
+    let description: String
+    let website: String
+    let nfts: [String]
+    let likes: [String]
+    let id: String
+}
+
 enum ProfileItemType {
     case myNFT
     case myFavorites
@@ -24,10 +34,4 @@ enum ProfileItemType {
 struct ProfileItem {
     let type: ProfileItemType
     let count: Int
-}
-
-struct ProfileEditModel {
-    let name: String
-    let description: String
-    let site: String
 }

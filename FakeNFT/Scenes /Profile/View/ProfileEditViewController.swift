@@ -15,15 +15,22 @@ protocol ProfileEditViewProtocol: AnyObject {
     func showExitAlert()
     func showAvatarAlert()
     func showPhotoLinkAlert()
+    func enableSaveButton(_ enable: Bool)
+}
+
+// MARK: - Delegate
+
+protocol ProfileEditDelegate: AnyObject {
+    func didUpdateProfile(_ model: ProfileEditModel)
 }
 
 // MARK: - ProfileEditViewController
 
-final class ProfileEditViewController: UIViewController {
+final class ProfileEditViewController: UIViewController, UITextViewDelegate {
     
     // MARK: - Dependencies
     
-    private let presenter: ProfileEditPresenterProtocol
+    private let presenter: ProfileEditPresenter
     
     // MARK: - UI
     
@@ -34,7 +41,6 @@ final class ProfileEditViewController: UIViewController {
         button.clipsToBounds = true
         
         let image = UIImageView.baseAvatarImage()
-        image.image = UIImage(resource: .joaquinPhoenix)
         button.addSubview(image)
         
         NSLayoutConstraint.activate([
@@ -58,6 +64,7 @@ final class ProfileEditViewController: UIViewController {
     
     private lazy var nameTextView: UITextView = {
         let textView = UITextView.baseTextView()
+        textView.delegate = self
         return textView
     }()
     
@@ -68,6 +75,7 @@ final class ProfileEditViewController: UIViewController {
     
     private lazy var descriptionTextView: UITextView = {
         let textView = UITextView.baseTextView()
+        textView.delegate = self
         return textView
     }()
     
@@ -78,6 +86,7 @@ final class ProfileEditViewController: UIViewController {
     
     private lazy var siteTextView: UITextView = {
         let textView = UITextView.baseTextView()
+        textView.delegate = self
         return textView
     }()
     
@@ -97,17 +106,13 @@ final class ProfileEditViewController: UIViewController {
         return stack
     }()
     
-    //логика пока не реализована, кнопка скрыта
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Сохранить", for: .normal)
-        button.backgroundColor = .blackApp
-        button.tintColor = .whiteApp
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        button.backgroundColor = .black
+        button.tintColor = .white
         button.layer.cornerRadius = 16
-        button.clipsToBounds = true
         button.isHidden = true
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(tapSaveButton), for: .touchUpInside)
         return button
     }()
@@ -115,9 +120,10 @@ final class ProfileEditViewController: UIViewController {
     
     // MARK: - Initializers
     
-    init(presenter: ProfileEditPresenterProtocol) {
+    init(presenter: ProfileEditPresenter) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
+        self.presenter.view = self
     }
     
     required init?(coder: NSCoder) {
@@ -133,6 +139,7 @@ final class ProfileEditViewController: UIViewController {
         addSubviews()
         setupConstraints()
         presenter.viewDidLoad()
+        setupTextViews()
     }
     
     // MARK: - Setup
@@ -175,6 +182,29 @@ final class ProfileEditViewController: UIViewController {
         ])
     }
     
+    private func setupTextViews() {
+        [nameTextView, descriptionTextView, siteTextView].forEach {
+            $0.delegate = self
+        }
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        presenter.didChangeText()
+    }
+    
+    @objc private func tapSaveButton() {
+        presenter.didTapSave(
+            name: nameTextView.text,
+            description: descriptionTextView.text,
+            site: siteTextView.text,
+            avatar: nil
+        )
+    }
+    
+    func enableSaveButton(_ enable: Bool) {
+        saveButton.isHidden = !enable
+    }
+    
     // MARK: - Actions
     
     @objc private func tapBackButton() {
@@ -185,9 +215,6 @@ final class ProfileEditViewController: UIViewController {
         presenter.didTapAvatar()
     }
     
-    @objc private func tapSaveButton() {
-        print("сохранение и выход")
-    }
 }
 
 // MARK: - ProfileEditViewProtocol
@@ -221,21 +248,25 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
     }
     
     func showPhotoLinkAlert() {
-        let alert = UIAlertController(title: "Ссылка на фото", message: nil, preferredStyle: .alert)       
-        alert.addTextField { textField in
-            textField.placeholder = "Введите ссылку на фото"
-            textField.keyboardType = .URL
+        let alert = UIAlertController(
+            title: "Ссылка на фото",
+            message: nil,
+            preferredStyle: .alert
+        )
+        
+        alert.addTextField {
+            $0.placeholder = "Введите ссылку на фото"
+            $0.keyboardType = .URL
         }
         
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Сохранить", style: .default) { [weak alert] _ in
-            if let text = alert?.textFields?.first?.text {
-                print("Введена ссылка: \(text)")
-            }
+        alert.addAction(UIAlertAction(title: "Сохранить", style: .default) { [weak self, weak alert] _ in
+            guard let link = alert?.textFields?.first?.text, !link.isEmpty else { return }
+            self?.presenter.didChangeAvatar(link: link)
         })
+        
         present(alert, animated: true)
     }
-
     
     func closeSave() {
         navigationController?.popViewController(animated: true)
@@ -245,6 +276,16 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
         nameTextView.text = model.name
         descriptionTextView.text = model.description
         siteTextView.text = model.site
+        
+        if let imageView = avatarButton.subviews.compactMap({ $0 as? UIImageView }).first {
+            if let avatar = model.avatar, let url = URL(string: avatar) {
+                imageView.kf.setImage(with: url)
+            } else {
+                imageView.image = UIImage(resource: .userPic)
+            }
+        }
+        
+        saveButton.isHidden = true
     }
     
 }

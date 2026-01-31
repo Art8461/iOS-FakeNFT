@@ -14,15 +14,25 @@ protocol ProfileEditPresenterProtocol: AnyObject {
     func didTapAvatar()
     func didSelectChangePhoto()
     func didSelectDeletePhoto()
+    func didTapSave(name: String, description: String, site: String, avatar: String?)
+    func didChangeAvatar(link: String)
 }
 
 final class ProfileEditPresenter: ProfileEditPresenterProtocol {
     
     weak var view: ProfileEditViewProtocol?
-    private let model: ProfileEditModel
+    weak var delegate: ProfileEditDelegate?
+    private let service: ProfileServiceProtocol
+    private var model: ProfileEditModel
     
-    init(model: ProfileEditModel) {
+    init(model: ProfileEditModel, service: ProfileServiceProtocol) {
         self.model = model
+        self.service = service
+    }
+    
+    func updateModel(_ newModel: ProfileEditModel) {
+        self.model = newModel
+        view?.showProfile(model: model)
     }
     
     func viewDidLoad() {
@@ -43,11 +53,66 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
     
     func didSelectChangePhoto() {
         view?.showPhotoLinkAlert()
-        print("Алерт для ввода ссылки на фото показан")
     }
     
     func didSelectDeletePhoto() {
-        print("Логика удаления фото")
+        let updatedModel = ProfileEditModel(
+            name: model.name,
+            description: model.description,
+            site: model.site,
+            avatar: nil
+        )
+        
+        model = updatedModel
+        view?.showProfile(model: updatedModel)
+        view?.enableSaveButton(true)
+    }
+    
+    func didChangeText() {
+        view?.enableSaveButton(true)
+    }
+    
+    func didTapSave(name: String, description: String, site: String, avatar: String?) {
+        let updatedModel = ProfileEditModel(
+            name: name,
+            description: description,
+            site: site,
+            avatar: model.avatar
+        )
+        
+        model = updatedModel
+        view?.enableSaveButton(false)
+        
+        service.updateProfile(updatedModel) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let profile):
+                    let updatedModel = ProfileEditModel(
+                        name: profile.name,
+                        description: profile.description,
+                        site: profile.website,
+                        avatar: profile.avatar
+                    )
+                    self?.delegate?.didUpdateProfile(updatedModel)
+                    self?.view?.closeSave()
+                case .failure:
+                    self?.view?.enableSaveButton(true)
+                }
+            }
+        }
+    }
+    
+    func didChangeAvatar(link: String) {
+        let updatedModel = ProfileEditModel(
+            name: model.name,
+            description: model.description,
+            site: model.site,
+            avatar: link
+        )
+        
+        model = updatedModel
+        view?.showProfile(model: updatedModel)
+        view?.enableSaveButton(true)
     }
     
 }
