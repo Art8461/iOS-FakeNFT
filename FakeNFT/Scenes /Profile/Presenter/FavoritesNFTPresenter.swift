@@ -69,7 +69,6 @@ final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
             imageURL: nft.images.first,
             likeImageName: "Favourites",
             title: nft.name,
-            starsImageName: "Rating3",
             authorName: nft.author,
             price: Float(nft.price),
             rating: nft.rating

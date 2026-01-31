@@ -12,7 +12,6 @@ struct NFTCartModel {
     let imageURL: URL?
     let likeImageName: String
     let title: String
-    let starsImageName: String  
     let authorName: String?
     let price: Float
     let rating: Int

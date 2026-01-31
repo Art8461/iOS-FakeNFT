@@ -114,7 +114,6 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
             imageURL: nft.images.first,
             likeImageName: isLiked ? "Favourites" : "NoFavorites",
             title: nft.name,
-            starsImageName: "Rating3",
             authorName: nft.author,
             price: Float(nft.price),
             rating: nft.rating

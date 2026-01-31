@@ -16,7 +16,6 @@ enum NFTMockData {
                 imageURL: nil,
                 likeImageName: "NoFavorites",
                 title: "Test",
-                starsImageName: "Rating3",
                 authorName: "Andrey P",
                 price: 1.78,
                 rating: 3
@@ -26,7 +25,6 @@ enum NFTMockData {
                 imageURL: nil,
                 likeImageName: "NoFavorites",
                 title: "Test 2",
-                starsImageName: "Rating3",
                 authorName: "Andrey P",
                 price: 2.50,
                 rating: 3
@@ -36,7 +34,6 @@ enum NFTMockData {
                 imageURL: nil,
                 likeImageName: "NoFavorites",
                 title: "Test 3",
-                starsImageName: "Rating3",
                 authorName: "Andrey P",
                 price: 3.12,
                 rating: 3

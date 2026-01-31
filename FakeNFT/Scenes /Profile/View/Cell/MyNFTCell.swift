@@ -26,7 +26,7 @@ final class MyNFTCell: UITableViewCell {
     private let imageNFTView: UIImageView = .baseNFTImage()
     private let likeButton: UIButton = .likeButton(color: .whiteUniversal)
     private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
-    private let starsImageView: UIImageView = .starsImageView()
+    private let ratingView = StarRatingView()
     private let authorPrefixLabel: UILabel = .baseLabel(text: "от", font: .systemFont(ofSize: 15, weight: .regular))
     private let nameAuthorLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 13, weight: .regular))
     private let priceTitleLabel: UILabel = .baseLabel(text: "Цена", font: .systemFont(ofSize: 13, weight: .regular))
@@ -38,7 +38,7 @@ final class MyNFTCell: UITableViewCell {
     }()
     
     private lazy var infoStack: UIStackView = {
-        let stack = UIStackView.stackVertical(spacing: 4, views: [titleLabel, starsImageView, authorStack])
+        let stack = UIStackView.stackVertical(spacing: 4, views: [titleLabel, ratingView, authorStack])
         return stack
     }()
     
@@ -108,7 +108,7 @@ final class MyNFTCell: UITableViewCell {
         }
         likeButton.setImage(UIImage(named: model.likeImageName), for: .normal)
         titleLabel.text = model.title
-        starsImageView.image = UIImage(named: model.starsImageName)
+        ratingView.setRating(model.rating)
         let authorName = model.authorName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         nameAuthorLabel.text = authorName
         authorStack.isHidden = authorName.isEmpty
@@ -121,7 +121,7 @@ final class MyNFTCell: UITableViewCell {
         imageNFTView.image = nil
         likeButton.setImage(nil, for: .normal)
         titleLabel.text = nil
-        starsImageView.image = nil
+        ratingView.setRating(0)
         nameAuthorLabel.text = nil
         authorStack.isHidden = false
         priceValueLabel.text = nil
