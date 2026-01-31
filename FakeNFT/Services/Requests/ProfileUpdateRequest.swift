@@ -18,13 +18,15 @@ struct ProfileUpdateDto: Dto {
     let likes: [String]
     
     func asQueryItems() -> [URLQueryItem] {
-        let likesValue = likes.joined(separator: ",")
-        return [
+        var items = [
             URLQueryItem(name: "name", value: name),
             URLQueryItem(name: "description", value: description),
             URLQueryItem(name: "avatar", value: avatar),
-            URLQueryItem(name: "website", value: website),
-            URLQueryItem(name: "likes", value: likesValue)
+            URLQueryItem(name: "website", value: website)
         ]
+        if !likes.isEmpty {
+            items += likes.map { URLQueryItem(name: "likes", value: $0) }
+        }
+        return items
     }
 }
