@@ -31,6 +31,7 @@ final class MyNFTCell: UITableViewCell {
     private let nameAuthorLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 13, weight: .regular))
     private let priceTitleLabel: UILabel = .baseLabel(text: "Цена", font: .systemFont(ofSize: 13, weight: .regular))
     private let priceValueLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
+    var onLikeTap: (() -> Void)?
     
     private lazy var authorStack: UIStackView = {
         let stack = UIStackView.stackHorizontal(spacing: 4, views: [authorPrefixLabel, nameAuthorLabel])
@@ -55,6 +56,7 @@ final class MyNFTCell: UITableViewCell {
         contentView.backgroundColor = .whiteApp
         addSubviews()
         setupConstraints()
+        likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -106,7 +108,9 @@ final class MyNFTCell: UITableViewCell {
         } else {
             imageNFTView.image = UIImage(named: model.imageName)
         }
-        likeButton.setImage(UIImage(named: model.likeImageName), for: .normal)
+        let likeImage = UIImage(named: "Favourites")?.withRenderingMode(.alwaysTemplate)
+        likeButton.setImage(likeImage, for: .normal)
+        likeButton.tintColor = model.isLiked ? .redUniversal : .whiteUniversal
         titleLabel.text = model.title
         ratingView.setRating(model.rating)
         let authorName = model.authorName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
@@ -120,10 +124,16 @@ final class MyNFTCell: UITableViewCell {
         imageNFTView.kf.cancelDownloadTask()
         imageNFTView.image = nil
         likeButton.setImage(nil, for: .normal)
+        likeButton.tintColor = .whiteUniversal
         titleLabel.text = nil
         ratingView.setRating(0)
         nameAuthorLabel.text = nil
         authorStack.isHidden = false
         priceValueLabel.text = nil
+        onLikeTap = nil
+    }
+
+    @objc private func didTapLike() {
+        onLikeTap?()
     }
 }

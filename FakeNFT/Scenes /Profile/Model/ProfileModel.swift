@@ -47,3 +47,10 @@ struct ProfileEditModel {
     let site: String
     let avatar: URL?
 }
+
+struct ProfileUpdateData {
+    let name: String
+    let description: String
+    let avatar: String
+    let website: String
+}

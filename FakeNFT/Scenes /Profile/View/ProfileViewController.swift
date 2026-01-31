@@ -301,10 +301,13 @@ extension ProfileViewController: ProfileViewProtocol {
     func openMyNFTs() {
         let nftIds = currentProfile?.nfts ?? []
         let likedIds = currentProfile?.likes ?? []
+        let updateData = makeProfileUpdateData()
         let presenter = MyNFTsPresenter(
             nftIds: nftIds,
             likedIds: likedIds,
-            nftService: servicesAssembly.nftService
+            nftService: servicesAssembly.nftService,
+            profileService: servicesAssembly.profileService,
+            profileUpdateData: updateData
         )
         let myNFTsVC = MyNFTsViewController(presenter: presenter)
         presenter.view = myNFTsVC
@@ -313,13 +316,25 @@ extension ProfileViewController: ProfileViewProtocol {
 
     func openFavoritesNFTs() {
         let nftIds = currentProfile?.likes ?? []
+        let updateData = makeProfileUpdateData()
         let presenter = FavoritesNFTPresenter(
             nftIds: nftIds,
-            nftService: servicesAssembly.nftService
+            nftService: servicesAssembly.nftService,
+            profileService: servicesAssembly.profileService,
+            profileUpdateData: updateData
         )
         let myNFTsVC = FavoritesNFTViewController(presenter: presenter)
         presenter.view = myNFTsVC
         navigationController?.pushViewController(myNFTsVC, animated: true)
+    }
+
+    private func makeProfileUpdateData() -> ProfileUpdateData {
+        ProfileUpdateData(
+            name: currentProfile?.name ?? avatarName.text ?? "",
+            description: currentProfile?.description ?? descriptionLabel.text ?? "",
+            avatar: currentProfile?.avatar?.absoluteString ?? "",
+            website: currentProfile?.website ?? webSiteLabel.text ?? ""
+        )
     }
     
     func openWebView(url: URL) {

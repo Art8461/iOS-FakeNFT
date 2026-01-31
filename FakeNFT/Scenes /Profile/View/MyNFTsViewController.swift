@@ -143,7 +143,11 @@ extension MyNFTsViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
 
-        cell.configure(with: myNFTs[indexPath.row])
+        let model = myNFTs[indexPath.row]
+        cell.configure(with: model)
+        cell.onLikeTap = { [weak self] in
+            self?.presenter.didTapLike(id: model.id)
+        }
         return cell
     }
 

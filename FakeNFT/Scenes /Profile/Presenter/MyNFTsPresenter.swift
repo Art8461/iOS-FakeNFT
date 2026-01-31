@@ -12,6 +12,7 @@ protocol MyNFTsPresenterProtocol: AnyObject {
     func viewDidLoad()
     func didTapSort()
     func didSelectSortOption(_ option: Sorting)
+    func didTapLike(id: String)
 }
 
 final class MyNFTsPresenter: MyNFTsPresenterProtocol {
@@ -19,15 +20,25 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
     weak var view: MyNFTsViewProtocol?
 
     private let nftIds: [String]
-    private let likedIds: Set<String>
+    private var likedIds: Set<String>
     private let nftService: NftService
+    private let profileService: ProfileService
+    private let profileUpdateData: ProfileUpdateData
     private var currentNfts: [Nft] = []
     private var sortOption: Sorting?
 
-    init(nftIds: [String], likedIds: [String], nftService: NftService) {
+    init(
+        nftIds: [String],
+        likedIds: [String],
+        nftService: NftService,
+        profileService: ProfileService,
+        profileUpdateData: ProfileUpdateData
+    ) {
         self.nftIds = nftIds
         self.likedIds = Set(likedIds)
         self.nftService = nftService
+        self.profileService = profileService
+        self.profileUpdateData = profileUpdateData
     }
     
     func viewDidLoad() {
@@ -46,6 +57,16 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
     func didSelectSortOption(_ option: Sorting) {
         sortOption = option
         applySortAndDisplay()
+    }
+
+    func didTapLike(id: String) {
+        if likedIds.contains(id) {
+            likedIds.remove(id)
+        } else {
+            likedIds.insert(id)
+        }
+        applySortAndDisplay()
+        updateLikes()
     }
 
     private func loadNfts() {
@@ -110,13 +131,22 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
     private func makeModel(from nft: Nft) -> NFTCartModel {
         let isLiked = likedIds.contains(nft.id)
         return NFTCartModel(
+            id: nft.id,
             imageName: "NFTCardTest",
             imageURL: nft.images.first,
-            likeImageName: isLiked ? "Favourites" : "NoFavorites",
+            isLiked: isLiked,
             title: nft.name,
             authorName: nft.author,
             price: Float(nft.price),
             rating: nft.rating
         )
+    }
+
+    private func updateLikes() {
+        let likes = Array(likedIds)
+        profileService.updateProfile(
+            data: profileUpdateData,
+            likes: likes
+        ) { _ in }
     }
 }

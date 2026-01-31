@@ -8,9 +8,10 @@
 import Foundation
 
 struct NFTCartModel {
+    let id: String
     let imageName: String
     let imageURL: URL?
-    let likeImageName: String
+    let isLiked: Bool
     let title: String
     let authorName: String?
     let price: Float

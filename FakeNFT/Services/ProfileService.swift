@@ -10,6 +10,7 @@ typealias ProfileCompletion = (Result<ProfilUser, Error>) -> Void
 protocol ProfileService {
     func loadMyProfile(completion: @escaping ProfileCompletion)
     func loadProfile(userId: String, completion: @escaping ProfileCompletion)
+    func updateProfile(data: ProfileUpdateData, likes: [String], completion: @escaping ProfileCompletion)
 }
 
 final class ProfileServiceImpl: ProfileService {
@@ -26,6 +27,18 @@ final class ProfileServiceImpl: ProfileService {
 
     func loadProfile(userId: String, completion: @escaping ProfileCompletion) {
         let request = ProfileStatsRequest(userId: userId)
+        networkClient.send(request: request, type: ProfilUser.self, onResponse: completion)
+    }
+
+    func updateProfile(data: ProfileUpdateData, likes: [String], completion: @escaping ProfileCompletion) {
+        let dto = ProfileUpdateDto(
+            name: data.name,
+            description: data.description,
+            avatar: data.avatar,
+            website: data.website,
+            likes: likes
+        )
+        let request = ProfileUpdateRequest(dto: dto)
         networkClient.send(request: request, type: ProfilUser.self, onResponse: completion)
     }
 }

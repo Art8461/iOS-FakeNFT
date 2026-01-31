@@ -139,7 +139,11 @@ extension FavoritesNFTViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
 
-        cell.configure(with: myFavoritesNFT[indexPath.item])
+        let model = myFavoritesNFT[indexPath.item]
+        cell.configure(with: model)
+        cell.onLikeTap = { [weak self] in
+            self?.presenter.didTapLike(id: model.id)
+        }
         return cell
     }
 }

@@ -21,6 +21,7 @@ final class FavoritesNFTCell: UICollectionViewCell {
     private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
     private let ratingView = StarRatingView()
     private let priceValueLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 15, weight: .regular))
+    var onLikeTap: (() -> Void)?
     
     private lazy var infoStack: UIStackView = {
         let stack = UIStackView.stackVertical(spacing: 4, views: [titleLabel, ratingView, priceValueLabel])
@@ -36,6 +37,7 @@ final class FavoritesNFTCell: UICollectionViewCell {
         contentView.backgroundColor = .whiteApp
         addSubviews()
         setupConstraints()
+        likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -78,7 +80,9 @@ final class FavoritesNFTCell: UICollectionViewCell {
         } else {
             imageNFTView.image = UIImage(named: model.imageName)
         }
-        likeButton.setImage(UIImage(named: model.likeImageName), for: .normal)
+        let likeImage = UIImage(named: "Favourites")?.withRenderingMode(.alwaysTemplate)
+        likeButton.setImage(likeImage, for: .normal)
+        likeButton.tintColor = model.isLiked ? .redUniversal : .greyUniversal
         titleLabel.text = model.title
         ratingView.setRating(model.rating)
         priceValueLabel.text = String(format: "%.2f ETH", model.price)
@@ -89,8 +93,14 @@ final class FavoritesNFTCell: UICollectionViewCell {
         imageNFTView.kf.cancelDownloadTask()
         imageNFTView.image = nil
         likeButton.setImage(nil, for: .normal)
+        likeButton.tintColor = .greyUniversal
         titleLabel.text = nil
         ratingView.setRating(0)
         priceValueLabel.text = nil
+        onLikeTap = nil
+    }
+
+    @objc private func didTapLike() {
+        onLikeTap?()
     }
 }
