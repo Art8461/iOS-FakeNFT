@@ -42,13 +42,7 @@ extension UIImageView {
         image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }
-    
-    static func starsImageView() -> UIImageView {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }
+
 }
 
 // MARK: - UITextView
@@ -74,6 +68,7 @@ extension UILabel {
     static func baseLabel(
         text: String? = nil,
         font: UIFont = .systemFont(ofSize: 17, weight: .regular),
+        truncate: Bool = false
     ) -> UILabel {
         let label = UILabel()
         label.text = text
@@ -81,6 +76,11 @@ extension UILabel {
         label.textColor = .blackApp
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
+        
+        if truncate {
+            label.numberOfLines = 1
+            label.lineBreakMode = .byTruncatingTail
+        }
         return label
     }
     
@@ -91,6 +91,11 @@ extension UILabel {
         label.font = .systemFont(ofSize: 17, weight: .bold)
         label.textColor = .blackApp
         return label
+    }
+    
+    func truncate() {
+        self.numberOfLines = 1
+        self.lineBreakMode = .byTruncatingTail
     }
 }
 

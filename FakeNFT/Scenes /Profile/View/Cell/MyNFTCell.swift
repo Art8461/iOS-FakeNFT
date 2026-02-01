@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class MyNFTCell: UITableViewCell {
     
@@ -24,10 +25,10 @@ final class MyNFTCell: UITableViewCell {
     
     private let imageNFTView: UIImageView = .baseNFTImage()
     private let likeButton: UIButton = .likeButton(color: .whiteUniversal)
-    private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
-    private let starsImageView: UIImageView = .starsImageView()
+    private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold),truncate: true)
+    private let starRatingView = StarRatingNFTView()
     private let authorPrefixLabel: UILabel = .baseLabel(text: "от", font: .systemFont(ofSize: 15, weight: .regular))
-    private let nameAuthorLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 13, weight: .regular))
+    private let nameAuthorLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 13),truncate: true)
     private let priceTitleLabel: UILabel = .baseLabel(text: "Цена", font: .systemFont(ofSize: 13, weight: .regular))
     private let priceValueLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
     
@@ -37,7 +38,7 @@ final class MyNFTCell: UITableViewCell {
     }()
     
     private lazy var infoStack: UIStackView = {
-        let stack = UIStackView.stackVertical(spacing: 4, views: [titleLabel, starsImageView, authorStack])
+        let stack = UIStackView.stackVertical(spacing: 4, views: [titleLabel, starRatingView, authorStack])
         return stack
     }()
     
@@ -88,6 +89,7 @@ final class MyNFTCell: UITableViewCell {
             
             infoStack.leadingAnchor.constraint(equalTo: imageNFTView.trailingAnchor, constant: 20),
             infoStack.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            infoStack.widthAnchor.constraint(equalToConstant: 80),
             
             priceStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             priceStack.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
@@ -96,12 +98,23 @@ final class MyNFTCell: UITableViewCell {
     
     // MARK: - Configure
     
-    func configure(with model: NFTCartModel) {
-        imageNFTView.image = UIImage(named: model.imageName)
-        likeButton.setImage(UIImage(named: model.likeImageName), for: .normal)
-        titleLabel.text = model.title
-        starsImageView.image = UIImage(named: model.starsImageName)
-        nameAuthorLabel.text = model.authorName
+    func configure(with model: NFTCartModel, likedIds: [String]) {
+        titleLabel.text = model.name
+        nameAuthorLabel.text = model.author
         priceValueLabel.text = String(format: "%.2f ETH", model.price)
+        starRatingView.setRating(model.rating)
+
+        if let urlString = model.images.first,
+           let url = URL(string: urlString) {
+            imageNFTView.kf.setImage(with: url)
+        } else {
+            imageNFTView.image = nil //можно сделать отображение картинки, если URL сломанный, недоступен или его нет
+        }
+
+        let isLiked = likedIds.contains(model.id)
+        let likeImage = UIImage(resource: .noFavorites)
+        likeButton.setImage(likeImage, for: .normal)
+        likeButton.tintColor = isLiked ? .redUniversal : .whiteUniversal
     }
+
 }

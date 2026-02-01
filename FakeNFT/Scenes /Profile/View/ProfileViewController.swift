@@ -266,7 +266,6 @@ extension ProfileViewController: ProfileViewProtocol {
         guard let profile = profile else {
             return ProfileEditModel(name: "", description: "", site: "", avatar: nil)
         }
-        
         return ProfileEditModel(
             name: profile.name,
             description: profile.description,
@@ -276,11 +275,15 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func openMyNFTs() {
-        let presenter = MyNFTsPresenter()
-        let myNFTsVC = MyNFTsViewController(presenter: presenter)
-        presenter.view = myNFTsVC
-        navigationController?.pushViewController(myNFTsVC, animated: true)
+        let presenter = MyNFTsPresenter(
+            profileService: servicesAssembly.profileService,
+            myNFTsService: servicesAssembly.myNFTsService
+        )
+        let vc = MyNFTsViewController(presenter: presenter)
+        presenter.view = vc
+        navigationController?.pushViewController(vc, animated: true)
     }
+
     
     func openFavoritesNFTs() {
         let presenter = FavoritesNFTPresenter()
@@ -310,9 +313,7 @@ extension ProfileViewController: ProfileEditDelegate {
             likes: profile?.likes ?? [],
             id: profile?.id ?? UUID().uuidString
         )
-        
         self.profile = updatedProfile
-        
         avatarName.text = updatedProfile.name
         descriptionLabel.text = updatedProfile.description
         webSiteLabel.text = updatedProfile.website

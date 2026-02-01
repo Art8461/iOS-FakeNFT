@@ -18,13 +18,13 @@ final class FavoritesNFTCell: UICollectionViewCell {
     private let imageNFTView: UIImageView = .baseNFTImage()
     private let likeButton: UIButton = .likeButton(color: .redUniversal)
     private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
-    private let starsImageView: UIImageView = .starsImageView()
+    private let starRatingView = StarRatingNFTView()
     private let priceValueLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 15, weight: .regular))
     
     private lazy var infoStack: UIStackView = {
-        let stack = UIStackView.stackVertical(spacing: 4, views: [titleLabel, starsImageView, priceValueLabel])
+        let stack = UIStackView.stackVertical(spacing: 4, views: [titleLabel, starRatingView, priceValueLabel])
         stack.alignment = .leading
-        stack.setCustomSpacing(8, after: starsImageView)
+        stack.setCustomSpacing(8, after: starRatingView)
         return stack
     }()
     
@@ -68,11 +68,11 @@ final class FavoritesNFTCell: UICollectionViewCell {
     
     // MARK: - Configure
     
-    func configure(with model: NFTCartModel) {
-        imageNFTView.image = UIImage(named: model.imageName)
-        likeButton.setImage(UIImage(named: model.likeImageName), for: .normal)
-        titleLabel.text = model.title
-        starsImageView.image = UIImage(named: model.starsImageName)
-        priceValueLabel.text = String(format: "%.2f ETH", model.price)
-    }
+//    func configure(with model: NFTCartModel) {
+//        imageNFTView.image = UIImage(named: model.imageName)
+//        likeButton.setImage(UIImage(named: model.likeImageName), for: .normal)
+//        titleLabel.text = model.title
+//        starsImageView.image = UIImage(named: model.starsImageName)
+//        priceValueLabel.text = String(format: "%.2f ETH", model.price)
+//    }
 }

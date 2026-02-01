@@ -7,11 +7,13 @@
 
 import Foundation
 
-struct NFTCartModel {
-    let imageName: String
-    let likeImageName: String
-    let title: String
-    let starsImageName: String  
-    let authorName: String?
+struct NFTCartModel: Decodable {
+    let createdAt: String
+    let name: String
+    let images: [String]
+    let rating: Int
+    let description: String
     let price: Float
+    let author: String
+    let id: String
 }

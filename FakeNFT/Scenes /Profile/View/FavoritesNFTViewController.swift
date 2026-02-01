@@ -40,8 +40,8 @@ final class FavoritesNFTViewController: UIViewController {
             FavoritesNFTCell.self,
             forCellWithReuseIdentifier: FavoritesNFTCell.reuseIdentifier
         )
-        collection.dataSource = self
-        collection.delegate = self
+//        collection.dataSource = self
+//        collection.delegate = self
         return collection
     }()
 
@@ -64,7 +64,6 @@ final class FavoritesNFTViewController: UIViewController {
         setupNavigationBar()
         addSubviews()
         setupConstraints()
-        setupMocks()
         updateUI()
     }
 
@@ -98,11 +97,6 @@ final class FavoritesNFTViewController: UIViewController {
             favoritesNFTCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             favoritesNFTCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-
-    private func setupMocks() {
-        myFavoritesNFT = NFTMockData.myNFTs()
-        favoritesNFTCollection.reloadData()
     }
 
     private func updateUI() {
@@ -143,7 +137,7 @@ extension FavoritesNFTViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
 
-        cell.configure(with: myFavoritesNFT[indexPath.item])
+//        cell.configure(with: myFavoritesNFT[indexPath.item])
         return cell
     }
 }
