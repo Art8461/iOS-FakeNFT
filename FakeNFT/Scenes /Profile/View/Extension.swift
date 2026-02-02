@@ -138,6 +138,8 @@ extension UIButton {
         let button = UIButton(type: .system)
         button.tintColor = color
         button.backgroundColor = .clear
+        let image = UIImage(resource: .noFavorites)
+        button.setImage(image, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }

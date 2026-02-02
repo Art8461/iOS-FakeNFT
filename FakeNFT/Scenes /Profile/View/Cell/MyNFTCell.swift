@@ -112,8 +112,6 @@ final class MyNFTCell: UITableViewCell {
         }
 
         let isLiked = likedIds.contains(model.id)
-        let likeImage = UIImage(resource: .noFavorites)
-        likeButton.setImage(likeImage, for: .normal)
         likeButton.tintColor = isLiked ? .redUniversal : .whiteUniversal
     }
 
