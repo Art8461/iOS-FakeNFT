@@ -18,7 +18,12 @@ final class FavoritesNFTCell: UICollectionViewCell {
     
     private let imageNFTView: UIImageView = .baseNFTImage()
     private let likeButton: UIButton = .likeButton(color: .redUniversal)
-    private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
+    private let titleLabel: UILabel = {
+        let label = UILabel.baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
+        return label
+    }()
     private let ratingView = StarRatingView()
     private let priceValueLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 15, weight: .regular))
     var onLikeTap: (() -> Void)?
@@ -65,7 +70,8 @@ final class FavoritesNFTCell: UICollectionViewCell {
             likeButton.heightAnchor.constraint(equalToConstant: 30),
             
             infoStack.leadingAnchor.constraint(equalTo: imageNFTView.trailingAnchor, constant: 20),
-            infoStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            infoStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            infoStack.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor)
         ])
     }
     

@@ -25,7 +25,12 @@ final class MyNFTCell: UITableViewCell {
     
     private let imageNFTView: UIImageView = .baseNFTImage()
     private let likeButton: UIButton = .likeButton(color: .whiteUniversal)
-    private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
+    private let titleLabel: UILabel = {
+        let label = UILabel.baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
+        label.numberOfLines = 1
+        label.lineBreakMode = .byTruncatingTail
+        return label
+    }()
     private let ratingView = StarRatingView()
     private let authorPrefixLabel: UILabel = .baseLabel(text: "от", font: .systemFont(ofSize: 15, weight: .regular))
     private let nameAuthorLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 13, weight: .regular))
@@ -35,11 +40,13 @@ final class MyNFTCell: UITableViewCell {
     
     private lazy var authorStack: UIStackView = {
         let stack = UIStackView.stackHorizontal(spacing: 4, views: [authorPrefixLabel, nameAuthorLabel])
+        stack.alignment = .firstBaseline
         return stack
     }()
     
     private lazy var infoStack: UIStackView = {
         let stack = UIStackView.stackVertical(spacing: 4, views: [titleLabel, ratingView, authorStack])
+        stack.alignment = .leading
         return stack
     }()
     
@@ -55,6 +62,8 @@ final class MyNFTCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = .whiteApp
         addSubviews()
+        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        priceStack.setContentCompressionResistancePriority(.required, for: .horizontal)
         setupConstraints()
         likeButton.addTarget(self, action: #selector(didTapLike), for: .touchUpInside)
     }
@@ -91,6 +100,7 @@ final class MyNFTCell: UITableViewCell {
             
             infoStack.leadingAnchor.constraint(equalTo: imageNFTView.trailingAnchor, constant: 20),
             infoStack.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            infoStack.trailingAnchor.constraint(lessThanOrEqualTo: priceStack.leadingAnchor),
             
             priceStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             priceStack.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)

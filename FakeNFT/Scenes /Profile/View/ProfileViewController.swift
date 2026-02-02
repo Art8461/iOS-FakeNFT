@@ -310,6 +310,7 @@ extension ProfileViewController: ProfileViewProtocol {
             profileUpdateData: updateData
         )
         let myNFTsVC = MyNFTsViewController(presenter: presenter)
+        myNFTsVC.hidesBottomBarWhenPushed = true
         presenter.view = myNFTsVC
         navigationController?.pushViewController(myNFTsVC, animated: true)
     }
