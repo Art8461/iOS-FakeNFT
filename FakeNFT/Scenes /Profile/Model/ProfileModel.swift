@@ -42,10 +42,12 @@ struct ProfileItem {
 }
 
 struct ProfileEditModel {
+    let id: String
     let name: String
     let description: String
     let site: String
     let avatar: URL?
+    let likes: [String]
 }
 
 struct ProfileUpdateData {

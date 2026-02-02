@@ -10,7 +10,7 @@ import Kingfisher
 
 // MARK: - Protocols
 
-protocol ProfileEditViewProtocol: AnyObject {
+protocol ProfileEditViewProtocol: AnyObject, ErrorView {
     func showProfile(model: ProfileEditModel)
     func closeSave()
     func showExitAlert()
@@ -25,6 +25,8 @@ final class ProfileEditViewController: UIViewController {
     // MARK: - Dependencies
     
     private let presenter: ProfileEditPresenterProtocol
+    private var initialModel: ProfileEditModel?
+    private var currentAvatarURL: URL?
     
     // MARK: - UI
     
@@ -98,7 +100,7 @@ final class ProfileEditViewController: UIViewController {
         return stack
     }()
     
-    //логика пока не реализована, кнопка скрыта
+    // Кнопка появляется при изменениях
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Сохранить", for: .normal)
@@ -133,6 +135,7 @@ final class ProfileEditViewController: UIViewController {
         setupNavigationBar()
         addSubviews()
         setupConstraints()
+        setupTextViews()
         presenter.viewDidLoad()
     }
     
@@ -146,7 +149,7 @@ final class ProfileEditViewController: UIViewController {
     }
     
     private func addSubviews() {
-        [avatarButton, editIcon, bigStackView,saveButton].forEach {
+        [avatarButton, editIcon, bigStackView, saveButton].forEach {
             view.addSubview($0)
         }
     }
@@ -176,6 +179,79 @@ final class ProfileEditViewController: UIViewController {
         ])
     }
     
+    private func setupTextViews() {
+        [nameTextView, descriptionTextView, siteTextView].forEach {
+            $0.delegate = self
+        }
+    }
+    
+    private func normalizedText(_ text: String) -> String {
+        text.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    private func normalizedText(from textView: UITextView) -> String {
+        normalizedText(textView.text)
+    }
+    
+    private func hasChanges() -> Bool {
+        guard let initialModel else { return false }
+        let currentName = normalizedText(from: nameTextView)
+        let currentDescription = normalizedText(from: descriptionTextView)
+        let currentSite = normalizedText(from: siteTextView)
+        let initialName = normalizedText(initialModel.name)
+        let initialDescription = normalizedText(initialModel.description)
+        let initialSite = normalizedText(initialModel.site)
+        let currentAvatar = currentAvatarURL?.absoluteString ?? ""
+        let initialAvatar = initialModel.avatar?.absoluteString ?? ""
+        return currentName != initialName
+            || currentDescription != initialDescription
+            || currentSite != initialSite
+            || currentAvatar != initialAvatar
+    }
+    
+    private func updateSaveButtonState() {
+        let shouldShow = hasChanges()
+        saveButton.isHidden = !shouldShow
+        saveButton.isEnabled = shouldShow
+        saveButton.alpha = shouldShow ? 1 : 0.6
+    }
+    
+    private func updateAvatar(with url: URL?) {
+        currentAvatarURL = url
+        let placeholder = UIImage(resource: .profile)
+        avatarImageView.tintColor = .greyUniversal
+        if let url {
+            avatarImageView.kf.setImage(
+                with: url,
+                placeholder: placeholder,
+                options: [.onFailureImage(placeholder)]
+            )
+        } else {
+            avatarImageView.image = placeholder
+        }
+        updateSaveButtonState()
+    }
+    
+    private func handlePhotoLinkInput(_ text: String) {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        guard let url = URL(string: trimmed) else {
+            showInvalidPhotoLinkAlert()
+            return
+        }
+        updateAvatar(with: url)
+    }
+    
+    private func showInvalidPhotoLinkAlert() {
+        let alert = UIAlertController(
+            title: "Некорректная ссылка",
+            message: "Введите корректный URL",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "ОК", style: .default))
+        present(alert, animated: true)
+    }
+    
     // MARK: - Actions
     
     @objc private func tapBackButton() {
@@ -187,7 +263,14 @@ final class ProfileEditViewController: UIViewController {
     }
     
     @objc private func tapSaveButton() {
-        print("сохранение и выход")
+        view.endEditing(true)
+        guard hasChanges() else { return }
+        presenter.didTapSave(
+            name: normalizedText(from: nameTextView),
+            description: normalizedText(from: descriptionTextView),
+            site: normalizedText(from: siteTextView),
+            avatarURL: currentAvatarURL
+        )
     }
 }
 
@@ -215,6 +298,7 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
         })
         
         alert.addAction(UIAlertAction(title: "Удалить фото", style: .destructive) { [weak self] _ in
+            self?.updateAvatar(with: nil)
             self?.presenter.didSelectDeletePhoto()
         })
         alert.addAction(UIAlertAction(title: "Отменить", style: .cancel))
@@ -229,10 +313,9 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
         }
         
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Сохранить", style: .default) { [weak alert] _ in
-            if let text = alert?.textFields?.first?.text {
-                print("Введена ссылка: \(text)")
-            }
+        alert.addAction(UIAlertAction(title: "Сохранить", style: .default) { [weak self, weak alert] _ in
+            let text = alert?.textFields?.first?.text ?? ""
+            self?.handlePhotoLinkInput(text)
         })
         present(alert, animated: true)
     }
@@ -243,20 +326,19 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
     }
     
     func showProfile(model: ProfileEditModel) {
+        initialModel = model
         nameTextView.text = model.name
         descriptionTextView.text = model.description
         siteTextView.text = model.site
-        let placeholder = UIImage(resource: .profile)
-        avatarImageView.tintColor = .greyUniversal
-        if let url = model.avatar {
-            avatarImageView.kf.setImage(
-                with: url,
-                placeholder: placeholder,
-                options: [.onFailureImage(placeholder)]
-            )
-        } else {
-            avatarImageView.image = placeholder
-        }
+        updateAvatar(with: model.avatar)
     }
     
+}
+
+// MARK: - UITextViewDelegate
+
+extension ProfileEditViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        updateSaveButtonState()
+    }
 }

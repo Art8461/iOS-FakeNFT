@@ -283,19 +283,25 @@ extension ProfileViewController: ProfileViewProtocol {
     
 
     func openEditProfile(model: ProfileEditModel) {
-        let presenter = ProfileEditPresenter(model: model)
+        let presenter = ProfileEditPresenter(
+            model: model,
+            profileService: servicesAssembly.profileService
+        )
         let editVC = ProfileEditViewController(presenter: presenter)
         presenter.view = editVC
+        editVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(editVC, animated: true)
     }
 
     func getProfileEditModel() -> ProfileEditModel {
         ProfileEditModel(
-                name: avatarName.text ?? "",
-                description: descriptionLabel.text ?? "",
-                site: webSiteLabel.text ?? "",
-                avatar: currentProfile?.avatar
-            )
+            id: currentProfile?.id ?? "",
+            name: avatarName.text ?? "",
+            description: descriptionLabel.text ?? "",
+            site: webSiteLabel.text ?? "",
+            avatar: currentProfile?.avatar,
+            likes: currentProfile?.likes ?? []
+        )
     }
 
     func openMyNFTs() {
@@ -324,9 +330,9 @@ extension ProfileViewController: ProfileViewProtocol {
             profileService: servicesAssembly.profileService,
             profileUpdateData: updateData
         )
-        let myNFTsVC = FavoritesNFTViewController(presenter: presenter)
-        presenter.view = myNFTsVC
-        navigationController?.pushViewController(myNFTsVC, animated: true)
+        let myFavorNFTsVC = FavoritesNFTViewController(presenter: presenter)
+        presenter.view = myFavorNFTsVC
+        navigationController?.pushViewController(myFavorNFTsVC, animated: true)
     }
 
     private func makeProfileUpdateData() -> ProfileUpdateData {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol ProfileEditPresenterProtocol: AnyObject {
     func viewDidLoad()
@@ -14,15 +15,18 @@ protocol ProfileEditPresenterProtocol: AnyObject {
     func didTapAvatar()
     func didSelectChangePhoto()
     func didSelectDeletePhoto()
+    func didTapSave(name: String, description: String, site: String, avatarURL: URL?)
 }
 
 final class ProfileEditPresenter: ProfileEditPresenterProtocol {
     
     weak var view: ProfileEditViewProtocol?
     private let model: ProfileEditModel
+    private let profileService: ProfileService
     
-    init(model: ProfileEditModel) {
+    init(model: ProfileEditModel, profileService: ProfileService) {
         self.model = model
+        self.profileService = profileService
     }
     
     func viewDidLoad() {
@@ -48,6 +52,51 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
     
     func didSelectDeletePhoto() {
         print("Логика удаления фото")
+    }
+
+    func didTapSave(name: String, description: String, site: String, avatarURL: URL?) {
+        let data = ProfileUpdateData(
+            id: model.id,
+            name: name,
+            description: description,
+            avatar: avatarURL?.absoluteString ?? "",
+            website: site
+        )
+        updateProfile(data: data, likes: model.likes)
+    }
+    
+    private func updateProfile(data: ProfileUpdateData, likes: [String]) {
+        profileService.updateProfile(data: data, likes: likes) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.view?.closeSave()
+                case .failure:
+                    let model = self?.makeErrorModel(data: data, likes: likes)
+                    if let model {
+                        self?.view?.showError(model)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func makeErrorModel(data: ProfileUpdateData, likes: [String]) -> ErrorModel {
+        let primary = ErrorAction(
+            title: NSLocalizedString("Error.repeat", comment: ""),
+            style: .default
+        ) { [weak self] in
+            self?.updateProfile(data: data, likes: likes)
+        }
+        let secondary = ErrorAction(
+            title: NSLocalizedString("Error.close", comment: ""),
+            style: .cancel
+        ) { }
+        return ErrorModel(
+            message: NSLocalizedString("Error.network", comment: ""),
+            primaryAction: primary,
+            secondaryAction: secondary
+        )
     }
     
 }
