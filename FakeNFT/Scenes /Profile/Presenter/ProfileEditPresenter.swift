@@ -15,7 +15,6 @@ protocol ProfileEditPresenterProtocol: AnyObject {
     func didSelectChangePhoto()
     func didSelectDeletePhoto()
     func didTapSave(name: String, description: String, site: String, avatar: String?)
-    func didChangeAvatar(link: String)
 }
 
 final class ProfileEditPresenter: ProfileEditPresenterProtocol {
@@ -24,9 +23,15 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
     weak var delegate: ProfileEditDelegate?
     private let service: ProfileServiceProtocol
     private var model: ProfileEditModel
+    private var currentProfile: ProfileResponse
     
-    init(model: ProfileEditModel, service: ProfileServiceProtocol) {
+    init(
+        model: ProfileEditModel,
+        currentProfile: ProfileResponse,
+        service: ProfileServiceProtocol
+    ) {
         self.model = model
+        self.currentProfile = currentProfile
         self.service = service
     }
     
@@ -77,42 +82,31 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
             name: name,
             description: description,
             site: site,
-            avatar: model.avatar
+            avatar: avatar
         )
-        
         model = updatedModel
         view?.enableSaveButton(false)
-        
-        service.updateProfile(updatedModel) { [weak self] result in
+
+        service.updateProfile(updatedModel,currentProfile: currentProfile) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let profile):
+                    self?.currentProfile = profile
+
                     let updatedModel = ProfileEditModel(
                         name: profile.name,
                         description: profile.description,
                         site: profile.website,
                         avatar: profile.avatar
                     )
+
                     self?.delegate?.didUpdateProfile(updatedModel)
                     self?.view?.closeSave()
+
                 case .failure:
                     self?.view?.enableSaveButton(true)
                 }
             }
         }
     }
-    
-    func didChangeAvatar(link: String) {
-        let updatedModel = ProfileEditModel(
-            name: model.name,
-            description: model.description,
-            site: model.site,
-            avatar: link
-        )
-        
-        model = updatedModel
-        view?.showProfile(model: updatedModel)
-        view?.enableSaveButton(true)
-    }
-    
 }

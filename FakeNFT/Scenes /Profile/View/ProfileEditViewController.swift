@@ -26,11 +26,12 @@ protocol ProfileEditDelegate: AnyObject {
 
 // MARK: - ProfileEditViewController
 
-final class ProfileEditViewController: UIViewController, UITextViewDelegate {
+final class ProfileEditViewController: UIViewController {
     
     // MARK: - Dependencies
     
     private let presenter: ProfileEditPresenter
+    private var currentAvatarURL: URL?
     
     // MARK: - UI
     
@@ -117,7 +118,6 @@ final class ProfileEditViewController: UIViewController, UITextViewDelegate {
         return button
     }()
     
-    
     // MARK: - Initializers
     
     init(presenter: ProfileEditPresenter) {
@@ -188,8 +188,12 @@ final class ProfileEditViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    func textViewDidChange(_ textView: UITextView) {
-        presenter.didChangeText()
+    private func updateAvatar(with link: String) {
+        currentAvatarURL = URL(string: link)
+        if let imageView = avatarButton.subviews.compactMap({ $0 as? UIImageView }).first {
+            imageView.kf.setImage(with: currentAvatarURL, placeholder: UIImage(resource: .userPic))
+        }
+        saveButton.isHidden = false
     }
     
     @objc private func tapSaveButton() {
@@ -197,12 +201,12 @@ final class ProfileEditViewController: UIViewController, UITextViewDelegate {
             name: nameTextView.text,
             description: descriptionTextView.text,
             site: siteTextView.text,
-            avatar: nil
+            avatar: currentAvatarURL?.absoluteString
         )
     }
     
-    func enableSaveButton(_ enable: Bool) {
-        saveButton.isHidden = !enable
+    private func setSaveButtonVisible(_ visible: Bool) {
+        saveButton.isHidden = !visible
     }
     
     // MARK: - Actions
@@ -253,19 +257,20 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
             message: nil,
             preferredStyle: .alert
         )
-        
         alert.addTextField {
             $0.placeholder = "Введите ссылку на фото"
             $0.keyboardType = .URL
         }
-        
         alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
         alert.addAction(UIAlertAction(title: "Сохранить", style: .default) { [weak self, weak alert] _ in
             guard let link = alert?.textFields?.first?.text, !link.isEmpty else { return }
-            self?.presenter.didChangeAvatar(link: link)
+            self?.updateAvatar(with: link)
         })
-        
         present(alert, animated: true)
+    }
+    
+    func enableSaveButton(_ enable: Bool) {
+        setSaveButtonVisible(enable)
     }
     
     func closeSave() {
@@ -276,17 +281,25 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
         nameTextView.text = model.name
         descriptionTextView.text = model.description
         siteTextView.text = model.site
-
+        
         if let imageView = avatarButton.subviews.compactMap({ $0 as? UIImageView }).first {
             imageView.image = UIImage(resource: .userPic)
             if let avatar = model.avatar,
                !avatar.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
                let url = URL(string: avatar) {
                 imageView.kf.setImage(with: url, placeholder: UIImage(resource: .userPic))
+                currentAvatarURL = url
+            } else {
+                currentAvatarURL = nil
             }
         }
-
         saveButton.isHidden = true
     }
     
+}
+
+extension ProfileEditViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        presenter.didChangeText()
+    }
 }

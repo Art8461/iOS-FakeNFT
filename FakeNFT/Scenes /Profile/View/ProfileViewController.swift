@@ -165,12 +165,15 @@ final class ProfileViewController: UIViewController {
         if let avatar = avatar,
            !avatar.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
            let url = URL(string: avatar) {
-            avatarImage.kf.setImage(with: url, placeholder: UIImage(resource: .userPic))
+            avatarImage.kf.setImage(
+                with: url,
+                placeholder: UIImage(resource: .userPic),
+                options: [.forceRefresh]
+            )
         } else {
             avatarImage.image = UIImage(resource: .userPic)
         }
     }
-
     
     // MARK: - Actions
     
@@ -249,12 +252,13 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func openEditProfile(model: ProfileEditModel) {
+        guard let profile = profile else { return }
         if let presenter = profileEditPresenter {
             presenter.updateModel(model)
             let editVC = ProfileEditViewController(presenter: presenter)
             navigationController?.pushViewController(editVC, animated: true)
         } else {
-            let presenter = ProfileEditPresenter(model: model, service: servicesAssembly.profileService)
+            let presenter = ProfileEditPresenter(model: model, currentProfile: profile, service: servicesAssembly.profileService)
             presenter.delegate = self
             profileEditPresenter = presenter
             let editVC = ProfileEditViewController(presenter: presenter)
@@ -323,8 +327,7 @@ extension ProfileViewController: ProfileEditDelegate {
         profileCellName = [
             ProfileItem(type: .myNFT, count: updatedProfile.nfts.count),
             ProfileItem(type: .myFavorites, count: updatedProfile.likes.count)
-        ]
-        
+        ]        
         profileTableView.reloadData()
     }
 }

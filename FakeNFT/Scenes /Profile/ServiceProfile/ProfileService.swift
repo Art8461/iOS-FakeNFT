@@ -9,10 +9,16 @@ import Foundation
 
 protocol ProfileServiceProtocol {
     func fetchProfile(completion: @escaping (Result<ProfileResponse, Error>) -> Void)
-    func updateProfile(_ model: ProfileEditModel, completion: @escaping (Result<ProfileResponse, Error>) -> Void)
+
+    func updateProfile(
+        _ model: ProfileEditModel,
+        currentProfile: ProfileResponse,
+        completion: @escaping (Result<ProfileResponse, Error>) -> Void
+    )
 }
 
 final class ProfileService: ProfileServiceProtocol {
+    
     private let networkClient: NetworkClient
 
     init(networkClient: NetworkClient) {
@@ -24,16 +30,25 @@ final class ProfileService: ProfileServiceProtocol {
         networkClient.send(request: request, type: ProfileResponse.self, onResponse: completion)
     }
     
-    func updateProfile(_ model: ProfileEditModel, completion: @escaping (Result<ProfileResponse, Error>) -> Void) {
+    func updateProfile(
+        _ model: ProfileEditModel,
+        currentProfile: ProfileResponse,
+        completion: @escaping (Result<ProfileResponse, Error>) -> Void
+    ) {
         let dto = UpdateProfileDto(
             name: model.name,
             description: model.description,
+            avatar: model.avatar ?? "",
             website: model.site,
-            avatar: model.avatar
+            likes: currentProfile.likes
         )
-        let request = UpdateProfileRequest(dtoData: dto)
-        
-        networkClient.send(request: request, type: ProfileResponse.self, onResponse: completion)
-    }
 
+        let request = UpdateProfileRequest(dtoData: dto)
+
+        networkClient.send(
+            request: request,
+            type: ProfileResponse.self,
+            onResponse: completion
+        )
+    }
 }

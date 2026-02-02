@@ -19,29 +19,42 @@ struct ProfileRequest: NetworkRequest {
 struct UpdateProfileDto: Dto {
     let name: String
     let description: String
+    let avatar: String
     let website: String
-    let avatar: String?
-    
-    func asDictionary() -> [String: String] {
-        return [
-            "name": name,
-            "description": description,
-            "website": website,
-            "avatar": avatar ?? ""
+    let likes: [String]
+
+    func asDictionary() -> [String : String] {[:]}
+
+    func asQueryItems() -> [URLQueryItem] {
+        var items: [URLQueryItem] = [
+            .init(name: "name", value: name),
+            .init(name: "description", value: description),
+            .init(name: "avatar", value: avatar),
+            .init(name: "website", value: website)
         ]
+        if likes.isEmpty {
+            items.append(.init(name: "likes", value: "null"))
+        } else {
+            items += likes.map {
+                URLQueryItem(name: "likes", value: $0)
+            }
+        }
+        return items
     }
 }
 
 struct UpdateProfileRequest: NetworkRequest {
+
     let dtoData: UpdateProfileDto
-    
+
     var endpoint: URL? {
-        URL(string: RequestConstants.baseURL + "/api/v1/profile/1")
+        var components = URLComponents(
+            string: RequestConstants.baseURL + "/api/v1/profile/1"
+        )
+        components?.queryItems = dtoData.asQueryItems()
+        return components?.url
     }
-    
+
     var httpMethod: HttpMethod { .put }
-    
-    var dto: Dto? {
-        return dtoData
-    }
+    var dto: Dto? { nil }
 }
