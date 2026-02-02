@@ -17,9 +17,9 @@ final class FavoritesNFTCell: UICollectionViewCell {
     
     private let imageNFTView: UIImageView = .baseNFTImage()
     private let likeButton: UIButton = .likeButton(color: .redUniversal)
-    private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold))
+    private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold), truncate: true)
     private let starRatingView = StarRatingNFTView()
-    private let priceValueLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 15, weight: .regular))
+    private let priceValueLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 15, weight: .regular), truncate: true)
     
     private lazy var infoStack: UIStackView = {
         let stack = UIStackView.stackVertical(spacing: 4, views: [titleLabel, starRatingView, priceValueLabel])
@@ -62,6 +62,7 @@ final class FavoritesNFTCell: UICollectionViewCell {
             likeButton.heightAnchor.constraint(equalToConstant: 30),
             
             infoStack.leadingAnchor.constraint(equalTo: imageNFTView.trailingAnchor, constant: 20),
+            infoStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             infoStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
