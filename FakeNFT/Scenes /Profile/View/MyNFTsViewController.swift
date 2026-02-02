@@ -13,6 +13,7 @@ protocol MyNFTsViewProtocol: AnyObject {
     func closeScreen()
     func showSortAlert(options: [Sorting])
     func display(items: [NFTCartModel])
+    func displayLoading(_ isLoading: Bool)
 }
 
 // MARK: - MyNFTsViewController
@@ -39,6 +40,8 @@ final class MyNFTsViewController: UIViewController {
         tableView.separatorStyle = .none
         return tableView
     }()
+    
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
 
     // MARK: - Initializers
 
@@ -78,13 +81,13 @@ final class MyNFTsViewController: UIViewController {
     }
 
     private func addSubviews() {
-        [emptyNFTLabel, myNFTTableView].forEach {
+        [emptyNFTLabel, myNFTTableView, activityIndicator].forEach {
             view.addSubview($0)
         }
     }
 
     private func setupConstraints() {
-        [emptyNFTLabel, myNFTTableView].forEach {
+        [emptyNFTLabel, myNFTTableView, activityIndicator].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
@@ -97,6 +100,12 @@ final class MyNFTsViewController: UIViewController {
             myNFTTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             myNFTTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        activityIndicator.hidesWhenStopped = true
     }
 
     private func updateUI() {
@@ -163,6 +172,17 @@ extension MyNFTsViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension MyNFTsViewController: MyNFTsViewProtocol {
 
+    func displayLoading(_ isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+            emptyNFTLabel.isHidden = true
+            myNFTTableView.isHidden = true
+            navigationItem.rightBarButtonItem = nil
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+    
     func closeScreen() {
         navigationController?.popViewController(animated: true)
     }

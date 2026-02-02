@@ -12,6 +12,7 @@ import UIKit
 protocol FavoritesNFTViewProtocol: AnyObject {
     func closeScreen()
     func display(items: [NFTCartModel])
+    func displayLoading(_ isLoading: Bool)
 }
 
 // MARK: - FavoritesNFTViewController
@@ -45,6 +46,8 @@ final class FavoritesNFTViewController: UIViewController {
         collection.delegate = self
         return collection
     }()
+    
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
 
     // MARK: - Initializers
 
@@ -80,13 +83,13 @@ final class FavoritesNFTViewController: UIViewController {
     }
 
     private func addSubviews() {
-        [emptyFavoritesLabel, favoritesNFTCollection].forEach {
+        [emptyFavoritesLabel, favoritesNFTCollection, activityIndicator].forEach {
             view.addSubview($0)
         }
     }
 
     private func setupConstraints() {
-        [emptyFavoritesLabel, favoritesNFTCollection].forEach {
+        [emptyFavoritesLabel, favoritesNFTCollection, activityIndicator].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
@@ -99,6 +102,12 @@ final class FavoritesNFTViewController: UIViewController {
             favoritesNFTCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             favoritesNFTCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        activityIndicator.hidesWhenStopped = true
     }
 
     private func updateUI() {
@@ -169,6 +178,16 @@ extension FavoritesNFTViewController: UICollectionViewDelegateFlowLayout {
 
 extension FavoritesNFTViewController: FavoritesNFTViewProtocol {
 
+    func displayLoading(_ isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+            emptyFavoritesLabel.isHidden = true
+            favoritesNFTCollection.isHidden = true
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+    
     func closeScreen() {
         navigationController?.popViewController(animated: true)
     }

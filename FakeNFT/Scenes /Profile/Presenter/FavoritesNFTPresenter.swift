@@ -55,9 +55,11 @@ final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
     }
 
     private func loadNfts() {
+        view?.displayLoading(true)
         guard !nftIds.isEmpty else {
             currentNfts = []
             view?.display(items: [])
+            view?.displayLoading(false)
             return
         }
 
@@ -81,6 +83,7 @@ final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
             self.currentNfts = self.nftIds.compactMap { nftsById[$0] }
             let models = self.currentNfts.map { self.makeModel(from: $0) }
             self.view?.display(items: models)
+            self.view?.displayLoading(false)
         }
     }
 

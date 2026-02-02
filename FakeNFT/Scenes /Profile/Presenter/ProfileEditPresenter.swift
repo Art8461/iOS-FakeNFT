@@ -66,12 +66,15 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
     }
     
     private func updateProfile(data: ProfileUpdateData, likes: [String]) {
+        view?.displayLoading(true)
         profileService.updateProfile(data: data, likes: likes) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success:
+                    self?.view?.displayLoading(false)
                     self?.view?.closeSave()
                 case .failure:
+                    self?.view?.displayLoading(false)
                     let model = self?.makeErrorModel(data: data, likes: likes)
                     if let model {
                         self?.view?.showError(model)

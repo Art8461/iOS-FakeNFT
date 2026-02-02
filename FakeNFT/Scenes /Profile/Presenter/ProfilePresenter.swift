@@ -15,6 +15,7 @@ protocol ProfilePresenterProtocol: AnyObject {
     func openMyNFTs()
     func openFavoritesNFC()
     func didTapWebSite(url: String)
+    func openCollectionNFTs()
 }
 
 
@@ -45,7 +46,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
 
         let items: [ProfileItem] = isMyProfile
         ? [ProfileItem(type: .myNFT, count: 0), ProfileItem(type: .myFavorites, count: 0)]
-        : [ProfileItem(type: .myNFT, count: 0)]
+        : [ProfileItem(type: .collection, count: 0)]
 
         view?.setMenuItems(items)
         loadProfile()
@@ -79,9 +80,11 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     }
 
     private func loadProfile() {
+        view?.displayLoading(true)
         let completion: ProfileCompletion = { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
+                self.view?.displayLoading(false)
                 switch result {
                 case .success(let profile):
                     self.view?.display(profile: self.makeProfileItem(from: profile))
@@ -122,7 +125,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
                 ProfileItem(type: .myFavorites, count: favoritesCount)
             ]
         case .user:
-            return [ProfileItem(type: .myNFT, count: nftCount)]
+            return [ProfileItem(type: .collection, count: nftCount)]
         }
     }
 
@@ -142,6 +145,10 @@ final class ProfilePresenter: ProfilePresenterProtocol {
             primaryAction: primary,
             secondaryAction: secondary
         )
+    }
+    
+    func openCollectionNFTs() {
+        view?.openCollectionNFTs()
     }
 }
 

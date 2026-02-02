@@ -22,6 +22,8 @@ protocol ProfileViewProtocol: AnyObject, ErrorView {
     func configureWebsite(isButton: Bool, spacingAfterDescription: CGFloat)
     func setBackButtonVisible(_ isVisible: Bool)
     func display(profile: ProfilUserItem)
+    func displayLoading(_ isLoading: Bool)
+    func openCollectionNFTs()
 }
 
 // MARK: - ProfileViewController
@@ -125,6 +127,8 @@ final class ProfileViewController: UIViewController {
         tableView.isScrollEnabled = false
         return tableView
     }()
+    
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
 
     // MARK: - Initializers
 
@@ -162,17 +166,15 @@ final class ProfileViewController: UIViewController {
     }
 
     private func addSubviews() {
-        [bigStack, profileTableView].forEach { view.addSubview($0) }
+        [bigStack, profileTableView, activityIndicator].forEach { view.addSubview($0) }
     }
 
     private func setupConstraints() {
-        [bigStack, profileTableView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        //bigStack.setCustomSpacing(8, after: descriptionLabel)
+        [bigStack, profileTableView, activityIndicator].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
             bigStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             bigStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             bigStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-         //   bigStack.heightAnchor.constraint(equalToConstant: 198),
 
             personStack.topAnchor.constraint(equalTo: bigStack.topAnchor),
             personStack.leadingAnchor.constraint(equalTo: bigStack.leadingAnchor),
@@ -184,6 +186,12 @@ final class ProfileViewController: UIViewController {
             profileTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             profileTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        activityIndicator.hidesWhenStopped = true
     }
 
     // MARK: - Actions
@@ -243,6 +251,9 @@ extension ProfileViewController: UITableViewDelegate {
         case .myFavorites:
             presenter.openFavoritesNFC()
             print("Переход к экрану Избранные NFT")
+        case .collection:
+            presenter.openCollectionNFTs()
+            print("Переход к экрану Коллекция NFT")
         }
     }
 }
@@ -250,6 +261,18 @@ extension ProfileViewController: UITableViewDelegate {
 // MARK: - ProfileViewProtocol
 
 extension ProfileViewController: ProfileViewProtocol {
+    
+    func displayLoading(_ isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+            bigStack.isHidden = true
+            profileTableView.isHidden = true
+        } else {
+            activityIndicator.stopAnimating()
+            bigStack.isHidden = false
+            profileTableView.isHidden = false
+        }
+    }
     
     func display(profile: ProfilUserItem) {
         currentProfile = profile
@@ -333,6 +356,14 @@ extension ProfileViewController: ProfileViewProtocol {
         let myFavorNFTsVC = FavoritesNFTViewController(presenter: presenter)
         presenter.view = myFavorNFTsVC
         navigationController?.pushViewController(myFavorNFTsVC, animated: true)
+    }
+    
+    func openCollectionNFTs() {
+        let presenter = CollectionNFTPresenter()
+        let vc = CollectionNFTViewController(presenter: presenter)
+        presenter.view = vc
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     private func makeProfileUpdateData() -> ProfileUpdateData {

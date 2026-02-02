@@ -10,6 +10,7 @@ import Foundation
 enum ProfileItemType {
     case myNFT
     case myFavorites
+    case collection
     
     var title: String {
         switch self {
@@ -17,6 +18,8 @@ enum ProfileItemType {
             return "Мои NFT"
         case .myFavorites:
             return "Избранные NFT"
+        case .collection:
+            return "Коллекция NFT"
         }
     }
 }

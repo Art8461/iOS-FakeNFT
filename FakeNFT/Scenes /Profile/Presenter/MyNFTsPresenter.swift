@@ -70,9 +70,11 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
     }
 
     private func loadNfts() {
+        view?.displayLoading(true)
         guard !nftIds.isEmpty else {
             currentNfts = []
             view?.display(items: [])
+            view?.displayLoading(false)
             return
         }
 
@@ -95,6 +97,7 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
             guard let self else { return }
             self.currentNfts = self.nftIds.compactMap { nftsById[$0] }
             self.applySortAndDisplay()
+            self.view?.displayLoading(false)
         }
     }
 

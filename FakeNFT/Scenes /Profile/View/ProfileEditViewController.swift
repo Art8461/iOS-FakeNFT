@@ -16,6 +16,7 @@ protocol ProfileEditViewProtocol: AnyObject, ErrorView {
     func showExitAlert()
     func showAvatarAlert()
     func showPhotoLinkAlert()
+    func displayLoading(_ isLoading: Bool)
 }
 
 // MARK: - ProfileEditViewController
@@ -100,6 +101,8 @@ final class ProfileEditViewController: UIViewController {
         return stack
     }()
     
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    
     // Кнопка появляется при изменениях
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
@@ -149,13 +152,13 @@ final class ProfileEditViewController: UIViewController {
     }
     
     private func addSubviews() {
-        [avatarButton, editIcon, bigStackView, saveButton].forEach {
+        [avatarButton, editIcon, bigStackView, saveButton, activityIndicator].forEach {
             view.addSubview($0)
         }
     }
     
     private func setupConstraints() {
-        [avatarButton, editIcon, bigStackView, saveButton].forEach {
+        [avatarButton, editIcon, bigStackView, saveButton, activityIndicator].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -177,6 +180,12 @@ final class ProfileEditViewController: UIViewController {
             saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             saveButton.heightAnchor.constraint(equalToConstant: 60)
         ])
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        activityIndicator.hidesWhenStopped = true
     }
     
     private func setupTextViews() {
@@ -277,6 +286,18 @@ final class ProfileEditViewController: UIViewController {
 // MARK: - ProfileEditViewProtocol
 
 extension ProfileEditViewController: ProfileEditViewProtocol {
+    
+    func displayLoading(_ isLoading: Bool) {
+        if isLoading {
+            activityIndicator.startAnimating()
+            view.isUserInteractionEnabled = false
+            saveButton.isEnabled = false
+        } else {
+            activityIndicator.stopAnimating()
+            view.isUserInteractionEnabled = true
+            updateSaveButtonState()
+        }
+    }
     
     func showExitAlert() {
         let alert = UIAlertController(
