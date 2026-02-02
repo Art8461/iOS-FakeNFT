@@ -24,7 +24,9 @@ struct ProfileUpdateDto: Dto {
             URLQueryItem(name: "avatar", value: avatar),
             URLQueryItem(name: "website", value: website)
         ]
-        if !likes.isEmpty {
+        if likes.isEmpty {
+            items.append(URLQueryItem(name: "likes", value: "null"))
+        } else {
             items += likes.map { URLQueryItem(name: "likes", value: $0) }
         }
         return items
