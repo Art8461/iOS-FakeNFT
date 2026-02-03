@@ -35,6 +35,9 @@ final class ProfileViewController: UIViewController {
     private let presenter: ProfilePresenterProtocol
     let servicesAssembly: ServicesAssembly
 
+    private var isEditButtonVisible = false
+    private var isLoading = false
+    
     private var currentProfile: ProfilUserItem?
 
     private var profileCellName: [ProfileItem] = [
@@ -267,10 +270,12 @@ extension ProfileViewController: ProfileViewProtocol {
             activityIndicator.startAnimating()
             bigStack.isHidden = true
             profileTableView.isHidden = true
+            navigationItem.rightBarButtonItem = nil
         } else {
             activityIndicator.stopAnimating()
             bigStack.isHidden = false
             profileTableView.isHidden = false
+            navigationItem.rightBarButtonItem = isEditButtonVisible ? editButton : nil
         }
     }
     
@@ -384,7 +389,10 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func setEditVisible(_ isVisible: Bool) {
-        navigationItem.rightBarButtonItem = isVisible ? editButton : nil
+        isEditButtonVisible = isVisible
+        if !isLoading {
+            navigationItem.rightBarButtonItem = isVisible ? editButton : nil
+        }
     }
     
     func setMenuItems(_ items: [ProfileItem]) {
