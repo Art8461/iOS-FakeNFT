@@ -11,6 +11,7 @@ import UIKit
 
 protocol FavoritesNFTViewProtocol: AnyObject {
     func closeScreen()
+    func showNFTs(_ nfts: [NFTCartModel])
 }
 
 // MARK: - FavoritesNFTViewController
@@ -24,6 +25,8 @@ final class FavoritesNFTViewController: UIViewController {
     private var myFavoritesNFT: [NFTCartModel] = []
 
     // MARK: - UI
+    
+    private lazy var loader = UIActivityIndicatorView.baseLoader()
 
     private lazy var emptyFavoritesLabel =
     UILabel.emptyStateLabel(text: "У Вас еще нет избранных NFT")
@@ -40,8 +43,8 @@ final class FavoritesNFTViewController: UIViewController {
             FavoritesNFTCell.self,
             forCellWithReuseIdentifier: FavoritesNFTCell.reuseIdentifier
         )
-//        collection.dataSource = self
-//        collection.delegate = self
+        collection.dataSource = self
+        collection.delegate = self
         return collection
     }()
 
@@ -64,7 +67,8 @@ final class FavoritesNFTViewController: UIViewController {
         setupNavigationBar()
         addSubviews()
         setupConstraints()
-        updateUI()
+        showLoading(true)
+        presenter.viewDidLoad()
     }
 
     // MARK: - Setup
@@ -78,17 +82,20 @@ final class FavoritesNFTViewController: UIViewController {
     }
 
     private func addSubviews() {
-        [emptyFavoritesLabel, favoritesNFTCollection].forEach {
+        [loader, emptyFavoritesLabel, favoritesNFTCollection].forEach {
             view.addSubview($0)
         }
     }
 
     private func setupConstraints() {
-        [emptyFavoritesLabel, favoritesNFTCollection].forEach {
+        [loader,emptyFavoritesLabel, favoritesNFTCollection].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
         NSLayoutConstraint.activate([
+            loader.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loader.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
             emptyFavoritesLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyFavoritesLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
 
@@ -105,6 +112,16 @@ final class FavoritesNFTViewController: UIViewController {
         favoritesNFTCollection.isHidden = isEmpty
 
         navigationItem.title = isEmpty ? nil : "Избранные NFT"
+    }
+    
+    private func showLoading(_ isLoading: Bool) {
+        if isLoading {
+            loader.startAnimating()
+            favoritesNFTCollection.isHidden = true
+            emptyFavoritesLabel.isHidden = true
+        } else {
+            loader.stopAnimating()
+        }
     }
 
     // MARK: - Actions
@@ -136,8 +153,11 @@ extension FavoritesNFTViewController: UICollectionViewDataSource {
         ) as? FavoritesNFTCell else {
             return UICollectionViewCell()
         }
-
-//        cell.configure(with: myFavoritesNFT[indexPath.item])
+        let nft = myFavoritesNFT[indexPath.item]
+        cell.configure(with: nft)
+        cell.onLikeTap = { [weak self] in
+            self?.presenter.didTapLike(nftId: nft.id)
+        }
         return cell
     }
 }
@@ -162,6 +182,13 @@ extension FavoritesNFTViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - FavoritesNFTViewProtocol
 
 extension FavoritesNFTViewController: FavoritesNFTViewProtocol {
+    func showNFTs(_ nfts: [NFTCartModel]) {
+        showLoading(false)
+        self.myFavoritesNFT = nfts
+        favoritesNFTCollection.reloadData()
+        updateUI()
+    }
+    
 
     func closeScreen() {
         navigationController?.popViewController(animated: true)

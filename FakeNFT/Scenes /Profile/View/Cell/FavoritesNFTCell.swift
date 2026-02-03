@@ -13,10 +13,17 @@ final class FavoritesNFTCell: UICollectionViewCell {
     
     static let reuseIdentifier = "FavoritesNFTCell"
     
+    var onLikeTap: (() -> Void)?
+    
     // MARK: - UI Elements
     
     private let imageNFTView: UIImageView = .baseNFTImage()
-    private let likeButton: UIButton = .likeButton(color: .redUniversal)
+    private lazy var likeButton: UIButton = {
+        let button = UIButton.likeButton(color: .redUniversal)
+        button.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
+        return button
+    }()
+    
     private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold), truncate: true)
     private let starRatingView = StarRatingNFTView()
     private let priceValueLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 15, weight: .regular), truncate: true)
@@ -67,13 +74,31 @@ final class FavoritesNFTCell: UICollectionViewCell {
         ])
     }
     
+    @objc private func likeTapped() {
+        onLikeTap?()
+    }
+    
     // MARK: - Configure
     
-//    func configure(with model: NFTCartModel) {
-//        imageNFTView.image = UIImage(named: model.imageName)
-//        likeButton.setImage(UIImage(named: model.likeImageName), for: .normal)
-//        titleLabel.text = model.title
-//        starsImageView.image = UIImage(named: model.starsImageName)
-//        priceValueLabel.text = String(format: "%.2f ETH", model.price)
-//    }
+    func configure(with model: NFTCartModel) {
+        titleLabel.text = model.name
+        priceValueLabel.text = String(format: "%.2f ETH", model.price)
+
+        starRatingView.setRating(model.rating)
+
+        if let urlString = model.images.first, let url = URL(string: urlString) {
+            imageNFTView.kf.setImage(with: url)
+        } else {
+            imageNFTView.image = nil
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageNFTView.image = nil
+        titleLabel.text = nil
+        priceValueLabel.text = nil
+        onLikeTap = nil
+    }
+
 }

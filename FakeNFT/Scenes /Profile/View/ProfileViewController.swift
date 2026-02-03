@@ -312,11 +312,15 @@ extension ProfileViewController: ProfileViewProtocol {
     }
     
     func openFavoritesNFTs() {
-        let presenter = FavoritesNFTPresenter()
-        let myNFTsVC = FavoritesNFTViewController(presenter: presenter)
-        presenter.view = myNFTsVC
-        navigationController?.pushViewController(myNFTsVC, animated: true)
+        let presenter = FavoritesNFTPresenter(
+            profileService: servicesAssembly.profileService,
+            myNFTsService: servicesAssembly.myNFTsService
+        )
+        let vc = FavoritesNFTViewController(presenter: presenter)
+        presenter.view = vc
+        navigationController?.pushViewController(vc, animated: true)
     }
+
     
     func openWebView(url: URL) {
         let presenter = WebViewPresenter()
