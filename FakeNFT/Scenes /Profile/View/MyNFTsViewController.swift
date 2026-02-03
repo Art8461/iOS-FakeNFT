@@ -30,12 +30,7 @@ final class MyNFTsViewController: UIViewController {
     private lazy var emptyNFTLabel =
     UILabel.emptyStateLabel(text: "У Вас еще нет NFT")
     
-    private lazy var loader: UIActivityIndicatorView = {
-        let loader = UIActivityIndicatorView(style: .large)
-        
-        loader.hidesWhenStopped = true
-        return loader
-    }()
+    private lazy var loader = UIActivityIndicatorView.baseLoader()
     
     private lazy var myNFTTableView: UITableView = {
         let tableView = UITableView()

@@ -38,6 +38,8 @@ final class ProfileViewController: UIViewController {
     
     // MARK: - UI
     
+    private lazy var loader = UIActivityIndicatorView.baseLoader()
+    
     private lazy var editButton: UIBarButtonItem = {
         let image = UIImage(resource: .squareAndPencil)
         let button = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(tapEditButton))
@@ -129,6 +131,7 @@ final class ProfileViewController: UIViewController {
         addSubviews()
         setupConstraints()
         navigationItem.title = nil
+        showLoading(true)
         presenter.viewDidLoad()
     }
     
@@ -139,12 +142,15 @@ final class ProfileViewController: UIViewController {
     }
     
     private func addSubviews() {
-        [bigStack, profileTableView].forEach { view.addSubview($0) }
+        [loader, bigStack, profileTableView].forEach { view.addSubview($0) }
     }
     
     private func setupConstraints() {
-        [bigStack, profileTableView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [loader, bigStack, profileTableView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
+            loader.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loader.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
             bigStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             bigStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             bigStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -172,6 +178,18 @@ final class ProfileViewController: UIViewController {
             )
         } else {
             avatarImage.image = UIImage(resource: .userPic)
+        }
+    }
+    
+    private func showLoading(_ isLoading: Bool) {
+        if isLoading {
+            loader.startAnimating()
+            bigStack.isHidden = true
+            profileTableView.isHidden = true
+        } else {
+            loader.stopAnimating()
+            bigStack.isHidden = false
+            profileTableView.isHidden = false
         }
     }
     
@@ -236,8 +254,8 @@ extension ProfileViewController: UITableViewDelegate {
 extension ProfileViewController: ProfileViewProtocol {
     
     func updateProfile(_ profile: ProfileResponse) {
+        showLoading(false)
         self.profile = profile
-        
         avatarName.text = profile.name
         descriptionLabel.text = profile.description
         webSiteLabel.text = profile.website

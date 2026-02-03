@@ -162,3 +162,14 @@ extension UIBarButtonItem {
         return .makeButton(image: UIImage(resource: .sort), target: target, action: action)
     }
 }
+
+// MARK: - UIActivityIndicatorView
+
+extension UIActivityIndicatorView {
+    static func baseLoader(style: UIActivityIndicatorView.Style = .large) -> UIActivityIndicatorView {
+        let loader = UIActivityIndicatorView(style: .large)
+        loader.hidesWhenStopped = true
+        loader.translatesAutoresizingMaskIntoConstraints = false
+        return loader
+    }
+}
