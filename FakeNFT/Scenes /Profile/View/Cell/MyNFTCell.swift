@@ -14,6 +14,8 @@ final class MyNFTCell: UITableViewCell {
     
     static let reuseIdentifier = "MyNFTCell"
     
+    private var likeAction: (() -> Void)?
+    
     // MARK: - UI Elements
     
     private let containerView: UIView = {
@@ -24,7 +26,11 @@ final class MyNFTCell: UITableViewCell {
     }()
     
     private let imageNFTView: UIImageView = .baseNFTImage()
-    private let likeButton: UIButton = .likeButton(color: .whiteUniversal)
+    private lazy var likeButton: UIButton = {
+        let button = UIButton.likeButton(color: .whiteUniversal)
+        button.addTarget(self, action: #selector(likeTapped), for: .touchUpInside)
+        return button
+    }()
     private let titleLabel: UILabel = .baseLabel(font: .systemFont(ofSize: 17, weight: .bold),truncate: true)
     private let starRatingView = StarRatingNFTView()
     private let authorPrefixLabel: UILabel = .baseLabel(text: "от", font: .systemFont(ofSize: 15, weight: .regular))
@@ -96,23 +102,24 @@ final class MyNFTCell: UITableViewCell {
         ])
     }
     
-    // MARK: - Configure
+    @objc private func likeTapped() {
+       likeAction?()
+    }
     
-    func configure(with model: NFTCartModel, likedIds: [String]) {
+    // MARK: - Configure
+
+    func configure(with model: NFTCartModel, likedIds: [String], likeAction: @escaping () -> Void) {
+        self.likeAction = likeAction
+        let isLiked = likedIds.contains(model.id)
+        likeButton.tintColor = isLiked ? .redUniversal : .whiteUniversal
         titleLabel.text = model.name
         nameAuthorLabel.text = model.author
         priceValueLabel.text = String(format: "%.2f ETH", model.price)
         starRatingView.setRating(model.rating)
-
-        if let urlString = model.images.first,
-           let url = URL(string: urlString) {
+        if let urlString = model.images.first, let url = URL(string: urlString) {
             imageNFTView.kf.setImage(with: url)
         } else {
-            imageNFTView.image = nil //можно сделать отображение картинки, если URL сломанный, недоступен или его нет
+            imageNFTView.image = nil
         }
-
-        let isLiked = likedIds.contains(model.id)
-        likeButton.tintColor = isLiked ? .redUniversal : .whiteUniversal
     }
-
 }

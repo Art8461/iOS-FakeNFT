@@ -20,7 +20,6 @@ protocol ProfileEditPresenterProtocol: AnyObject {
 final class ProfileEditPresenter: ProfileEditPresenterProtocol {
     
     weak var view: ProfileEditViewProtocol?
-    weak var delegate: ProfileEditDelegate?
     private let service: ProfileServiceProtocol
     private var model: ProfileEditModel
     private var currentProfile: ProfileResponse
@@ -92,15 +91,6 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
                 switch result {
                 case .success(let profile):
                     self?.currentProfile = profile
-
-                    let updatedModel = ProfileEditModel(
-                        name: profile.name,
-                        description: profile.description,
-                        site: profile.website,
-                        avatar: profile.avatar
-                    )
-
-                    self?.delegate?.didUpdateProfile(updatedModel)
                     self?.view?.closeSave()
 
                 case .failure:

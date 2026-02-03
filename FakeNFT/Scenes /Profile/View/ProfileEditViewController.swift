@@ -18,12 +18,6 @@ protocol ProfileEditViewProtocol: AnyObject {
     func enableSaveButton(_ enable: Bool)
 }
 
-// MARK: - Delegate
-
-protocol ProfileEditDelegate: AnyObject {
-    func didUpdateProfile(_ model: ProfileEditModel)
-}
-
 // MARK: - ProfileEditViewController
 
 final class ProfileEditViewController: UIViewController {

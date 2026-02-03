@@ -9,11 +9,26 @@ import Foundation
 
 struct ProfileRequest: NetworkRequest {
     var endpoint: URL? {
-        URL(string: RequestConstants.baseURL + "/api/v1/profile/1")
+        var components = URLComponents(string: RequestConstants.baseURL + "/api/v1/profile/1")
+        components?.queryItems = dto?.asQueryItems()
+        return components?.url
     }
-
+    
     var httpMethod: HttpMethod { .get }
     var dto: Dto? { nil }
+}
+
+struct UpdateProfileRequest: NetworkRequest {
+    let dtoData: UpdateProfileDto
+
+    var endpoint: URL? {
+        var components = URLComponents(string: RequestConstants.baseURL + "/api/v1/profile/1")
+        components?.queryItems = dtoData.asQueryItems()
+        return components?.url
+    }
+
+    var httpMethod: HttpMethod { .put }
+    var dto: Dto? { dtoData }
 }
 
 struct UpdateProfileDto: Dto {
@@ -41,20 +56,4 @@ struct UpdateProfileDto: Dto {
         }
         return items
     }
-}
-
-struct UpdateProfileRequest: NetworkRequest {
-
-    let dtoData: UpdateProfileDto
-
-    var endpoint: URL? {
-        var components = URLComponents(
-            string: RequestConstants.baseURL + "/api/v1/profile/1"
-        )
-        components?.queryItems = dtoData.asQueryItems()
-        return components?.url
-    }
-
-    var httpMethod: HttpMethod { .put }
-    var dto: Dto? { nil }
 }

@@ -135,6 +135,12 @@ final class ProfileViewController: UIViewController {
         presenter.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        showLoading(true)
+        presenter.viewDidLoad()
+    }
+    
     // MARK: - Setup
     
     private func setupNavigationBar() {
@@ -277,7 +283,6 @@ extension ProfileViewController: ProfileViewProtocol {
             navigationController?.pushViewController(editVC, animated: true)
         } else {
             let presenter = ProfileEditPresenter(model: model, currentProfile: profile, service: servicesAssembly.profileService)
-            presenter.delegate = self
             profileEditPresenter = presenter
             let editVC = ProfileEditViewController(presenter: presenter)
             navigationController?.pushViewController(editVC, animated: true)
@@ -305,7 +310,6 @@ extension ProfileViewController: ProfileViewProtocol {
         presenter.view = vc
         navigationController?.pushViewController(vc, animated: true)
     }
-
     
     func openFavoritesNFTs() {
         let presenter = FavoritesNFTPresenter()
@@ -321,31 +325,4 @@ extension ProfileViewController: ProfileViewProtocol {
         navigationController?.pushViewController(webVC, animated: true)
     }
     
-}
-
-extension ProfileViewController: ProfileEditDelegate {
-    func didUpdateProfile(_ model: ProfileEditModel) {
-        
-        let updatedProfile = ProfileResponse(
-            name: model.name,
-            avatar: model.avatar ?? "",
-            description: model.description,
-            website: model.site,
-            nfts: profile?.nfts ?? [],
-            likes: profile?.likes ?? [],
-            id: profile?.id ?? UUID().uuidString
-        )
-        self.profile = updatedProfile
-        avatarName.text = updatedProfile.name
-        descriptionLabel.text = updatedProfile.description
-        webSiteLabel.text = updatedProfile.website
-        
-        showAvatar(updatedProfile.avatar)
-        
-        profileCellName = [
-            ProfileItem(type: .myNFT, count: updatedProfile.nfts.count),
-            ProfileItem(type: .myFavorites, count: updatedProfile.likes.count)
-        ]        
-        profileTableView.reloadData()
-    }
 }

@@ -12,6 +12,7 @@ protocol MyNFTsPresenterProtocol: AnyObject {
     func viewDidLoad()
     func didTapSort()
     func didSelectSortOption(_ option: Sorting)
+    func didTapLike(nftId: String)
 }
 
 final class MyNFTsPresenter: MyNFTsPresenterProtocol {
@@ -20,6 +21,7 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
     private let profileService: ProfileServiceProtocol
     private let myNFTsService: MyNFTsServiceProtocol
     private var nfts: [NFTCartModel] = []
+    private var likedIds: Set<String> = []
     
     init(
         profileService: ProfileServiceProtocol,
@@ -34,6 +36,7 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
             guard let self = self else { return }
             switch result {
             case .success(let profile):
+                self.likedIds = Set(profile.likes)
                 self.loadMyNFTs(ids: profile.nfts)
             case .failure(let error):
                 print("Ошибка загрузки профиля:", error)
@@ -59,36 +62,38 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
         case .name:
             nfts.sort { $0.name < $1.name }
         }
-
-        profileService.fetchProfile { [weak self] result in
-            guard let self = self else { return }
-            let likedIds = (try? result.get().likes) ?? []
-            self.view?.showNFTs(nfts, likedIds: likedIds)
-        }
+        view?.showNFTs(nfts, likedIds: Array(likedIds))
     }
-
 
     private func loadMyNFTs(ids: [String]) {
         myNFTsService.fetchMyNFTs(ids: ids) { [weak self] result in
             guard let self = self else { return }
-
             switch result {
             case .success(let nfts):
                 self.nfts = nfts
-                self.profileService.fetchProfile { [weak self] result in
-                    guard let self = self else { return }
-                    switch result {
-                    case .success(let profile):
-                        self.view?.showNFTs(nfts, likedIds: profile.likes)
-                    case .failure(let error):
-                        print("Ошибка профиля:", error)
-                    }
-                }
-
+                self.view?.showNFTs(nfts, likedIds: Array(self.likedIds))
             case .failure(let error):
-                print(error)
+                print("Ошибка загрузки NFT:", error)
             }
         }
     }
     
+    func didTapLike(nftId: String) {
+        if likedIds.contains(nftId) {
+            likedIds.remove(nftId)
+            profileService.removeLike(nftId: nftId) { result in
+                if case .failure(let error) = result {
+                    print("Ошибка удаления лайка:", error)
+                }
+            }
+        } else {
+            likedIds.insert(nftId)
+            profileService.addLike(nftId: nftId) { result in
+                if case .failure(let error) = result {
+                    print("Ошибка добавления лайка:", error)
+                }
+            }
+        }
+        view?.showNFTs(nfts, likedIds: Array(likedIds))
+    }
 }

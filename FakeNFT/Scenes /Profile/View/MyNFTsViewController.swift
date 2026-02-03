@@ -137,7 +137,7 @@ extension MyNFTsViewController: UITableViewDataSource, UITableViewDelegate {
         myNFTs.count
     }
     
-    func tableView(_ tableView: UITableView,cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: MyNFTCell.reuseIdentifier,
             for: indexPath
@@ -146,14 +146,13 @@ extension MyNFTsViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let nft = myNFTs[indexPath.row]
-        cell.configure(with: nft, likedIds: likedNFTIds)
+        cell.configure(with: nft, likedIds: likedNFTIds) { [weak self] in
+            self?.presenter.didTapLike(nftId: nft.id)
+        }
         return cell
     }
     
-    func tableView(
-        _ tableView: UITableView,
-        heightForRowAt indexPath: IndexPath
-    ) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         140
     }
 }
