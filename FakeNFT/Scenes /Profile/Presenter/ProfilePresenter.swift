@@ -19,10 +19,16 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     
     weak var view: ProfileViewProtocol?
     private let service: ProfileServiceProtocol
+    private let router: ProfileRouterProtocol
+    
     private var profile: ProfileResponse?
     
-    init(service: ProfileServiceProtocol) {
+    init(
+        service: ProfileServiceProtocol,
+        router: ProfileRouterProtocol
+    ) {
         self.service = service
+        self.router = router
     }
     
     func viewDidLoad() {
@@ -34,29 +40,32 @@ final class ProfilePresenter: ProfilePresenterProtocol {
                     self?.view?.updateProfile(profile)
                 }
             case .failure(let error):
-                print("Ошибка загрузки профиля:", error)
+                print(error)
             }
         }
     }
     
     func didTapEdit() {
-        guard let model = view?.getProfileEditModel() else { return }
-        view?.openEditProfile(model: model)
+        guard let profile else { return }
+        let model = ProfileEditModel(
+            name: profile.name,
+            description: profile.description,
+            site: profile.website,
+            avatar: profile.avatar
+        )
+        router.showProfileEdit(model: model, profile: profile)
     }
     
     func openMyNFTs() {
-        view?.openMyNFTs()
+        router.showMyNFTs()
     }
     
     func openFavoritesNFC() {
-        view?.openFavoritesNFTs()
+        router.showFavoritesNFTs()
     }
     
     func didTapWebSite(url: String) {
-        guard let url = URL(string: url) else {
-            print("Некорректный URL: \(url)")
-            return
-        }
-        view?.openWebView(url: url)
+        guard let url = URL(string: url) else { return }
+        router.showWebView(url: url)
     }
 }

@@ -11,11 +11,6 @@ import Kingfisher
 // MARK: - Protocols
 
 protocol ProfileViewProtocol: AnyObject {
-    func openEditProfile(model: ProfileEditModel)
-    func getProfileEditModel() -> ProfileEditModel
-    func openMyNFTs()
-    func openFavoritesNFTs()
-    func openWebView(url: URL)
     func updateProfile(_ profile: ProfileResponse)
 }
 
@@ -26,10 +21,7 @@ final class ProfileViewController: UIViewController {
     // MARK: - Properties
     
     private let presenter: ProfilePresenterProtocol
-    let servicesAssembly: ServicesAssembly
     private var profile: ProfileResponse?
-    private var profileEditPresenter: ProfileEditPresenter?
-    
     
     private var profileCellName: [ProfileItem] = [
         ProfileItem(type: .myNFT, count: 0),
@@ -112,8 +104,7 @@ final class ProfileViewController: UIViewController {
     
     // MARK: - Initializers
     
-    init(servicesAssembly: ServicesAssembly, presenter: ProfilePresenterProtocol) {
-        self.servicesAssembly = servicesAssembly
+    init(presenter: ProfilePresenterProtocol) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -274,59 +265,5 @@ extension ProfileViewController: ProfileViewProtocol {
         ]
         profileTableView.reloadData()
     }
-    
-    func openEditProfile(model: ProfileEditModel) {
-        guard let profile = profile else { return }
-        if let presenter = profileEditPresenter {
-            presenter.updateModel(model)
-            let editVC = ProfileEditViewController(presenter: presenter)
-            navigationController?.pushViewController(editVC, animated: true)
-        } else {
-            let presenter = ProfileEditPresenter(model: model, currentProfile: profile, service: servicesAssembly.profileService)
-            profileEditPresenter = presenter
-            let editVC = ProfileEditViewController(presenter: presenter)
-            navigationController?.pushViewController(editVC, animated: true)
-        }
-    }
-    
-    func getProfileEditModel() -> ProfileEditModel {
-        guard let profile = profile else {
-            return ProfileEditModel(name: "", description: "", site: "", avatar: nil)
-        }
-        return ProfileEditModel(
-            name: profile.name,
-            description: profile.description,
-            site: profile.website,
-            avatar: profile.avatar
-        )
-    }
-    
-    func openMyNFTs() {
-        let presenter = MyNFTsPresenter(
-            profileService: servicesAssembly.profileService,
-            myNFTsService: servicesAssembly.myNFTsService
-        )
-        let vc = MyNFTsViewController(presenter: presenter)
-        presenter.view = vc
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func openFavoritesNFTs() {
-        let presenter = FavoritesNFTPresenter(
-            profileService: servicesAssembly.profileService,
-            myNFTsService: servicesAssembly.myNFTsService
-        )
-        let vc = FavoritesNFTViewController(presenter: presenter)
-        presenter.view = vc
-        navigationController?.pushViewController(vc, animated: true)
-    }
 
-    
-    func openWebView(url: URL) {
-        let presenter = WebViewPresenter()
-        let webVC = WebViewProfile(url: url, presenter: presenter)
-        presenter.view = webVC
-        navigationController?.pushViewController(webVC, animated: true)
-    }
-    
 }
