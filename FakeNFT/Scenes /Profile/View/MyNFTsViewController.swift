@@ -193,8 +193,6 @@ extension MyNFTsViewController: MyNFTsViewProtocol {
         navigationItem.rightBarButtonItem = isEmpty
         ? nil
         : .sortButton(target: self, action: #selector(tapSortButton))
-        
-        print("Получено NFT: \(myNFTs)")
     }
     
 }

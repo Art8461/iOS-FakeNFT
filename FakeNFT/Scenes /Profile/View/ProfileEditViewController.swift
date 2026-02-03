@@ -199,10 +199,6 @@ final class ProfileEditViewController: UIViewController {
         )
     }
     
-    private func setSaveButtonVisible(_ visible: Bool) {
-        saveButton.isHidden = !visible
-    }
-    
     // MARK: - Actions
     
     @objc private func tapBackButton() {
@@ -264,7 +260,7 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
     }
     
     func enableSaveButton(_ enable: Bool) {
-        setSaveButtonVisible(enable)
+        saveButton.isHidden = !enable
     }
     
     func closeSave() {
