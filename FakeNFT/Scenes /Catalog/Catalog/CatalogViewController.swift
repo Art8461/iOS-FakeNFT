@@ -5,23 +5,17 @@ final class CatalogViewController: UIViewController {
     private let tableView = UITableView()
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     
-    // MARK: - Dependencies
-    private let catalogProvider: CatalogProviderProtocol
-    
-    private lazy var presenter: CatalogViewOutput = {
-            CatalogPresenter(
-                view: self,
-                catalogProvider: catalogProvider,
-                router: self
-            )
-        }()
+    // MARK: - MVP Dependencies
+    // MVP: презентер (output) инжектится извне через сборку.
+    private let output: CatalogViewOutput
     
     // MARK: - Data
     private var items: [Catalog] = []
     
     // MARK: - Init
-    init(catalogProvider: CatalogProviderProtocol) {
-        self.catalogProvider = catalogProvider
+    // MVP: зависимости резолвятся вне view.
+    init(output: CatalogViewOutput) {
+        self.output = output
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,7 +27,7 @@ final class CatalogViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        presenter.viewDidLoad()
+        output.viewDidLoad()
     }
 }
 
@@ -102,12 +96,12 @@ final class CatalogViewController: UIViewController {
         
         // Действие "Сортировать по имени"
         let sortByNameAction = UIAlertAction(title: "По имени", style: .default) { [weak self] _ in
-            self?.presenter.didTapSortByName()
+            self?.output.didTapSortByName()
         }
         
         // Действие "Сортировать по количеству NFT"
         let sortByCountAction = UIAlertAction(title: "По количеству NFT", style: .default) { [weak self] _ in
-            self?.presenter.didTapSortByCount()
+            self?.output.didTapSortByCount()
         }
         
         // Действие "Отмена"
@@ -148,7 +142,7 @@ final class CatalogViewController: UIViewController {
     func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        presenter.didSelectItem(at: indexPath.row)
+        output.didSelectItem(at: indexPath.row)
     }
 }
 
@@ -180,24 +174,7 @@ final class CatalogViewController: UIViewController {
     }
 }
 
-extension CatalogViewController: CatalogRouterInput {
-    func openCollection(_ collection: Catalog) {
-        let collectionVC = NFTCollectionViewController(collection: collection)
-
-        let router = NFTCollectionRouterImpl(viewController: collectionVC)
-        let presenter = NFTCollectionPresenter(
-            view: collectionVC,
-            nftService: NftListMockService(),
-            favoriteService: FavoriteNftMockService(storage: FavoriteNftMockProvider()),
-            orderService: OrderNftMockService(storage: OrderNftMockProvider()),
-            router: router,
-            nftIds: collection.nfts
-        )
-        collectionVC.output = presenter
-
-        navigationController?.pushViewController(collectionVC, animated: true)
-    }
-}
+// MVP: роутинг вынесен в отдельный роутер.
 
 
 

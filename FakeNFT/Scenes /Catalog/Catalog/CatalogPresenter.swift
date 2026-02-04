@@ -1,18 +1,17 @@
-import Foundation
+import UIKit
 
 final class CatalogPresenter {
-    private weak var view: CatalogViewInput?
+    // MVP: view задаётся после сборки модуля.
+    weak var view: CatalogViewInput?
     private let catalogProvider: CatalogProviderProtocol
     private let router: CatalogRouterInput
     
     private var catalog: [Catalog] = []
     
     init(
-        view: CatalogViewInput,
         catalogProvider: CatalogProviderProtocol,
         router: CatalogRouterInput
     ) {
-        self.view = view
         self.catalogProvider = catalogProvider
         self.router = router
     }
@@ -58,6 +57,46 @@ private extension CatalogPresenter {
         } catch {
             self.view?.showError(error)
         }
+    }
+}
+
+// MARK: - Catalog Router
+final class CatalogRouter: CatalogRouterInput {
+    // MVP: навигация вынесена из view controller.
+    weak var viewController: UIViewController?
+    private let servicesAssembly: ServicesAssembly
+
+    init(servicesAssembly: ServicesAssembly) {
+        self.servicesAssembly = servicesAssembly
+    }
+
+    func openCollection(_ collection: Catalog) {
+        let builder = NFTCollectionModuleBuilder(servicesAssembly: servicesAssembly)
+        let collectionVC = builder.build(with: collection)
+        viewController?.navigationController?.pushViewController(collectionVC, animated: true)
+    }
+}
+
+// MARK: - Catalog Assembly
+final class CatalogAssembly {
+    // MVP: модуль собирается вне view controller.
+    private let servicesAssembly: ServicesAssembly
+
+    init(servicesAssembly: ServicesAssembly) {
+        self.servicesAssembly = servicesAssembly
+    }
+
+    func build() -> UIViewController {
+        let router = CatalogRouter(servicesAssembly: servicesAssembly)
+        let presenter = CatalogPresenter(
+            catalogProvider: servicesAssembly.catalogProvider,
+            router: router
+        )
+        let viewController = CatalogViewController(output: presenter)
+        presenter.view = viewController
+        router.viewController = viewController
+
+        return viewController
     }
 }
 

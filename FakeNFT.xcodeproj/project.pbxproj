@@ -60,6 +60,8 @@
 		FED0DC6E2F2B537F009FDB8E /* NFTCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED0DC6D2F2B5379009FDB8E /* NFTCollectionCell.swift */; };
 		FED0DC702F2B53B5009FDB8E /* NFTCollectionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED0DC6F2F2B53A7009FDB8E /* NFTCollectionPresenter.swift */; };
 		FED0DC722F2B53D4009FDB8E /* NFTCollectionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED0DC712F2B53B9009FDB8E /* NFTCollectionProtocol.swift */; };
+		FED0DC8A2F5C1A01009FDB8E /* NFTCollectionModuleBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED0DC892F5C1A01009FDB8E /* NFTCollectionModuleBuilder.swift */; };
+		FED0DC8C2F5C1A01009FDB8E /* NFTCollectionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED0DC8B2F5C1A01009FDB8E /* NFTCollectionRouter.swift */; };
 		FED0DC752F306A0D009FDB8E /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED0DC742F306A01009FDB8E /* RatingView.swift */; };
 		FED0DC7A2F307798009FDB8E /* CollectionMockDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED0DC792F30778A009FDB8E /* CollectionMockDate.swift */; };
 /* End PBXBuildFile section */
@@ -138,6 +140,8 @@
 		FED0DC6D2F2B5379009FDB8E /* NFTCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCollectionCell.swift; sourceTree = "<group>"; };
 		FED0DC6F2F2B53A7009FDB8E /* NFTCollectionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCollectionPresenter.swift; sourceTree = "<group>"; };
 		FED0DC712F2B53B9009FDB8E /* NFTCollectionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFTCollectionProtocol.swift; sourceTree = "<group>"; };
+		FED0DC892F5C1A01009FDB8E /* NFTCollectionModuleBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NFTCollectionRouter+build/NFTCollectionModuleBuilder.swift"; sourceTree = "<group>"; };
+		FED0DC8B2F5C1A01009FDB8E /* NFTCollectionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NFTCollectionRouter+build/NFTCollectionRouter.swift"; sourceTree = "<group>"; };
 		FED0DC742F306A01009FDB8E /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		FED0DC792F30778A009FDB8E /* CollectionMockDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionMockDate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -467,6 +471,8 @@
 				FED0DC6D2F2B5379009FDB8E /* NFTCollectionCell.swift */,
 				FED0DC6F2F2B53A7009FDB8E /* NFTCollectionPresenter.swift */,
 				FED0DC712F2B53B9009FDB8E /* NFTCollectionProtocol.swift */,
+				FED0DC892F5C1A01009FDB8E /* NFTCollectionModuleBuilder.swift */,
+				FED0DC8B2F5C1A01009FDB8E /* NFTCollectionRouter.swift */,
 				FED0DC732F3069D7009FDB8E /* Helpers */,
 			);
 			path = NFTCollection;
@@ -648,6 +654,8 @@
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				FED0DC692F261A9C009FDB8E /* CatalogMockData.swift in Sources */,
 				FED0DC702F2B53B5009FDB8E /* NFTCollectionPresenter.swift in Sources */,
+				FED0DC8A2F5C1A01009FDB8E /* NFTCollectionModuleBuilder.swift in Sources */,
+				FED0DC8C2F5C1A01009FDB8E /* NFTCollectionRouter.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
 				558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */,
 				3F68069729CBBAF100B4F915 /* AppDelegate.swift in Sources */,
