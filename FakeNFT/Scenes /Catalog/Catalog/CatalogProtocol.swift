@@ -19,3 +19,8 @@ protocol CatalogViewOutput: AnyObject {
 protocol CatalogProviderProtocol {
     func loadCatalog() throws -> [Catalog]
 }
+
+protocol CatalogRouterInput: AnyObject {
+    func openCollection(_ collection: Catalog)
+}
+

@@ -9,8 +9,12 @@ final class CatalogViewController: UIViewController {
     private let catalogProvider: CatalogProviderProtocol
     
     private lazy var presenter: CatalogViewOutput = {
-        CatalogPresenter(view: self, catalogProvider: catalogProvider)
-    }()
+            CatalogPresenter(
+                view: self,
+                catalogProvider: catalogProvider,
+                router: self
+            )
+        }()
     
     // MARK: - Data
     private var items: [Catalog] = []
@@ -175,6 +179,28 @@ final class CatalogViewController: UIViewController {
         tableView.reloadData()
     }
 }
+
+extension CatalogViewController: CatalogRouterInput {
+    func openCollection(_ collection: Catalog) {
+        let collectionVC = NFTCollectionViewController(collection: collection)
+
+        let router = NFTCollectionRouterImpl(viewController: collectionVC)
+        let presenter = NFTCollectionPresenter(
+            view: collectionVC,
+            nftService: NftListMockService(),
+            favoriteService: FavoriteNftMockService(storage: FavoriteNftMockProvider()),
+            orderService: OrderNftMockService(storage: OrderNftMockProvider()),
+            router: router,
+            nftIds: collection.nfts
+        )
+        collectionVC.output = presenter
+
+        navigationController?.pushViewController(collectionVC, animated: true)
+    }
+}
+
+
+
 
 
 

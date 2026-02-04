@@ -2,15 +2,19 @@ import Foundation
 
 final class CatalogPresenter {
     private weak var view: CatalogViewInput?
-   
     private let catalogProvider: CatalogProviderProtocol
+    private let router: CatalogRouterInput
     
     private var catalog: [Catalog] = []
     
-    init(view: CatalogViewInput,
-         catalogProvider: CatalogProviderProtocol) {
+    init(
+        view: CatalogViewInput,
+        catalogProvider: CatalogProviderProtocol,
+        router: CatalogRouterInput
+    ) {
         self.view = view
         self.catalogProvider = catalogProvider
+        self.router = router
     }
 }
 
@@ -31,15 +35,15 @@ extension CatalogPresenter: CatalogViewOutput {
     }
     
     func didSelectItem(at index: Int) {
-//        let item = catalog[index]
-       
+        let item = catalog[index]
+        router.openCollection(item)
     }
 }
+
 
 // MARK: - Private Methods
 private extension CatalogPresenter {
     
-    // CatalogPresenter.swift
     func loadData() {
         view?.setLoading(true)
         

@@ -22,12 +22,27 @@ protocol FavoriteNftProvider {
   func removeFromFavorites(id: String)
 }
 
-import Foundation
-
 protocol OrderNftProvider {
   func getCartIds() -> [String]
   func addToCart(id: String)
   func removeFromCart(id: String)
 }
 
+protocol NftListService {
+  func loadNfts(ids: [String], completion: @escaping (Result<[Nft], Error>) -> Void)
+}
 
+protocol FavoriteNftService {
+  func getFavorites(completion: @escaping (Result<[String], Error>) -> Void)
+  func toggleFavorite(id: String, completion: @escaping (Result<[String], Error>) -> Void)
+}
+
+protocol OrderNftService {
+  func getCart(completion: @escaping (Result<[String], Error>) -> Void)
+  func toggleInCart(id: String, completion: @escaping (Result<[String], Error>) -> Void)
+}
+
+protocol NFTCollectionRouter {
+  func close()
+  func showNftDetail(id: String)
+}

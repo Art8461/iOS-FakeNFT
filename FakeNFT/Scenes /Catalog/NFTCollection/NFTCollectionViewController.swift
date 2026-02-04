@@ -35,6 +35,10 @@ final class NFTCollectionViewController: UIViewController {
   private let descriptionLabel = UILabel()
   private let collectionView: UICollectionView
   private let activityIndicator = UIActivityIndicatorView(style: .large)
+    
+    private let collection: Catalog
+
+    
 
   // MARK: - MVP
   var output: NFTCollectionViewOutput?
@@ -45,34 +49,47 @@ final class NFTCollectionViewController: UIViewController {
   private var itemsInCart: Set<String> = []
 
   // MARK: - Init
-  init() {
-    let layout = UICollectionViewFlowLayout()
-    layout.scrollDirection = .vertical
-    layout.itemSize = CGSize(width: CollectionLayout.itemWidth, height: CollectionLayout.itemHeight)
-    layout.minimumLineSpacing = 12
-    layout.sectionInset = UIEdgeInsets(
-      top: 0,
-      left: 0,
-      bottom: CollectionLayout.collectionBottomInset,
-      right: 0
-    )
-    collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-    super.init(nibName: nil, bundle: nil)
-  }
+    // MARK: - Init
+    init(collection: Catalog) {
+      self.collection = collection
 
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+      let layout = UICollectionViewFlowLayout()
+      layout.scrollDirection = .vertical
+      layout.itemSize = CGSize(width: CollectionLayout.itemWidth, height: CollectionLayout.itemHeight)
+      layout.minimumLineSpacing = 12
+      layout.sectionInset = UIEdgeInsets(
+        top: 0,
+        left: 0,
+        bottom: CollectionLayout.collectionBottomInset,
+        right: 0
+      )
+      collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+      super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+      fatalError("init(coder:) has not been implemented")
+    }
+
 
   // MARK: - Lifecycle
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .systemBackground
+    navigationItem.hidesBackButton = true
     setupViews()
     setupLayout()
     setupCollection()
+    applyCollectionHeader()
 
     output?.viewDidLoad()
+  }
+
+  private func applyCollectionHeader() {
+    titleLabel.text = collection.name
+    authorLabel.text = collection.author
+    descriptionLabel.text = collection.description
+    coverImageView.image = UIImage(named: collection.cover)
   }
 
   // MARK: - Setup
@@ -175,12 +192,27 @@ extension NFTCollectionViewController: UICollectionViewDataSource {
       priceText:  String(nft.price),
       isFavorite: isFavorite,
       inCart: inCart,
-      image: nil 
+      image: Self.makeImage(from: nft.images.first)
     )
 
     cell.configure(with: viewModel)
     cell.delegate = self
     return cell
+  }
+}
+
+private extension NFTCollectionViewController {
+  static func makeImage(from url: URL?) -> UIImage? {
+    guard let url else { return nil }
+
+    // Моки: asset://Catalog
+    if url.scheme == "asset" {
+      let assetName = url.host ?? url.path.replacingOccurrences(of: "/", with: "")
+      return UIImage(named: assetName)
+    }
+
+    // Для реальной сети можно будет подключить нормальный image loader.
+    return nil
   }
 }
 
@@ -242,5 +274,6 @@ extension NFTCollectionViewController: NFTCollectionViewInput {
     collectionView.reloadData()
   }
 }
+
 
 
