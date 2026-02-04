@@ -14,9 +14,9 @@ enum Sorting {
     
     var title: String {
         switch self {
-        case .price: return "По цене"
-        case .rating: return "По рейтингу"
-        case .name: return "По названию"
+        case .price: return NSLocalizedString("ProfileSortPrice", comment: "sort")
+        case .rating: return NSLocalizedString("ProfileSortRating", comment: "sort")
+        case .name: return NSLocalizedString("ProfileSortName", comment: "sort")
         }
     }
 }

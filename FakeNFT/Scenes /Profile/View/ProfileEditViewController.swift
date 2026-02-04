@@ -64,7 +64,7 @@ final class ProfileEditViewController: UIViewController {
     }()
     
     private lazy var nameStackView: UIStackView = {
-        let stackView = UIStackView.stackVerticalEditProfile(labels: "Имя", field: nameTextView)
+        let stackView = UIStackView.stackVerticalEditProfile(labels: NSLocalizedString("ProfileName" , comment: "edit"), field: nameTextView)
         return stackView
     }()
     
@@ -75,7 +75,7 @@ final class ProfileEditViewController: UIViewController {
     }()
     
     private lazy var descriptionStackView: UIStackView = {
-        let stackView = UIStackView.stackVerticalEditProfile(labels: "Описание", field: descriptionTextView)
+        let stackView = UIStackView.stackVerticalEditProfile(labels: NSLocalizedString("ProfileDescription" , comment: "edit"), field: descriptionTextView)
         return stackView
     }()
     
@@ -86,7 +86,7 @@ final class ProfileEditViewController: UIViewController {
     }()
     
     private lazy var siteStackView: UIStackView = {
-        let stackView = UIStackView.stackVerticalEditProfile(labels: "Сайт", field: siteTextView)
+        let stackView = UIStackView.stackVerticalEditProfile(labels: NSLocalizedString("ProfileWebSite" , comment: "edit"), field: siteTextView)
         return stackView
     }()
     
@@ -103,7 +103,7 @@ final class ProfileEditViewController: UIViewController {
     
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Сохранить", for: .normal)
+        button.setTitle(NSLocalizedString("ProfileSave" , comment: "edit"), for: .normal)
         button.backgroundColor = .black
         button.tintColor = .white
         button.layer.cornerRadius = 16
@@ -217,42 +217,42 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
     
     func showExitAlert() {
         let alert = UIAlertController(
-            title: "Уверены, что хотите выйти?",
+            title: NSLocalizedString("ProfileGetOut" , comment: "alert"),
             message: nil,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "Остаться", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Выйти", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileStay" , comment: "alert"), style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("PrifileExit" , comment: "alert"), style: .default) { [weak self] _ in
             self?.presenter.didTapExit()
         })
         present(alert, animated: true)
     }
     
     func showAvatarAlert() {
-        let alert = UIAlertController(title: "Фото профиля", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Изменить фото", style: .default) { [weak self] _ in
+        let alert = UIAlertController(title: NSLocalizedString("ProfilePhoto" , comment: "alert"), message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileEditPhoto" , comment: "alert"), style: .default) { [weak self] _ in
             self?.presenter.didSelectChangePhoto()
         })
         
-        alert.addAction(UIAlertAction(title: "Удалить фото", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileDelPhoto" , comment: "alert"), style: .destructive) { [weak self] _ in
             self?.presenter.didSelectDeletePhoto()
         })
-        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileCancel" , comment: "alert"), style: .cancel))
         present(alert, animated: true)
     }
     
     func showPhotoLinkAlert() {
         let alert = UIAlertController(
-            title: "Ссылка на фото",
+            title: NSLocalizedString("ProfileLinkPhoto" , comment: "alert"),
             message: nil,
             preferredStyle: .alert
         )
         alert.addTextField {
-            $0.placeholder = "Введите ссылку на фото"
+            $0.placeholder = NSLocalizedString("ProfileLinkPhoto" , comment: "alert")
             $0.keyboardType = .URL
         }
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Сохранить", style: .default) { [weak self, weak alert] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileCancel" , comment: "alert"), style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileSave" , comment: "edit"), style: .default) { [weak self, weak alert] _ in
             guard let link = alert?.textFields?.first?.text, !link.isEmpty else { return }
             self?.updateAvatar(with: link)
         })

@@ -20,13 +20,13 @@ struct ProfileResponse: Decodable {
 enum ProfileItemType {
     case myNFT
     case myFavorites
-
+    
     var title: String {
         switch self {
         case .myNFT:
-            return "Мои NFT"
+            return NSLocalizedString("My NFTs", comment: "")
         case .myFavorites:
-            return "Избранные NFT"
+            return NSLocalizedString("Favorites NFTs", comment: "")
         }
     }
 }

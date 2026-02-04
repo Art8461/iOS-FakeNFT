@@ -28,7 +28,7 @@ final class MyNFTsViewController: UIViewController {
     // MARK: - UI
     
     private lazy var emptyNFTLabel =
-    UILabel.emptyStateLabel(text: "У Вас еще нет NFT")
+    UILabel.emptyStateLabel(text: NSLocalizedString("ProfileMyNFT", comment: "emptyLabel"))
     
     private lazy var loader = UIActivityIndicatorView.baseLoader()
     
@@ -166,7 +166,7 @@ extension MyNFTsViewController: MyNFTsViewProtocol {
     }
     
     func showSortAlert(options: [Sorting]) {
-        let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: NSLocalizedString("ProfileSort", comment: "alert"), message: nil, preferredStyle: .actionSheet)
         
         for option in options {
             alert.addAction(UIAlertAction(title: option.title, style: .default) { [weak self] _ in
@@ -174,7 +174,7 @@ extension MyNFTsViewController: MyNFTsViewProtocol {
             })
         }
         
-        alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileClose", comment: "alert"), style: .cancel))
         
         present(alert, animated: true)
     }
@@ -189,7 +189,7 @@ extension MyNFTsViewController: MyNFTsViewProtocol {
         emptyNFTLabel.isHidden = !isEmpty
         myNFTTableView.isHidden = isEmpty
         
-        navigationItem.title = isEmpty ? nil : "Мои NFT"
+        navigationItem.title = isEmpty ? nil : NSLocalizedString("My NFTs", comment: "")
         navigationItem.rightBarButtonItem = isEmpty
         ? nil
         : .sortButton(target: self, action: #selector(tapSortButton))

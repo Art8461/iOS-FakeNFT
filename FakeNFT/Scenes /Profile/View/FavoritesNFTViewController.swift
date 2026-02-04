@@ -29,7 +29,7 @@ final class FavoritesNFTViewController: UIViewController {
     private lazy var loader = UIActivityIndicatorView.baseLoader()
     
     private lazy var emptyFavoritesLabel =
-    UILabel.emptyStateLabel(text: "У Вас еще нет избранных NFT")
+    UILabel.emptyStateLabel(text: NSLocalizedString("ProfileFavLable", comment: "emptyLabel"))
     
     private lazy var favoritesNFTCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -111,7 +111,7 @@ final class FavoritesNFTViewController: UIViewController {
         emptyFavoritesLabel.isHidden = !isEmpty
         favoritesNFTCollection.isHidden = isEmpty
         
-        navigationItem.title = isEmpty ? nil : "Избранные NFT"
+        navigationItem.title = isEmpty ? nil : NSLocalizedString("Favorites NFTs", comment: "")
     }
     
     private func showLoading(_ isLoading: Bool) {
