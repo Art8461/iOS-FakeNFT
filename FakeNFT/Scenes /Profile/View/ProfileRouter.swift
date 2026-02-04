@@ -47,6 +47,7 @@ final class ProfileRouter: ProfileRouterProtocol {
         )
         let vc = ProfileEditViewController(presenter: presenter)
         presenter.view = vc
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -57,6 +58,7 @@ final class ProfileRouter: ProfileRouterProtocol {
         )
         let vc = MyNFTsViewController(presenter: presenter)
         presenter.view = vc
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -67,6 +69,7 @@ final class ProfileRouter: ProfileRouterProtocol {
         )
         let vc = FavoritesNFTViewController(presenter: presenter)
         presenter.view = vc
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -74,6 +77,7 @@ final class ProfileRouter: ProfileRouterProtocol {
         let presenter = WebViewPresenter()
         let vc = WebViewProfile(url: url, presenter: presenter)
         presenter.view = vc
+        vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)
     }
 }

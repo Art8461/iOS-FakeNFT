@@ -11,7 +11,7 @@ protocol ProfilePresenterProtocol: AnyObject {
     func viewDidLoad()
     func didTapEdit()
     func openMyNFTs()
-    func openFavoritesNFC()
+    func openFavoritesNFT()
     func didTapWebSite(url: String)
 }
 
@@ -60,7 +60,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         router.showMyNFTs()
     }
     
-    func openFavoritesNFC() {
+    func openFavoritesNFT() {
         router.showFavoritesNFTs()
     }
     

@@ -102,7 +102,7 @@ final class FavoritesNFTViewController: UIViewController {
             favoritesNFTCollection.topAnchor.constraint(equalTo: view.topAnchor, constant: 108),
             favoritesNFTCollection.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             favoritesNFTCollection.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            favoritesNFTCollection.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            favoritesNFTCollection.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     

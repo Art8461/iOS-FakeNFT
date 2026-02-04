@@ -11,7 +11,7 @@ protocol ProfileServiceProtocol {
     func fetchProfile(completion: @escaping (Result<ProfileResponse, Error>) -> Void)
     
     func updateProfile(_ model: ProfileEditModel, currentProfile: ProfileResponse,
-        completion: @escaping (Result<ProfileResponse, Error>) -> Void)
+                       completion: @escaping (Result<ProfileResponse, Error>) -> Void)
     func addLike(nftId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void)
     func removeLike(nftId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void)
 }
@@ -52,36 +52,28 @@ final class ProfileService: ProfileServiceProtocol {
     }
     
     func addLike(nftId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void) {
-        fetchProfile { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let profile):
-                var likes = profile.likes
-                if !likes.contains(nftId) { likes.append(nftId) }
-                let dto = UpdateProfileDto(
-                    name: profile.name,
-                    description: profile.description,
-                    avatar: profile.avatar ?? "",
-                    website: profile.website,
-                    likes: likes
-                )
-                let request = UpdateProfileRequest(dtoData: dto)
-                self.networkClient.send(request: request, type: ProfileResponse.self) { result in
-                    completion(result)
-                }
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+        modifyLike(nftId: nftId, add: true, completion: completion)
     }
-
+    
     func removeLike(nftId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void) {
+        modifyLike(nftId: nftId, add: false, completion: completion)
+    }
+    
+    private func modifyLike(
+        nftId: String,
+        add: Bool,
+        completion: @escaping (Result<ProfileResponse, Error>) -> Void
+    ) {
         fetchProfile { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let profile):
                 var likes = profile.likes
-                likes.removeAll { $0 == nftId }
+                if add {
+                    if !likes.contains(nftId) { likes.append(nftId) }
+                } else {
+                    likes.removeAll { $0 == nftId }
+                }
                 let dto = UpdateProfileDto(
                     name: profile.name,
                     description: profile.description,
@@ -90,9 +82,7 @@ final class ProfileService: ProfileServiceProtocol {
                     likes: likes
                 )
                 let request = UpdateProfileRequest(dtoData: dto)
-                self.networkClient.send(request: request, type: ProfileResponse.self) { result in
-                    completion(result)
-                }
+                self.networkClient.send(request: request, type: ProfileResponse.self, onResponse: completion)
             case .failure(let error):
                 completion(.failure(error))
             }

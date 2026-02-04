@@ -240,7 +240,7 @@ extension ProfileViewController: UITableViewDelegate {
             presenter.openMyNFTs()
             print("Переход к экрану Мои NFT")
         case .myFavorites:
-            presenter.openFavoritesNFC()
+            presenter.openFavoritesNFT()
             print("Переход к экрану Избранные NFT")
         }
     }
