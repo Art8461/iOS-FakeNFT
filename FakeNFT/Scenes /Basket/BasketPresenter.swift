@@ -82,7 +82,7 @@ final class BasketPresenterImpl: BasketPresenter {
             self.view?.showError(model)
             return
         }
-        router.showPayment(orderId: orderId)
+        router.showPayment(orderId: orderId, nftIds: nftIds)
     }
     
     private func reloadOrder() {
@@ -129,7 +129,29 @@ final class BasketPresenterImpl: BasketPresenter {
     }
     
     private func updateOrder(removedId: String, previousIds: [String], previousNfts: [Nft]) {
-        basketService.updateOrder(nfts: nftIds) { [weak self] result in
+        guard let orderId else {
+            nftIds = previousIds
+            currentNfts = previousNfts
+            applySortAndDisplay()
+            let primary = ErrorAction(
+                title: NSLocalizedString("Error.repeat", comment: ""),
+                style: .default
+            ) { [weak self] in
+                self?.updateOrder(removedId: removedId, previousIds: previousIds, previousNfts: previousNfts)
+            }
+            let secondary = ErrorAction(
+                title: NSLocalizedString("Error.close", comment: ""),
+                style: .cancel
+            ) { }
+            let model = ErrorModel(
+                message: NSLocalizedString("Error.network", comment: ""),
+                primaryAction: primary,
+                secondaryAction: secondary
+            )
+            view?.showError(model)
+            return
+        }
+        basketService.updateOrder(orderId: orderId, nfts: nftIds) { [weak self] result in
             DispatchQueue.main.async{
                 assert(Thread.isMainThread)
 

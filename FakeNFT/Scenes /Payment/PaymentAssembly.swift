@@ -14,13 +14,14 @@ final class PaymentAssembly {
         self.servicesAssembly = servicesAssembly
     }
 
-    func build(orderId: String) -> UIViewController {
+    func build(orderId: String, nftIds: [String]) -> UIViewController {
         let router = PaymentRouter()
         let presenter = PaymentPresenterImpl(
             currencyService: servicesAssembly.currenciesService,
             paymentService: servicesAssembly.paymentService,
             basketService: servicesAssembly.basketService,
             orderId: orderId,
+            nftIds: nftIds,
             router: router
         )
         let vc = PaymentViewController(presenter: presenter)

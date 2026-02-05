@@ -16,9 +16,15 @@ struct UpdateOrderRequest: NetworkRequest {
 }
 
 struct UpdateOrderDto: Dto {
+    let id: String
     let nfts: [String]
 
-    func asDictionary() -> [String : String] {
-        ["nfts": nfts.joined(separator: ",")]
+    func asQueryItems() -> [URLQueryItem] {
+        var items = [URLQueryItem(name: "id", value: id)]
+        if !nfts.isEmpty {
+            let nftsValue = nfts.joined(separator: ",")
+            items.append(URLQueryItem(name: "nfts", value: nftsValue))
+        }
+        return items
     }
 }
