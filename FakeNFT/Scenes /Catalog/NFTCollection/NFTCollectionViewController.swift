@@ -191,7 +191,8 @@ extension NFTCollectionViewController: UICollectionViewDataSource {
             priceText:  String(nft.price),
             isFavorite: isFavorite,
             inCart: inCart,
-            image: Self.makeImage(from: nft.images.first)
+            image: Self.makeImage(from: nft.images.first),
+            rating: nft.rating
         )
         
         cell.configure(with: viewModel)

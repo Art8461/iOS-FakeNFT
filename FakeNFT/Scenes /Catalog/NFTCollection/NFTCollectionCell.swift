@@ -6,13 +6,44 @@ protocol NFTCollectionCellDelegate: AnyObject {
 }
 
 final class NFTCollectionCell: UICollectionViewCell {
+    
+    private enum NFTCellLayout {
+        static let cornerRadius: CGFloat = 12
+        
+        static let imageHeight: CGFloat = 108
+        static let imageWidth: CGFloat = 108
+        
+        static let likeButtonWidth: CGFloat = 42
+        static let likeButtonHeight: CGFloat = 42
+        static let likeButtonTrailingOffset: CGFloat = 0
+        
+        static let starSize: CGFloat = 12
+        static let starSpacing: CGFloat = 2
+        static let ratingTopSpacing: CGFloat = 8
+        static let ratingHeight: CGFloat = 12
+        static let ratingWidth: CGFloat = 68
+        
+        static let labelTopSpacing: CGFloat = 4
+        static let priceTopSpacing: CGFloat = 2
+        static let labelToCartSpacing: CGFloat = -8
+        
+        static let bottomPadding: CGFloat = -20
+        
+        static let cartButtonWidth: CGFloat = 40
+        static let cartButtonHeight: CGFloat = 40
+        static let cartButtonTrailing: CGFloat = -4
+    }
+    
     // MARK: - Subviews
     private let imageView = UIImageView()
     private let titleLabel = UILabel()
-    private let authorLabel = UILabel()
     private let priceLabel = UILabel()
     private let favoriteButton = UIButton(type: .system)
     private let cartButton = UIButton(type: .system)
+    private let ratingView = SimpleRatingView(
+        starSize: NFTCellLayout.starSize,
+        spacing: NFTCellLayout.starSpacing
+    )
     
     // MARK: - Properties
     weak var delegate: NFTCollectionCellDelegate?
@@ -36,26 +67,29 @@ final class NFTCollectionCell: UICollectionViewCell {
         let priceText: String
         let isFavorite: Bool
         let inCart: Bool
-        let image: UIImage? 
+        let image: UIImage?
+        let rating: Int 
     }
     
     func configure(with viewModel: ViewModel) {
         titleLabel.text = viewModel.title
-        authorLabel.text = viewModel.author
         priceLabel.text = viewModel.priceText
         imageView.image = viewModel.image
         
         let favoriteImageName = viewModel.isFavorite ? "heart.fill" : "heart"
         favoriteButton.setImage(UIImage(systemName: favoriteImageName), for: .normal)
         
-        let cartImageName = viewModel.inCart ? "cart.fill" : "cart"
-        cartButton.setImage(UIImage(systemName: cartImageName), for: .normal)
+        let cartImageName = viewModel.inCart ? "BasketDel" : "BasketAdd"
+        let cartImage = UIImage(named: cartImageName)
+        cartButton.setImage(cartImage, for: .normal)
+        
+        ratingView.setRating(viewModel.rating)
     }
     
     // MARK: - Setup
     private func setupViews() {
-        contentView.backgroundColor = .secondarySystemBackground
-        contentView.layer.cornerRadius = 12
+        contentView.backgroundColor = .whiteUniversal
+        contentView.layer.cornerRadius = NFTCellLayout.cornerRadius
         contentView.clipsToBounds = true
         
         imageView.contentMode = .scaleAspectFill
@@ -64,15 +98,12 @@ final class NFTCollectionCell: UICollectionViewCell {
         titleLabel.font = .systemFont(ofSize: 14, weight: .semibold)
         titleLabel.numberOfLines = 2
         
-        authorLabel.font = .systemFont(ofSize: 12, weight: .regular)
-        authorLabel.textColor = .secondaryLabel
-        
         priceLabel.font = .systemFont(ofSize: 13, weight: .medium)
         
         favoriteButton.tintColor = .redUniversal
         cartButton.tintColor = .blueUniversal
         
-        [imageView, titleLabel, authorLabel, priceLabel, favoriteButton, cartButton].forEach {
+        [imageView, titleLabel, priceLabel, favoriteButton, cartButton, ratingView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
@@ -80,28 +111,44 @@ final class NFTCollectionCell: UICollectionViewCell {
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: 120),
+            // imageView
+            imageView .topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageView .leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageView .heightAnchor.constraint(equalToConstant: NFTCellLayout.imageHeight),
+            imageView.widthAnchor.constraint(equalToConstant: NFTCellLayout.imageWidth),
+          
             
-            titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            // like (favoriteButton)
+            favoriteButton.topAnchor.constraint(equalTo: imageView.topAnchor),
+            favoriteButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor),
+            favoriteButton.heightAnchor.constraint(equalToConstant: NFTCellLayout.likeButtonHeight),
+            favoriteButton.widthAnchor.constraint(equalToConstant: NFTCellLayout.likeButtonWidth),
             
-            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            authorLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            authorLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            // ratingView
+            ratingView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: NFTCellLayout.ratingTopSpacing),
+            ratingView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            ratingView.heightAnchor.constraint(equalToConstant: NFTCellLayout.ratingHeight),
+            ratingView.widthAnchor.constraint(equalToConstant: NFTCellLayout.ratingWidth),
+            ratingView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
             
-            priceLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: 4),
-            priceLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            // titleLabel
+            titleLabel.topAnchor.constraint(equalTo: ratingView.bottomAnchor, constant: NFTCellLayout.labelTopSpacing),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: cartButton.leadingAnchor, constant: NFTCellLayout.labelToCartSpacing),
             
-            favoriteButton.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 8),
-            favoriteButton.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            favoriteButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             
-            cartButton.centerYAnchor.constraint(equalTo: favoriteButton.centerYAnchor),
-            cartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
+            // priceLabel
+            priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: NFTCellLayout.priceTopSpacing),
+            priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            priceLabel.trailingAnchor.constraint(lessThanOrEqualTo: cartButton.leadingAnchor, constant: NFTCellLayout.labelToCartSpacing),
+            priceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: NFTCellLayout.bottomPadding),
+           
+            
+            // cartButton
+            cartButton.topAnchor.constraint(equalTo: titleLabel.topAnchor),
+            cartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: NFTCellLayout.cartButtonTrailing),
+            cartButton.widthAnchor.constraint(equalToConstant: NFTCellLayout.cartButtonWidth),
+            cartButton.heightAnchor.constraint(equalToConstant: NFTCellLayout.cartButtonHeight)
         ])
     }
     
@@ -120,3 +167,4 @@ final class NFTCollectionCell: UICollectionViewCell {
     }
 }
 
+#warning("Цена НФТ в ячейке будет правильно расположена, когда будут подключены сетевые данные (Сейчас из за мок данных цена сьехала). Если я ошибаюсь, то скажите в гидхабе как лечше исправить")
