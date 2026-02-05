@@ -72,7 +72,7 @@ final class CatalogViewController: UIViewController {
     
     // Настройка navigation bar
     func setupNavigationItems() {
-        let sortImage = UIImage(named: "Sort")
+        let sortImage = UIImage(resource: .sort)
         let sortButton = UIBarButtonItem(
             image: sortImage,
             style: .plain,
@@ -87,7 +87,7 @@ final class CatalogViewController: UIViewController {
     @objc
     func showSortOptions() {
         
-        // UIAlertController c типом .actionSheet (меню снизу экрана)
+        // UIAlertController c типом .actionSheet
         let alert = UIAlertController(
             title: "Сортировка",
             message: nil,
@@ -173,8 +173,6 @@ final class CatalogViewController: UIViewController {
         tableView.reloadData()
     }
 }
-
-// MVP: роутинг вынесен в отдельный роутер.
 
 
 

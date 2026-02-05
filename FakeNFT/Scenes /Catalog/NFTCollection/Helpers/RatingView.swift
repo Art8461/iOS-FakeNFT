@@ -38,30 +38,25 @@ final class SimpleRatingView: UIView {
                 iv.centerYAnchor.constraint(equalTo: self.centerYAnchor)
             ])
 
-            // leading: первый — к leading, остальные — к trailing предыдущей + spacing
             if i == 0 {
                 iv.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
             } else {
                 iv.leadingAnchor.constraint(equalTo: stars[i - 1].trailingAnchor, constant: spacing).isActive = true
             }
         }
-
-        // trailing <= last star trailing (чтобы view имело понятную ширину)
+        
         if let last = stars.last {
             last.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         }
     }
 
     func setRating(_ rating: Int) {
-        // clamp rating to 0...5
         let r = max(0, min(5, rating))
         for (i, iv) in stars.enumerated() {
             let sysName = i < r ? "star.fill" : "star"
             iv.image = UIImage(systemName: sysName)?.withRenderingMode(.alwaysTemplate)
         }
     }
-
-    // при желании можно переопределить intrinsicContentSize:
     override var intrinsicContentSize: CGSize {
         let width = CGFloat(stars.count) * starSize + CGFloat(max(0, stars.count - 1)) * spacing
         return CGSize(width: width, height: starSize)
