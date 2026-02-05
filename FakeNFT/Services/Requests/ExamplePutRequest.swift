@@ -13,14 +13,14 @@ struct ExampleDtoObject: Dto {
    let param2: String
 
     enum CodingKeys: String, CodingKey {
-        case param1 = "param_1" //имя поля в запросе будет param_1
-        case param2 //имя поля в запросе будет param_2
+        case param1 = "param_1"
+        case param2
     }
 
-    func asDictionary() -> [String : String] {
+    func asQueryItems() -> [URLQueryItem] {
         [
-            CodingKeys.param1.rawValue: param1,
-            CodingKeys.param2.rawValue: param2
+            URLQueryItem(name: CodingKeys.param1.rawValue, value: param1),
+            URLQueryItem(name: CodingKeys.param2.rawValue, value: param2)
         ]
     }
 }
@@ -29,3 +29,4 @@ struct ExamplePutResponse: Decodable {
     let name: String
     let devices: [String]
 }
+
