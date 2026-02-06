@@ -13,6 +13,7 @@ protocol MyNFTsViewProtocol: AnyObject {
     func closeScreen()
     func showSortAlert(options: [Sorting])
     func showNFTs(_ nfts: [NFTCartModel], likedIds: [String], currentSorting: Sorting)
+    func showErrorRetry(_ retryAction: @escaping () -> Void)
 }
 
 // MARK: - MyNFTsViewController
@@ -31,7 +32,7 @@ final class MyNFTsViewController: UIViewController {
     private lazy var emptyNFTLabel =
     UILabel.emptyStateLabel(text: NSLocalizedString("ProfileMyNFT", comment: "emptyLabel"))
     
-    private lazy var loader = UIActivityIndicatorView.baseLoader()
+    private lazy var loader: UIActivityIndicatorView = .baseLoader(in: view)
     
     private lazy var myNFTTableView: UITableView = {
         let tableView = UITableView()
@@ -81,22 +82,19 @@ final class MyNFTsViewController: UIViewController {
     }
     
     private func addSubviews() {
-        [emptyNFTLabel, myNFTTableView, loader].forEach {
+        [emptyNFTLabel, myNFTTableView].forEach {
             view.addSubview($0)
         }
     }
     
     private func setupConstraints() {
-        [emptyNFTLabel, myNFTTableView, loader].forEach {
+        [emptyNFTLabel, myNFTTableView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
             emptyNFTLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyNFTLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
-            loader.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loader.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             myNFTTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             myNFTTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -120,12 +118,10 @@ final class MyNFTsViewController: UIViewController {
     
     @objc private func tapBackButton() {
         presenter.didTapBack()
-        print("назад на главный экран")
     }
     
     @objc private func tapSortButton() {
         presenter.didTapSort()
-        print("сортировка")
     }
     
 }
@@ -199,4 +195,7 @@ extension MyNFTsViewController: MyNFTsViewProtocol {
         : .sortButton(target: self, action: #selector(tapSortButton))
     }
     
+    func showErrorRetry(_ retryAction: @escaping () -> Void) {
+        self.presentErrorRetry(retryAction)
+    }
 }

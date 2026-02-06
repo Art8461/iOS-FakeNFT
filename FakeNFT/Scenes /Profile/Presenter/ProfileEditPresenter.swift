@@ -88,16 +88,25 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
         )
         model = updatedModel
         view?.enableSaveButton(false)
-
-        service.updateProfile(updatedModel,currentProfile: currentProfile) { [weak self] result in
+        view?.setLoading(true)
+        service.updateProfile(updatedModel, currentProfile: currentProfile) { [weak self] result in
             DispatchQueue.main.async {
+                guard let self else { return }
+                self.view?.setLoading(false)
                 switch result {
                 case .success(let profile):
-                    self?.currentProfile = profile
-                    self?.view?.closeSave()
-
+                    self.currentProfile = profile
+                    self.view?.closeSave()
                 case .failure:
-                    self?.view?.enableSaveButton(true)
+                    self.view?.enableSaveButton(true)
+                    self.view?.showSaveErrorAlert {
+                        self.didTapSave(
+                            name: name,
+                            description: description,
+                            site: site,
+                            avatar: avatar
+                        )
+                    }
                 }
             }
         }

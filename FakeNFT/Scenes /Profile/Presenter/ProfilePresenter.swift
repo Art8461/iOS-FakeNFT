@@ -39,8 +39,13 @@ final class ProfilePresenter: ProfilePresenterProtocol {
                     self?.profile = profile
                     self?.view?.updateProfile(profile)
                 }
-            case .failure(let error):
-                print(error)
+            case .failure:
+                DispatchQueue.main.async {
+                    self?.view?.showErrorRetry { [weak self] in
+                        self?.viewDidLoad()
+                    }
+                }
+                
             }
         }
     }

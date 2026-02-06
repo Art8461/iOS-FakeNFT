@@ -39,8 +39,12 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
             case .success(let profile):
                 self.likedIds = Set(profile.likes)
                 self.loadMyNFTs(ids: profile.nfts)
-            case .failure(let error):
-                print("Ошибка загрузки профиля:", error)
+            case .failure:
+                DispatchQueue.main.async {
+                    self.view?.showErrorRetry { [weak self] in
+                        self?.viewDidLoad()
+                    }
+                }
             }
         }
     }
@@ -79,8 +83,12 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
             case .success(let nfts):
                 self.nfts = nfts
                 self.applySorting(self.currentSorting)
-            case .failure(let error):
-                print("Ошибка загрузки NFT:", error)
+            case .failure:
+                DispatchQueue.main.async {
+                    self.view?.showErrorRetry { [weak self] in
+                        self?.viewDidLoad()
+                    }
+                }
             }
         }
     }
