@@ -12,7 +12,7 @@ import UIKit
 protocol MyNFTsViewProtocol: AnyObject {
     func closeScreen()
     func showSortAlert(options: [Sorting])
-    func showNFTs(_ nfts: [NFTCartModel], likedIds: [String])
+    func showNFTs(_ nfts: [NFTCartModel], likedIds: [String], currentSorting: Sorting)
 }
 
 // MARK: - MyNFTsViewController
@@ -24,6 +24,7 @@ final class MyNFTsViewController: UIViewController {
     private let presenter: MyNFTsPresenterProtocol
     private var myNFTs: [NFTCartModel] = []
     private var likedNFTIds: [String] = []
+    private var currentSorting: Sorting = Sorting.load()
     
     // MARK: - UI
     
@@ -169,7 +170,9 @@ extension MyNFTsViewController: MyNFTsViewProtocol {
         let alert = UIAlertController(title: NSLocalizedString("ProfileSort", comment: "alert"), message: nil, preferredStyle: .actionSheet)
         
         for option in options {
-            alert.addAction(UIAlertAction(title: option.title, style: .default) { [weak self] _ in
+            let isSelected = (option == currentSorting)
+            let title = isSelected ? "\(option.title) ✅" : option.title
+            alert.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
                 self?.presenter.didSelectSortOption(option)
             })
         }
@@ -179,8 +182,9 @@ extension MyNFTsViewController: MyNFTsViewProtocol {
         present(alert, animated: true)
     }
     
-    func showNFTs(_ nfts: [NFTCartModel], likedIds: [String]) {
+    func showNFTs(_ nfts: [NFTCartModel], likedIds: [String],currentSorting: Sorting) {
         showLoading(false)
+        self.currentSorting = currentSorting
         self.myNFTs = nfts
         self.likedNFTIds = likedIds
         myNFTTableView.reloadData()

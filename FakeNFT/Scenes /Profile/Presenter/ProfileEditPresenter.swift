@@ -76,7 +76,10 @@ final class ProfileEditPresenter: ProfileEditPresenterProtocol {
         view?.enableSaveButton(true)
     }
     
-    func didTapSave(name: String, description: String, site: String, avatar: String?) {
+    func didTapSave(name: String,
+                    description: String,
+                    site: String,
+                    avatar: String?) {
         let updatedModel = ProfileEditModel(
             name: name,
             description: description,

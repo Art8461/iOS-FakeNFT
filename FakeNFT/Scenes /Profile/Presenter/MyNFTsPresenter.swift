@@ -22,6 +22,7 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
     private let myNFTsService: MyNFTsServiceProtocol
     private var nfts: [NFTCartModel] = []
     private var likedIds: Set<String> = []
+    private var currentSorting = Sorting.load()
     
     init(
         profileService: ProfileServiceProtocol,
@@ -33,7 +34,7 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
     
     func viewDidLoad() {
         profileService.fetchProfile { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             switch result {
             case .success(let profile):
                 self.likedIds = Set(profile.likes)
@@ -43,18 +44,23 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
             }
         }
     }
-
+    
     func didTapBack() {
         view?.closeScreen()
     }
     
     func didTapSort() {
-        let options: [Sorting] = [.price, .rating, .name]
-        view?.showSortAlert(options: options)
+        view?.showSortAlert(options: Sorting.allCases)
     }
     
     func didSelectSortOption(_ option: Sorting) {
-        switch option {
+        applySorting(option)
+    }
+    private func applySorting(_ sorting: Sorting) {
+        currentSorting = sorting
+        Sorting.save(sorting)
+        
+        switch sorting {
         case .price:
             nfts.sort { $0.price < $1.price }
         case .rating:
@@ -62,16 +68,17 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
         case .name:
             nfts.sort { $0.name < $1.name }
         }
-        view?.showNFTs(nfts, likedIds: Array(likedIds))
+        
+        view?.showNFTs(nfts, likedIds: Array(likedIds), currentSorting: currentSorting)
     }
-
+    
     private func loadMyNFTs(ids: [String]) {
         myNFTsService.fetchMyNFTs(ids: ids) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let nfts):
                 self.nfts = nfts
-                self.view?.showNFTs(nfts, likedIds: Array(self.likedIds))
+                self.applySorting(self.currentSorting)
             case .failure(let error):
                 print("Ошибка загрузки NFT:", error)
             }
@@ -94,6 +101,7 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
                 }
             }
         }
-        view?.showNFTs(nfts, likedIds: Array(likedIds))
+        view?.showNFTs(nfts, likedIds: Array(likedIds), currentSorting: currentSorting)
     }
 }
+
