@@ -17,7 +17,6 @@ final class NFTCollectionRouterImpl: NFTCollectionRouter {
         viewController?.navigationController?.popViewController(animated: true)
     }
     
-    /// Открывает детальный экран NFT
     func showNftDetail(id: String) {
         let assembly = NftDetailAssembly(servicesAssembler: servicesAssembly)
         let input = NftDetailInput(id: id)

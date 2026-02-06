@@ -116,7 +116,6 @@ final class NFTCollectionCell: UICollectionViewCell {
             imageView .leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView .heightAnchor.constraint(equalToConstant: NFTCellLayout.imageHeight),
             imageView.widthAnchor.constraint(equalToConstant: NFTCellLayout.imageWidth),
-          
             
             // like (favoriteButton)
             favoriteButton.topAnchor.constraint(equalTo: imageView.topAnchor),
@@ -136,14 +135,12 @@ final class NFTCollectionCell: UICollectionViewCell {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: cartButton.leadingAnchor, constant: NFTCellLayout.labelToCartSpacing),
             
-            
             // priceLabel
             priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: NFTCellLayout.priceTopSpacing),
             priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             priceLabel.trailingAnchor.constraint(lessThanOrEqualTo: cartButton.leadingAnchor, constant: NFTCellLayout.labelToCartSpacing),
             priceLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: NFTCellLayout.bottomPadding),
            
-            
             // cartButton
             cartButton.topAnchor.constraint(equalTo: titleLabel.topAnchor),
             cartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: NFTCellLayout.cartButtonTrailing),

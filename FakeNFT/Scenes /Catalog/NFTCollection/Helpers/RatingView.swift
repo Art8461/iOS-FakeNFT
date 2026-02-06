@@ -18,7 +18,6 @@ final class SimpleRatingView: UIView {
     }
 
     private func setupStars() {
-        // Цвет и конфигурация символов
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: starSize, weight: .regular)
         for i in 0..<5 {
             let iv = UIImageView()
@@ -26,12 +25,10 @@ final class SimpleRatingView: UIView {
             iv.contentMode = .scaleAspectFit
             iv.tintColor = .yellow
             iv.preferredSymbolConfiguration = symbolConfig
-            // по умолчанию пустая звезда
             iv.image = UIImage(systemName: "star")?.withRenderingMode(.alwaysTemplate)
             addSubview(iv)
             stars.append(iv)
 
-            // размер каждой звезды
             NSLayoutConstraint.activate([
                 iv.widthAnchor.constraint(equalToConstant: starSize),
                 iv.heightAnchor.constraint(equalToConstant: starSize),

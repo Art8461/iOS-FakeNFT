@@ -1,7 +1,6 @@
 import UIKit
 
 final class CatalogPresenter {
-    // MVP: view задаётся после сборки модуля.
     weak var view: CatalogViewInput?
     private let catalogProvider: CatalogProviderProtocol
     private let router: CatalogRouterInput
@@ -62,7 +61,6 @@ private extension CatalogPresenter {
 
 // MARK: - Catalog Router
 final class CatalogRouter: CatalogRouterInput {
-    // MVP: навигация вынесена из view controller.
     weak var viewController: UIViewController?
     private let servicesAssembly: ServicesAssembly
 
@@ -79,7 +77,6 @@ final class CatalogRouter: CatalogRouterInput {
 
 // MARK: - Catalog Assembly
 final class CatalogAssembly {
-    // MVP: модуль собирается вне view controller.
     private let servicesAssembly: ServicesAssembly
 
     init(servicesAssembly: ServicesAssembly) {

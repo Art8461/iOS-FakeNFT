@@ -205,7 +205,6 @@ private extension NFTCollectionViewController {
     static func makeImage(from url: URL?) -> UIImage? {
         guard let url else { return nil }
         
-        // Моки: asset://Catalog
         if url.scheme == "asset" {
             let assetName = url.host ?? url.path.replacingOccurrences(of: "/", with: "")
             return UIImage(named: assetName)

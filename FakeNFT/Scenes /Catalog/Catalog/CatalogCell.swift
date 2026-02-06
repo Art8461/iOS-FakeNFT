@@ -6,7 +6,6 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
         return String(describing: self)
     }
     
-    // Описание констант для layout ячейки
     private enum CatalogCellLayout {
         static let imageTop: CGFloat = 20
         static let imageHeight: CGFloat = 140
@@ -16,7 +15,6 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
     }
     
     //MARK: - UI
-    // Обложка коллекции
     private lazy var catalogImage: UIImageView = {
         let image = UIImageView()
         image.layer.cornerRadius = CatalogCellLayout.imageCornerRadius
@@ -27,7 +25,6 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
         return image
     }()
     
-    // Название и количество NFT
     private lazy var catalogLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.bodyBold
@@ -61,7 +58,6 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
         ])
     }
     
-    // Настройка лейбла
     private func setupLabel() {
         contentView.addSubview(catalogLabel)
         
@@ -80,7 +76,6 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
         catalogLabel.text = nil
     }
     
-    // Метод конфигурации ячейки
     func configure(imageName: String, text: String, numberOfNfts: Int) {
         catalogImage.image = UIImage(named: imageName)
         catalogLabel.text = "\(text.capitalized) (\(numberOfNfts))"
