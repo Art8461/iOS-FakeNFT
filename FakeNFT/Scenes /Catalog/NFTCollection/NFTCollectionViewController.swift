@@ -25,6 +25,11 @@ final class NFTCollectionViewController: UIViewController {
         
         static let itemWidth: CGFloat = 108
         static let itemHeight: CGFloat = 192
+        
+        static let interItemSpacing: CGFloat = 10
+        static let lineSpacing: CGFloat = 8
+        
+        static let itemsPerRow: Int = 3
     }
     
     // MARK: - UI
@@ -51,20 +56,22 @@ final class NFTCollectionViewController: UIViewController {
     // MARK: - Init
     init(collection: Catalog) {
         self.collection = collection
-        
+
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: CollectionLayout.itemWidth, height: CollectionLayout.itemHeight)
-        layout.minimumLineSpacing = 12
+        layout.minimumInteritemSpacing = CollectionLayout.interItemSpacing
+        layout.minimumLineSpacing = CollectionLayout.lineSpacing
         layout.sectionInset = UIEdgeInsets(
             top: 0,
             left: 0,
             bottom: CollectionLayout.collectionBottomInset,
             right: 0
         )
+
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         super.init(nibName: nil, bundle: nil)
     }
+
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -213,6 +220,49 @@ private extension NFTCollectionViewController {
         return nil
     }
 }
+
+extension NFTCollectionViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        let itemsPerRow = CGFloat(CollectionLayout.itemsPerRow)
+        let interItemSpacing = CollectionLayout.interItemSpacing
+
+        let sectionInsets = UIEdgeInsets(
+            top: 0,
+            left: CollectionLayout.collectionLeading,
+            bottom: 0,
+            right: -CollectionLayout.collectionTrailing
+        )
+
+        let totalHorizontalInsets = sectionInsets.left + sectionInsets.right
+        let totalSpacing = interItemSpacing * (itemsPerRow - 1)
+
+        let availableWidth = collectionView.bounds.width - totalHorizontalInsets - totalSpacing
+        let itemWidth = floor(availableWidth / itemsPerRow)
+
+        return CGSize(width: itemWidth, height: CollectionLayout.itemHeight)
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        CollectionLayout.interItemSpacing
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        CollectionLayout.lineSpacing
+    }
+}
+
 
 // MARK: - UICollectionViewDelegate
 extension NFTCollectionViewController: UICollectionViewDelegate {
