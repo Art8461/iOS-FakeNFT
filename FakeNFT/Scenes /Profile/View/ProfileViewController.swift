@@ -130,7 +130,7 @@ final class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         showLoading(true)
-        presenter.viewDidLoad()
+        presenter.viewWillAppear()
     }
     
     // MARK: - Setup

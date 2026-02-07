@@ -9,6 +9,7 @@ import Foundation
 
 protocol ProfilePresenterProtocol: AnyObject {
     func viewDidLoad()
+    func viewWillAppear()
     func didTapEdit()
     func openMyNFTs()
     func openFavoritesNFT()
@@ -20,8 +21,8 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     weak var view: ProfileViewProtocol?
     private let service: ProfileServiceProtocol
     private let router: ProfileRouterProtocol
-    
     private var profile: ProfileResponse?
+    private var hasLoadedInitially = false
     
     init(
         service: ProfileServiceProtocol,
@@ -32,6 +33,18 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     }
     
     func viewDidLoad() {
+        loadPProfile()
+    }
+    
+    func viewWillAppear() {
+        if hasLoadedInitially {
+            loadPProfile()
+        } else {
+            hasLoadedInitially = true
+        }
+    }
+    
+    func loadPProfile() {
         service.fetchProfile { [weak self] result in
             switch result {
             case .success(let profile):
