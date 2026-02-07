@@ -20,7 +20,7 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
         image.layer.cornerRadius = CatalogCellLayout.imageCornerRadius
         image.layer.masksToBounds = true
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.backgroundColor = .whiteApp
+        image.backgroundColor = .whiteUniversal
         image.contentMode = .scaleAspectFill
         return image
     }()
@@ -28,7 +28,7 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
     private lazy var catalogLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.bodyBold
-        label.textColor = .blackApp
+        label.textColor = .blackUniversal
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -37,7 +37,7 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
     //MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = .backgroundUniversal // Цвет будет изменен после добавления картинок НФТ
+        contentView.backgroundColor = .clear
         setupImage()
         setupLabel()
     }
