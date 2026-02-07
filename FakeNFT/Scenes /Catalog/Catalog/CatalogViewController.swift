@@ -32,7 +32,7 @@ final class CatalogViewController: UIViewController {
     // MARK: - Setup UI
     private extension CatalogViewController {
     func setupUI() {
-        view.backgroundColor = .whiteApp
+        view.backgroundColor = .whiteUniversal
         
         setupTableView()
         setupActivityIndicator()
@@ -76,6 +76,8 @@ final class CatalogViewController: UIViewController {
         )
         
         navigationItem.rightBarButtonItem = sortButton
+        
+        sortButton.tintColor = .blackUniversal
     }
     
     @objc
