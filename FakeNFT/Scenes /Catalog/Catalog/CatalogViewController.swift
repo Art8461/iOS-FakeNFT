@@ -46,6 +46,8 @@ final class CatalogViewController: UIViewController {
         tableView.delegate = self
         tableView.register(CatalogCell.self, forCellReuseIdentifier: CatalogCell.reuseIdentifier)
         
+        tableView.separatorStyle = .none
+        
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
