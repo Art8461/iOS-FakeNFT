@@ -60,12 +60,11 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let profilePresenter = ProfilePresenter()
-        let profileVC = ProfileViewController(
-            servicesAssembly: servicesAssembly,
-            presenter: profilePresenter
-        )
-        profilePresenter.view = profileVC
+        let profileNavController = UINavigationController()
+        let router = ProfileRouter(
+            services: servicesAssembly,
+            navigationController: profileNavController)
+        router.showProfile()
         
         let catalogVC = TestCatalogViewController(
             servicesAssembly: servicesAssembly
@@ -79,7 +78,6 @@ final class TabBarController: UITabBarController {
             servicesAssembly: servicesAssembly
         )
         
-        let profileNavController = UINavigationController(rootViewController: profileVC)
         profileNavController.tabBarItem = profileTabBarItem
         
         catalogVC.tabBarItem = catalogTabBarItem

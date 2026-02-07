@@ -15,6 +15,7 @@ protocol ProfileEditViewProtocol: AnyObject {
     func showExitAlert()
     func showAvatarAlert()
     func showPhotoLinkAlert()
+    func enableSaveButton(_ enable: Bool)
 }
 
 // MARK: - ProfileEditViewController
@@ -23,7 +24,8 @@ final class ProfileEditViewController: UIViewController {
     
     // MARK: - Dependencies
     
-    private let presenter: ProfileEditPresenterProtocol
+    private let presenter: ProfileEditPresenter
+    private var currentAvatarURL: URL?
     
     // MARK: - UI
     
@@ -34,7 +36,6 @@ final class ProfileEditViewController: UIViewController {
         button.clipsToBounds = true
         
         let image = UIImageView.baseAvatarImage()
-        image.image = UIImage(resource: .joaquinPhoenix)
         button.addSubview(image)
         
         NSLayoutConstraint.activate([
@@ -58,31 +59,34 @@ final class ProfileEditViewController: UIViewController {
     
     private lazy var nameTextView: UITextView = {
         let textView = UITextView.baseTextView()
+        textView.delegate = self
         return textView
     }()
     
     private lazy var nameStackView: UIStackView = {
-        let stackView = UIStackView.stackVerticalEditProfile(labels: "Имя", field: nameTextView)
+        let stackView = UIStackView.stackVerticalEditProfile(labels: NSLocalizedString("ProfileName" , comment: "edit"), field: nameTextView)
         return stackView
     }()
     
     private lazy var descriptionTextView: UITextView = {
         let textView = UITextView.baseTextView()
+        textView.delegate = self
         return textView
     }()
     
     private lazy var descriptionStackView: UIStackView = {
-        let stackView = UIStackView.stackVerticalEditProfile(labels: "Описание", field: descriptionTextView)
+        let stackView = UIStackView.stackVerticalEditProfile(labels: NSLocalizedString("ProfileDescription" , comment: "edit"), field: descriptionTextView)
         return stackView
     }()
     
     private lazy var siteTextView: UITextView = {
         let textView = UITextView.baseTextView()
+        textView.delegate = self
         return textView
     }()
     
     private lazy var siteStackView: UIStackView = {
-        let stackView = UIStackView.stackVerticalEditProfile(labels: "Сайт", field: siteTextView)
+        let stackView = UIStackView.stackVerticalEditProfile(labels: NSLocalizedString("ProfileWebSite" , comment: "edit"), field: siteTextView)
         return stackView
     }()
     
@@ -97,27 +101,23 @@ final class ProfileEditViewController: UIViewController {
         return stack
     }()
     
-    //логика пока не реализована, кнопка скрыта
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Сохранить", for: .normal)
-        button.backgroundColor = .blackApp
-        button.tintColor = .whiteApp
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+        button.setTitle(NSLocalizedString("ProfileSave" , comment: "edit"), for: .normal)
+        button.backgroundColor = .black
+        button.tintColor = .white
         button.layer.cornerRadius = 16
-        button.clipsToBounds = true
         button.isHidden = true
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(tapSaveButton), for: .touchUpInside)
         return button
     }()
     
-    
     // MARK: - Initializers
     
-    init(presenter: ProfileEditPresenterProtocol) {
+    init(presenter: ProfileEditPresenter) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
+        self.presenter.view = self
     }
     
     required init?(coder: NSCoder) {
@@ -133,6 +133,7 @@ final class ProfileEditViewController: UIViewController {
         addSubviews()
         setupConstraints()
         presenter.viewDidLoad()
+        setupTextViews()
     }
     
     // MARK: - Setup
@@ -175,6 +176,29 @@ final class ProfileEditViewController: UIViewController {
         ])
     }
     
+    private func setupTextViews() {
+        [nameTextView, descriptionTextView, siteTextView].forEach {
+            $0.delegate = self
+        }
+    }
+    
+    private func updateAvatar(with link: String) {
+        currentAvatarURL = URL(string: link)
+        if let imageView = avatarButton.subviews.compactMap({ $0 as? UIImageView }).first {
+            imageView.kf.setImage(with: currentAvatarURL, placeholder: UIImage(resource: .userPic))
+        }
+        saveButton.isHidden = false
+    }
+    
+    @objc private func tapSaveButton() {
+        presenter.didTapSave(
+            name: nameTextView.text,
+            description: descriptionTextView.text,
+            site: siteTextView.text,
+            avatar: currentAvatarURL?.absoluteString
+        )
+    }
+    
     // MARK: - Actions
     
     @objc private func tapBackButton() {
@@ -185,9 +209,6 @@ final class ProfileEditViewController: UIViewController {
         presenter.didTapAvatar()
     }
     
-    @objc private func tapSaveButton() {
-        print("сохранение и выход")
-    }
 }
 
 // MARK: - ProfileEditViewProtocol
@@ -196,46 +217,51 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
     
     func showExitAlert() {
         let alert = UIAlertController(
-            title: "Уверены, что хотите выйти?",
+            title: NSLocalizedString("ProfileGetOut" , comment: "alert"),
             message: nil,
             preferredStyle: .alert
         )
-        alert.addAction(UIAlertAction(title: "Остаться", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Выйти", style: .default) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileStay" , comment: "alert"), style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("PrifileExit" , comment: "alert"), style: .default) { [weak self] _ in
             self?.presenter.didTapExit()
         })
         present(alert, animated: true)
     }
     
     func showAvatarAlert() {
-        let alert = UIAlertController(title: "Фото профиля", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Изменить фото", style: .default) { [weak self] _ in
+        let alert = UIAlertController(title: NSLocalizedString("ProfilePhoto" , comment: "alert"), message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileEditPhoto" , comment: "alert"), style: .default) { [weak self] _ in
             self?.presenter.didSelectChangePhoto()
         })
         
-        alert.addAction(UIAlertAction(title: "Удалить фото", style: .destructive) { [weak self] _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileDelPhoto" , comment: "alert"), style: .destructive) { [weak self] _ in
             self?.presenter.didSelectDeletePhoto()
         })
-        alert.addAction(UIAlertAction(title: "Отменить", style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileCancel" , comment: "alert"), style: .cancel))
         present(alert, animated: true)
     }
     
     func showPhotoLinkAlert() {
-        let alert = UIAlertController(title: "Ссылка на фото", message: nil, preferredStyle: .alert)       
-        alert.addTextField { textField in
-            textField.placeholder = "Введите ссылку на фото"
-            textField.keyboardType = .URL
+        let alert = UIAlertController(
+            title: NSLocalizedString("ProfileLinkPhoto" , comment: "alert"),
+            message: nil,
+            preferredStyle: .alert
+        )
+        alert.addTextField {
+            $0.placeholder = NSLocalizedString("ProfileLinkPhoto" , comment: "alert")
+            $0.keyboardType = .URL
         }
-        
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Сохранить", style: .default) { [weak alert] _ in
-            if let text = alert?.textFields?.first?.text {
-                print("Введена ссылка: \(text)")
-            }
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileCancel" , comment: "alert"), style: .cancel))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileSave" , comment: "edit"), style: .default) { [weak self, weak alert] _ in
+            guard let link = alert?.textFields?.first?.text, !link.isEmpty else { return }
+            self?.updateAvatar(with: link)
         })
         present(alert, animated: true)
     }
-
+    
+    func enableSaveButton(_ enable: Bool) {
+        saveButton.isHidden = !enable
+    }
     
     func closeSave() {
         navigationController?.popViewController(animated: true)
@@ -245,6 +271,25 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
         nameTextView.text = model.name
         descriptionTextView.text = model.description
         siteTextView.text = model.site
+        
+        if let imageView = avatarButton.subviews.compactMap({ $0 as? UIImageView }).first {
+            imageView.image = UIImage(resource: .userPic)
+            if let avatar = model.avatar,
+               !avatar.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+               let url = URL(string: avatar) {
+                imageView.kf.setImage(with: url, placeholder: UIImage(resource: .userPic))
+                currentAvatarURL = url
+            } else {
+                currentAvatarURL = nil
+            }
+        }
+        saveButton.isHidden = true
     }
     
+}
+
+extension ProfileEditViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        presenter.didChangeText()
+    }
 }
