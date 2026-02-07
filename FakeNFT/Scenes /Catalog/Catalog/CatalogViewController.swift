@@ -1,5 +1,10 @@
 import UIKit
 
+private enum CatalogLayout {
+    static let tableViewLeading: CGFloat = 16
+    static let tableViewTrailing: CGFloat = -16
+}
+
 final class CatalogViewController: UIViewController {
     // MARK: - UI
     private let tableView = UITableView()
@@ -52,8 +57,8 @@ final class CatalogViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: CatalogLayout.tableViewLeading),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: CatalogLayout.tableViewTrailing),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
