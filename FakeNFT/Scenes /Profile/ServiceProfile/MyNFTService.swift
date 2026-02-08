@@ -4,7 +4,6 @@
 //
 //  Created by Андрей Пермяков on 01.02.2026.
 //
-
 import Foundation
 
 protocol MyNFTsServiceProtocol {
@@ -36,14 +35,17 @@ final class MyNFTsService: MyNFTsServiceProtocol {
             let request = MyNFTRequest(id: id)
             
             networkClient.send(request: request, type: NFTCartModel.self) { response in
-                switch response {
-                case .success(let nft):
-                    result.append(nft)
-                    Logger.shared.logSuccess("NFT \(nft.id) загружен")
-                case .failure(let error):
-                    Logger.shared.logError("Ошибка загрузки NFT \(id): \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    switch response {
+                    case .success(let nft):
+                        result.append(nft)
+                        Logger.shared.logSuccess("NFT \(nft.id) загружен")
+                    case .failure(let error):
+                        let profileError = ProfileNetworkError.network(error)
+                        Logger.shared.logError("Ошибка загрузки NFT \(id): \(profileError.localizedDescription)")
+                    }
+                    group.leave()
                 }
-                group.leave()
             }
         }
         

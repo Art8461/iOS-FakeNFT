@@ -13,6 +13,7 @@ import Kingfisher
 protocol ProfileViewProtocol: AnyObject {
     func updateProfile(_ profile: ProfileResponse)
     func showErrorRetry(_ retryAction: @escaping () -> Void)
+    func showLoading(_ isLoading: Bool)
 }
 
 // MARK: - ProfileViewController
@@ -177,18 +178,6 @@ final class ProfileViewController: UIViewController {
         }
     }
     
-    private func showLoading(_ isLoading: Bool) {
-        if isLoading {
-            loader.startAnimating()
-            bigStack.isHidden = true
-            profileTableView.isHidden = true
-        } else {
-            loader.stopAnimating()
-            bigStack.isHidden = false
-            profileTableView.isHidden = false
-        }
-    }
-    
     // MARK: - Actions
     
     @objc private func tapEditButton() {
@@ -260,6 +249,18 @@ extension ProfileViewController: ProfileViewProtocol {
             ProfileItem(type: .myFavorites, count: profile.likes.count)
         ]
         profileTableView.reloadData()
+    }
+    
+    func showLoading(_ isLoading: Bool) {
+        if isLoading {
+            loader.startAnimating()
+            bigStack.isHidden = true
+            profileTableView.isHidden = true
+        } else {
+            loader.stopAnimating()
+            bigStack.isHidden = false
+            profileTableView.isHidden = false
+        }
     }
     
     func showErrorRetry(_ retryAction: @escaping () -> Void) {

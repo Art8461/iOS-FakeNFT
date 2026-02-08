@@ -37,8 +37,9 @@ final class ProfileService: ProfileServiceProtocol {
                     Logger.shared.logSuccess("Профиль загружен")
                     completion(.success(profile))
                 case .failure(let error):
-                    Logger.shared.logError("Ошибка загрузки профиля: \(error.localizedDescription)")
-                    completion(.failure(.network(error.localizedDescription)))
+                    let profileError = ProfileNetworkError.network(error)
+                    Logger.shared.logError("Ошибка загрузки профиля: \(profileError.localizedDescription)")
+                    completion(.failure(profileError))
                 }
             }
         }
@@ -66,8 +67,9 @@ final class ProfileService: ProfileServiceProtocol {
                     Logger.shared.logSuccess("Профиль обновлен")
                     completion(.success(profile))
                 case .failure(let error):
-                    Logger.shared.logError("Ошибка обновления профиля: \(error.localizedDescription)")
-                    completion(.failure(.network(error.localizedDescription)))
+                    let profileError = ProfileNetworkError.network(error)
+                    Logger.shared.logError("Ошибка обновления профиля: \(profileError.localizedDescription)")
+                    completion(.failure(profileError))
                 }
             }
         }
@@ -88,6 +90,7 @@ final class ProfileService: ProfileServiceProtocol {
     ) {
         fetchProfile { [weak self] result in
             guard let self = self else { return }
+            
             switch result {
             case .success(let profile):
                 var likes = profile.likes
@@ -114,15 +117,17 @@ final class ProfileService: ProfileServiceProtocol {
                             Logger.shared.logSuccess("Лайк успешно \(add ? "добавлен" : "удален")")
                             completion(.success(profile))
                         case .failure(let error):
-                            Logger.shared.logError("Ошибка изменения лайка: \(error.localizedDescription)")
-                            completion(.failure(.network(error.localizedDescription)))
+                            let profileError = ProfileNetworkError.network(error)
+                            Logger.shared.logError("Ошибка изменения лайка: \(profileError.localizedDescription)")
+                            completion(.failure(profileError))
                         }
                     }
                 }
                 
             case .failure(let error):
-                Logger.shared.logError("Ошибка при получении профиля перед лайком: \(error.localizedDescription)")
-                completion(.failure(.network(error.localizedDescription)))
+                let profileError = ProfileNetworkError.network(error)
+                Logger.shared.logError("Ошибка при получении профиля перед лайком: \(profileError.localizedDescription)")
+                completion(.failure(profileError))
             }
         }
     }

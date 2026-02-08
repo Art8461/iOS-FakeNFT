@@ -39,19 +39,40 @@ final class Logger {
 }
 
 enum ProfileNetworkError: Error {
-    case network(String)
-    case decoding(String)
+    case network(Error)
+    case decoding(Error)
     case invalidData
     case notFound(String)
-    case unknown(String)
+    case unknown(Error)
 
     var localizedDescription: String {
         switch self {
-        case .network(let msg): return "Сетевая ошибка: \(msg)"
-        case .decoding(let msg): return "Ошибка декодирования: \(msg)"
-        case .invalidData: return "Некорректные данные"
-        case .notFound(let msg): return "Не найдено: \(msg)"
-        case .unknown(let msg): return "Неизвестная ошибка: \(msg)"
+        case .network(let error):
+            if let clientError = error as? NetworkClientError {
+                switch clientError {
+                case .urlSessionError:
+                    return "Сетевая ошибка: не удалось получить ответ от сервера"
+                case .httpStatusCode(let code):
+                    return "Сетевая ошибка: сервер вернул HTTP статус \(code)"
+                case .urlRequestError(let err):
+                    return "Сетевая ошибка: \(err.localizedDescription)"
+                case .parsingError:
+                    return "Ошибка парсинга ответа от сервера"
+                }
+            }
+            // Любая другая системная ошибка
+            return "Сетевая ошибка: \(error.localizedDescription)"
+            
+        case .decoding(let error):
+            return "Ошибка декодирования: \(error.localizedDescription)"
+        case .invalidData:
+            return "Некорректные данные"
+        case .notFound(let msg):
+            return "Не найдено: \(msg)"
+        case .unknown(let error):
+            return "Неизвестная ошибка: \(error.localizedDescription)"
         }
     }
 }
+
+

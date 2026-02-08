@@ -23,6 +23,7 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     private let router: ProfileRouterProtocol
     private var profile: ProfileResponse?
     private var hasLoadedInitially = false
+    private var isLoading = false
     
     init(
         service: ProfileServiceProtocol,
@@ -44,21 +45,26 @@ final class ProfilePresenter: ProfilePresenterProtocol {
         }
     }
     
-    func loadProfile() {
+    private func loadProfile() {
+        guard !isLoading else { return }
+        isLoading = true
+        view?.showLoading(true)
+        
         service.fetchProfile { [weak self] result in
-            switch result {
-            case .success(let profile):
-                DispatchQueue.main.async {
-                    self?.profile = profile
-                    self?.view?.updateProfile(profile)
-                }
-            case .failure:
-                DispatchQueue.main.async {
-                    self?.view?.showErrorRetry { [weak self] in
-                        self?.viewDidLoad()
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.isLoading = false
+                self.view?.showLoading(false)
+                
+                switch result {
+                case .success(let profile):
+                    self.profile = profile
+                    self.view?.updateProfile(profile)
+                case .failure:
+                    self.view?.showErrorRetry { [weak self] in
+                        self?.loadProfile()
                     }
                 }
-                
             }
         }
     }
