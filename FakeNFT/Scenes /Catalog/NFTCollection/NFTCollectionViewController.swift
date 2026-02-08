@@ -25,11 +25,6 @@ final class NFTCollectionViewController: UIViewController {
         
         static let itemWidth: CGFloat = 108
         static let itemHeight: CGFloat = 192
-        
-        static let interItemSpacing: CGFloat = 10
-        static let lineSpacing: CGFloat = 8
-        
-        static let itemsPerRow: Int = 3
     }
     
     // MARK: - UI
@@ -37,6 +32,7 @@ final class NFTCollectionViewController: UIViewController {
     private let coverImageView = UIImageView()
     private let titleLabel = UILabel()
     private let authorLabel = UILabel()
+    private let webLabel = UILabel()
     private let descriptionLabel = UILabel()
     private let collectionView: UICollectionView
     private let activityIndicator = UIActivityIndicatorView(style: .large)
@@ -56,22 +52,20 @@ final class NFTCollectionViewController: UIViewController {
     // MARK: - Init
     init(collection: Catalog) {
         self.collection = collection
-
+        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumInteritemSpacing = CollectionLayout.interItemSpacing
-        layout.minimumLineSpacing = CollectionLayout.lineSpacing
+        layout.itemSize = CGSize(width: CollectionLayout.itemWidth, height: CollectionLayout.itemHeight)
+        layout.minimumLineSpacing = 12
         layout.sectionInset = UIEdgeInsets(
             top: 0,
             left: 0,
             bottom: CollectionLayout.collectionBottomInset,
             right: 0
         )
-
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         super.init(nibName: nil, bundle: nil)
     }
-
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -93,11 +87,37 @@ final class NFTCollectionViewController: UIViewController {
     
     private func applyCollectionHeader() {
         titleLabel.text = collection.name
-        authorLabel.text = collection.author
         descriptionLabel.text = collection.description
         coverImageView.image = UIImage(named: collection.cover)
+
+        configureAuthorLabels(with: collection.author)
     }
     
+    private func configureAuthorLabels(with text: String) {
+        let components = text.components(separatedBy: ":")
+        
+        guard components.count >= 2 else {
+            authorLabel.text = text
+            webLabel.text = nil
+            return
+        }
+        
+        let prefix = components[0] + ":"
+        let authorName = components[1].trimmingCharacters(in: .whitespaces)
+        authorLabel.text = prefix
+        webLabel.text = authorName
+    }
+    
+    private lazy var authorStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [authorLabel, webLabel])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.spacing = CollectionLayout.authorSpacing
+        return stack
+    }()
+
+
+
     // MARK: - Setup
     private func setupViews() {
         backButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
@@ -108,21 +128,33 @@ final class NFTCollectionViewController: UIViewController {
         coverImageView.clipsToBounds = true
         
         titleLabel.font = .systemFont(ofSize: 22, weight: .bold)
-        authorLabel.font = .systemFont(ofSize: 14, weight: .medium)
-        authorLabel.textColor = .secondaryLabel
         
-        descriptionLabel.font = .systemFont(ofSize: 14, weight: .regular)
-        descriptionLabel.textColor = .secondaryLabel
+        authorLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        authorLabel.textColor = .blackUniversal
+        
+        webLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        webLabel.textColor = .blueUniversal
+        webLabel.isUserInteractionEnabled = true
+        
+        descriptionLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        descriptionLabel.textColor = .blackUniversal
         descriptionLabel.numberOfLines = 0
         
         activityIndicator.hidesWhenStopped = true
-        
-        [backButton, coverImageView, titleLabel, authorLabel, descriptionLabel, collectionView, activityIndicator]
-            .forEach {
-                $0.translatesAutoresizingMaskIntoConstraints = false
-                view.addSubview($0)
-            }
+       
+        [backButton,
+         coverImageView,
+         titleLabel,
+         authorStack,
+         descriptionLabel,
+         collectionView,
+         activityIndicator
+        ].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
     }
+
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
@@ -140,9 +172,9 @@ final class NFTCollectionViewController: UIViewController {
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CollectionLayout.titleLeading),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: CollectionLayout.titeTrailing),
             
-            authorLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: CollectionLayout.authorTop),
-            authorLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            authorLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            authorStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: CollectionLayout.authorTop),
+                   authorStack.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+                   authorStack.trailingAnchor.constraint(lessThanOrEqualTo: titleLabel.trailingAnchor),
             
             descriptionLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: CollectionLayout.descriptionTop),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
@@ -220,49 +252,6 @@ private extension NFTCollectionViewController {
         return nil
     }
 }
-
-extension NFTCollectionViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        let itemsPerRow = CGFloat(CollectionLayout.itemsPerRow)
-        let interItemSpacing = CollectionLayout.interItemSpacing
-
-        let sectionInsets = UIEdgeInsets(
-            top: 0,
-            left: CollectionLayout.collectionLeading,
-            bottom: 0,
-            right: -CollectionLayout.collectionTrailing
-        )
-
-        let totalHorizontalInsets = sectionInsets.left + sectionInsets.right
-        let totalSpacing = interItemSpacing * (itemsPerRow - 1)
-
-        let availableWidth = collectionView.bounds.width - totalHorizontalInsets - totalSpacing
-        let itemWidth = floor(availableWidth / itemsPerRow)
-
-        return CGSize(width: itemWidth, height: CollectionLayout.itemHeight)
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumInteritemSpacingForSectionAt section: Int
-    ) -> CGFloat {
-        CollectionLayout.interItemSpacing
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAt section: Int
-    ) -> CGFloat {
-        CollectionLayout.lineSpacing
-    }
-}
-
 
 // MARK: - UICollectionViewDelegate
 extension NFTCollectionViewController: UICollectionViewDelegate {

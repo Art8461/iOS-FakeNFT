@@ -45,7 +45,6 @@ final class OrderNftMockProvider: OrderNftProvider {
 
 // MARK: - Мок-сервисы
 final class NftListMockService: NftListService {
-    // MVP: простой мок, чтобы не связывать view и источник данных.
     func loadNfts(ids: [String], completion: @escaping (Result<[Nft], Error>) -> Void) {
         let nfts = ids.map { id in
             Nft(
@@ -54,7 +53,7 @@ final class NftListMockService: NftListService {
                 rating: 4,
                 description: "Mock NFT for catalog demo.",
                 price: 1.0,
-                author: "Demo Author",
+                author: "Demo Author123",
                 id: id
             )
         }
