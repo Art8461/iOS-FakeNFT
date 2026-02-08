@@ -40,11 +40,17 @@ final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
     
     func didTapLike(nftId: String) {
         profileService.removeLike(nftId: nftId) { [weak self] result in
-            guard let self else { return }
-            if case .success = result {
-                self.favoritesNFTs.removeAll { $0.id == nftId }
-                DispatchQueue.main.async {
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.favoritesNFTs.removeAll { $0.id == nftId }
                     self.view?.showNFTs(self.favoritesNFTs)
+                case .failure(let error):
+                    print("Ошибка удаления лайка:", error)
+                    self.view?.showErrorRetry { [weak self] in
+                        self?.didTapLike(nftId: nftId)
+                    }
                 }
             }
         }
