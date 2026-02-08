@@ -76,8 +76,14 @@ final class NFTCollectionCell: UICollectionViewCell {
         priceLabel.text = viewModel.priceText
         imageView.image = viewModel.image
         
-        let favoriteImageName = viewModel.isFavorite ? "heart.fill" : "heart"
-        favoriteButton.setImage(UIImage(systemName: favoriteImageName), for: .normal)
+        if viewModel.isFavorite {
+            favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            favoriteButton.tintColor = .redUniversal
+        } else {
+            
+            favoriteButton.setImage(UIImage(named: "LikeNoActive"), for: .normal)
+            favoriteButton.tintColor = .clear
+        }
         
         let cartImageName = viewModel.inCart ? "BasketDel" : "BasketAdd"
         let cartImage = UIImage(named: cartImageName)
@@ -85,6 +91,7 @@ final class NFTCollectionCell: UICollectionViewCell {
         
         ratingView.setRating(viewModel.rating)
     }
+
     
     // MARK: - Setup
     private func setupViews() {
@@ -101,7 +108,8 @@ final class NFTCollectionCell: UICollectionViewCell {
         priceLabel.font = .systemFont(ofSize: 13, weight: .medium)
         
         favoriteButton.tintColor = .redUniversal
-        cartButton.tintColor = .blueUniversal
+
+        cartButton.tintColor = .blackUniversal
         
         [imageView, titleLabel, priceLabel, favoriteButton, cartButton, ratingView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
