@@ -23,6 +23,11 @@ final class NFTCollectionViewController: UIViewController {
         static let collectionBottom: CGFloat = -16
         static let collectionBottomInset: CGFloat = 16
         
+        static let interItemSpacing: CGFloat = 10
+        static let lineSpacing: CGFloat = 8
+        
+        static let itemsPerRow: Int = 3
+        
         static let itemWidth: CGFloat = 108
         static let itemHeight: CGFloat = 192
     }
@@ -55,18 +60,29 @@ final class NFTCollectionViewController: UIViewController {
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: CollectionLayout.itemWidth, height: CollectionLayout.itemHeight)
-        layout.minimumLineSpacing = 12
+        
+        let totalWidth = UIScreen.main.bounds.width
+        let horizontalInsets = CollectionLayout.collectionLeading + abs(CollectionLayout.collectionTrailing)
+        let availableWidth = totalWidth - horizontalInsets
+        
+        let totalSpacing = CGFloat(CollectionLayout.itemsPerRow - 1) * CollectionLayout.interItemSpacing
+        
+        let itemWidth = (availableWidth - totalSpacing) / CGFloat(CollectionLayout.itemsPerRow)
+        
+        layout.itemSize = CGSize(width: itemWidth, height: CollectionLayout.itemHeight)
+        layout.minimumInteritemSpacing = CollectionLayout.interItemSpacing
+        layout.minimumLineSpacing = CollectionLayout.lineSpacing
         layout.sectionInset = UIEdgeInsets(
             top: 0,
             left: 0,
             bottom: CollectionLayout.collectionBottomInset,
             right: 0
         )
+        
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
