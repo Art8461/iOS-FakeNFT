@@ -33,18 +33,18 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     }
     
     func viewDidLoad() {
-        loadPProfile()
+        loadProfile()
     }
     
     func viewWillAppear() {
         if hasLoadedInitially {
-            loadPProfile()
+            loadProfile()
         } else {
             hasLoadedInitially = true
         }
     }
     
-    func loadPProfile() {
+    func loadProfile() {
         service.fetchProfile { [weak self] result in
             switch result {
             case .success(let profile):
