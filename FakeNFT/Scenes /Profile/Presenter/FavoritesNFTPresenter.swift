@@ -43,7 +43,9 @@ final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
             guard let self else { return }
             if case .success = result {
                 self.favoritesNFTs.removeAll { $0.id == nftId }
-                self.view?.showNFTs(self.favoritesNFTs)
+                DispatchQueue.main.async {
+                    self.view?.showNFTs(self.favoritesNFTs)
+                }
             }
         }
     }

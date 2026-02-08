@@ -8,12 +8,14 @@
 import Foundation
 
 protocol ProfileServiceProtocol {
-    func fetchProfile(completion: @escaping (Result<ProfileResponse, Error>) -> Void)
-    
-    func updateProfile(_ model: ProfileEditModel, currentProfile: ProfileResponse,
-                       completion: @escaping (Result<ProfileResponse, Error>) -> Void)
-    func addLike(nftId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void)
-    func removeLike(nftId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void)
+    func fetchProfile(completion: @escaping (Result<ProfileResponse, ProfileNetworkError>) -> Void)
+    func updateProfile(
+        _ model: ProfileEditModel,
+        currentProfile: ProfileResponse,
+        completion: @escaping (Result<ProfileResponse, ProfileNetworkError>) -> Void
+    )
+    func addLike(nftId: String, completion: @escaping (Result<ProfileResponse, ProfileNetworkError>) -> Void)
+    func removeLike(nftId: String, completion: @escaping (Result<ProfileResponse, ProfileNetworkError>) -> Void)
 }
 
 final class ProfileService: ProfileServiceProtocol {
@@ -24,15 +26,28 @@ final class ProfileService: ProfileServiceProtocol {
         self.networkClient = networkClient
     }
     
-    func fetchProfile(completion: @escaping (Result<ProfileResponse, Error>) -> Void) {
+    func fetchProfile(completion: @escaping (Result<ProfileResponse, ProfileNetworkError>) -> Void) {
         let request = ProfileRequest()
-        networkClient.send(request: request, type: ProfileResponse.self, onResponse: completion)
+        Logger.shared.log("Запрос профиля...", level: .info)
+        
+        networkClient.send(request: request, type: ProfileResponse.self) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let profile):
+                    Logger.shared.logSuccess("Профиль загружен")
+                    completion(.success(profile))
+                case .failure(let error):
+                    Logger.shared.logError("Ошибка загрузки профиля: \(error.localizedDescription)")
+                    completion(.failure(.network(error.localizedDescription)))
+                }
+            }
+        }
     }
     
     func updateProfile(
         _ model: ProfileEditModel,
         currentProfile: ProfileResponse,
-        completion: @escaping (Result<ProfileResponse, Error>) -> Void
+        completion: @escaping (Result<ProfileResponse, ProfileNetworkError>) -> Void
     ) {
         let dto = UpdateProfileDto(
             name: model.name,
@@ -41,28 +56,35 @@ final class ProfileService: ProfileServiceProtocol {
             website: model.site,
             likes: currentProfile.likes
         )
-        
         let request = UpdateProfileRequest(dtoData: dto)
+        Logger.shared.log("Обновление профиля...", level: .info)
         
-        networkClient.send(
-            request: request,
-            type: ProfileResponse.self,
-            onResponse: completion
-        )
+        networkClient.send(request: request, type: ProfileResponse.self) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let profile):
+                    Logger.shared.logSuccess("Профиль обновлен")
+                    completion(.success(profile))
+                case .failure(let error):
+                    Logger.shared.logError("Ошибка обновления профиля: \(error.localizedDescription)")
+                    completion(.failure(.network(error.localizedDescription)))
+                }
+            }
+        }
     }
     
-    func addLike(nftId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void) {
+    func addLike(nftId: String, completion: @escaping (Result<ProfileResponse, ProfileNetworkError>) -> Void) {
         modifyLike(nftId: nftId, add: true, completion: completion)
     }
     
-    func removeLike(nftId: String, completion: @escaping (Result<ProfileResponse, Error>) -> Void) {
+    func removeLike(nftId: String, completion: @escaping (Result<ProfileResponse, ProfileNetworkError>) -> Void) {
         modifyLike(nftId: nftId, add: false, completion: completion)
     }
     
     private func modifyLike(
         nftId: String,
         add: Bool,
-        completion: @escaping (Result<ProfileResponse, Error>) -> Void
+        completion: @escaping (Result<ProfileResponse, ProfileNetworkError>) -> Void
     ) {
         fetchProfile { [weak self] result in
             guard let self = self else { return }
@@ -74,6 +96,7 @@ final class ProfileService: ProfileServiceProtocol {
                 } else {
                     likes.removeAll { $0 == nftId }
                 }
+                
                 let dto = UpdateProfileDto(
                     name: profile.name,
                     description: profile.description,
@@ -82,9 +105,24 @@ final class ProfileService: ProfileServiceProtocol {
                     likes: likes
                 )
                 let request = UpdateProfileRequest(dtoData: dto)
-                self.networkClient.send(request: request, type: ProfileResponse.self, onResponse: completion)
+                Logger.shared.log("\(add ? "Добавление" : "Удаление") лайка NFT \(nftId)...", level: .info)
+                
+                self.networkClient.send(request: request, type: ProfileResponse.self) { result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let profile):
+                            Logger.shared.logSuccess("Лайк успешно \(add ? "добавлен" : "удален")")
+                            completion(.success(profile))
+                        case .failure(let error):
+                            Logger.shared.logError("Ошибка изменения лайка: \(error.localizedDescription)")
+                            completion(.failure(.network(error.localizedDescription)))
+                        }
+                    }
+                }
+                
             case .failure(let error):
-                completion(.failure(error))
+                Logger.shared.logError("Ошибка при получении профиля перед лайком: \(error.localizedDescription)")
+                completion(.failure(.network(error.localizedDescription)))
             }
         }
     }

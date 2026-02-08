@@ -60,6 +60,7 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
     func didSelectSortOption(_ option: Sorting) {
         applySorting(option)
     }
+    
     private func applySorting(_ sorting: Sorting) {
         currentSorting = sorting
         Sorting.save(sorting)
@@ -72,8 +73,11 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
         case .name:
             nfts.sort { $0.name < $1.name }
         }
-        
-        view?.showNFTs(nfts, likedIds: Array(likedIds), currentSorting: currentSorting)
+        DispatchQueue.main.async {
+            self.view?.showNFTs(self.nfts,
+                                likedIds: Array(self.likedIds),
+                                currentSorting: self.currentSorting)
+        }
     }
     
     private func loadMyNFTs(ids: [String]) {
@@ -109,7 +113,10 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
                 }
             }
         }
-        view?.showNFTs(nfts, likedIds: Array(likedIds), currentSorting: currentSorting)
+        DispatchQueue.main.async {
+            self.view?.showNFTs(self.nfts,
+                                likedIds: Array(self.likedIds),
+                                currentSorting: self.currentSorting)
+        }
     }
 }
-
