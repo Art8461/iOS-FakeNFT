@@ -12,6 +12,7 @@ import UIKit
 protocol FavoritesNFTViewProtocol: AnyObject {
     func closeScreen()
     func showNFTs(_ nfts: [NFTCartModel])
+    func showErrorRetry(_ retryAction: @escaping () -> Void)
 }
 
 // MARK: - FavoritesNFTViewController
@@ -26,7 +27,7 @@ final class FavoritesNFTViewController: UIViewController {
     
     // MARK: - UI
     
-    private lazy var loader = UIActivityIndicatorView.baseLoader()
+    private lazy var loader: UIActivityIndicatorView = .baseLoader(in: view)
     
     private lazy var emptyFavoritesLabel =
     UILabel.emptyStateLabel(text: NSLocalizedString("ProfileFavLable", comment: "emptyLabel"))
@@ -82,20 +83,17 @@ final class FavoritesNFTViewController: UIViewController {
     }
     
     private func addSubviews() {
-        [loader, emptyFavoritesLabel, favoritesNFTCollection].forEach {
+        [emptyFavoritesLabel, favoritesNFTCollection].forEach {
             view.addSubview($0)
         }
     }
     
     private func setupConstraints() {
-        [loader,emptyFavoritesLabel, favoritesNFTCollection].forEach {
+        [emptyFavoritesLabel, favoritesNFTCollection].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
-            loader.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loader.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            
             emptyFavoritesLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyFavoritesLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
@@ -128,7 +126,6 @@ final class FavoritesNFTViewController: UIViewController {
     
     @objc private func tapBackButton() {
         presenter.didTapBack()
-        print("назад на главный экран")
     }
 }
 
@@ -191,5 +188,9 @@ extension FavoritesNFTViewController: FavoritesNFTViewProtocol {
     
     func closeScreen() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    func showErrorRetry(_ retryAction: @escaping () -> Void) {
+        self.presentErrorRetry(retryAction)
     }
 }

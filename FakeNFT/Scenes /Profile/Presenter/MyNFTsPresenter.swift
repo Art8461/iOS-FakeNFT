@@ -39,8 +39,12 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
             case .success(let profile):
                 self.likedIds = Set(profile.likes)
                 self.loadMyNFTs(ids: profile.nfts)
-            case .failure(let error):
-                print("Ошибка загрузки профиля:", error)
+            case .failure:
+                DispatchQueue.main.async {
+                    self.view?.showErrorRetry { [weak self] in
+                        self?.viewDidLoad()
+                    }
+                }
             }
         }
     }
@@ -56,6 +60,7 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
     func didSelectSortOption(_ option: Sorting) {
         applySorting(option)
     }
+    
     private func applySorting(_ sorting: Sorting) {
         currentSorting = sorting
         Sorting.save(sorting)
@@ -68,8 +73,11 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
         case .name:
             nfts.sort { $0.name < $1.name }
         }
-        
-        view?.showNFTs(nfts, likedIds: Array(likedIds), currentSorting: currentSorting)
+        DispatchQueue.main.async {
+            self.view?.showNFTs(self.nfts,
+                                likedIds: Array(self.likedIds),
+                                currentSorting: self.currentSorting)
+        }
     }
     
     private func loadMyNFTs(ids: [String]) {
@@ -79,29 +87,55 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
             case .success(let nfts):
                 self.nfts = nfts
                 self.applySorting(self.currentSorting)
-            case .failure(let error):
-                print("Ошибка загрузки NFT:", error)
+            case .failure:
+                DispatchQueue.main.async {
+                    self.view?.showErrorRetry { [weak self] in
+                        self?.viewDidLoad()
+                    }
+                }
             }
         }
     }
     
     func didTapLike(nftId: String) {
-        if likedIds.contains(nftId) {
+        let wasLiked = likedIds.contains(nftId)
+        if wasLiked {
             likedIds.remove(nftId)
-            profileService.removeLike(nftId: nftId) { result in
-                if case .failure(let error) = result {
-                    print("Ошибка удаления лайка:", error)
-                }
-            }
         } else {
             likedIds.insert(nftId)
-            profileService.addLike(nftId: nftId) { result in
-                if case .failure(let error) = result {
-                    print("Ошибка добавления лайка:", error)
+        }
+        DispatchQueue.main.async {
+            self.view?.showNFTs(self.nfts,
+                                likedIds: Array(self.likedIds),
+                                currentSorting: self.currentSorting)
+        }
+        let completion: (Result<ProfileResponse, ProfileNetworkError>) -> Void = { [weak self] result in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    break
+                case .failure(let error):
+                    if wasLiked {
+                        self.likedIds.insert(nftId)
+                    } else {
+                        self.likedIds.remove(nftId)
+                    }
+                    self.view?.showNFTs(self.nfts,
+                                        likedIds: Array(self.likedIds),
+                                        currentSorting: self.currentSorting)
+                    self.view?.showErrorRetry { [weak self] in
+                        self?.didTapLike(nftId: nftId)
+                    }
+                    
+                    print("Ошибка лайка:", error)
                 }
             }
         }
-        view?.showNFTs(nfts, likedIds: Array(likedIds), currentSorting: currentSorting)
+        if wasLiked {
+            profileService.removeLike(nftId: nftId, completion: completion)
+        } else {
+            profileService.addLike(nftId: nftId, completion: completion)
+        }
     }
 }
-

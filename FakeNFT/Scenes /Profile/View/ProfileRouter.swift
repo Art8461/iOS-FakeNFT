@@ -15,7 +15,6 @@ protocol ProfileRouterProtocol: AnyObject {
     func showWebView(url: URL)
 }
 
-
 final class ProfileRouter: ProfileRouterProtocol {
     
     private let services: ServicesAssembly
@@ -40,6 +39,7 @@ final class ProfileRouter: ProfileRouterProtocol {
     }
     
     func showProfileEdit(model: ProfileEditModel, profile: ProfileResponse) {
+        Logger.shared.log("Open Edit Profile")
         let presenter = ProfileEditPresenter(
             model: model,
             currentProfile: profile,
@@ -52,6 +52,7 @@ final class ProfileRouter: ProfileRouterProtocol {
     }
     
     func showMyNFTs() {
+        Logger.shared.log("Open MyNFTs screen")
         let presenter = MyNFTsPresenter(
             profileService: services.profileService,
             myNFTsService: services.myNFTsService
@@ -63,6 +64,7 @@ final class ProfileRouter: ProfileRouterProtocol {
     }
     
     func showFavoritesNFTs() {
+        Logger.shared.log("Open Favorites screen")
         let presenter = FavoritesNFTPresenter(
             profileService: services.profileService,
             myNFTsService: services.myNFTsService
@@ -74,6 +76,7 @@ final class ProfileRouter: ProfileRouterProtocol {
     }
     
     func showWebView(url: URL) {
+        Logger.shared.log("Open WebView")
         let presenter = WebViewPresenter()
         let vc = WebViewProfile(url: url, presenter: presenter)
         presenter.view = vc

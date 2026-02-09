@@ -7,8 +7,8 @@
 
 import Foundation
 
-protocol WebViewViewProtocol: AnyObject {
-    func closeWebView()
+protocol WebViewPresenterProtocol: AnyObject {
+    func didTapBack()
 }
 
 final class WebViewPresenter: WebViewPresenterProtocol {

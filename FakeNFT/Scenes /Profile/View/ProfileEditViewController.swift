@@ -16,6 +16,8 @@ protocol ProfileEditViewProtocol: AnyObject {
     func showAvatarAlert()
     func showPhotoLinkAlert()
     func enableSaveButton(_ enable: Bool)
+    func showSaveErrorAlert(retryAction: @escaping () -> Void)
+    func setLoading(_ isLoading: Bool)
 }
 
 // MARK: - ProfileEditViewController
@@ -28,6 +30,8 @@ final class ProfileEditViewController: UIViewController {
     private var currentAvatarURL: URL?
     
     // MARK: - UI
+    
+    private lazy var loader: UIActivityIndicatorView = .baseLoader(in: view)
     
     private lazy var avatarButton: UIButton = {
         let button = UIButton(type: .custom)
@@ -190,6 +194,16 @@ final class ProfileEditViewController: UIViewController {
         saveButton.isHidden = false
     }
     
+    private func startLoading() {
+        loader.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+
+    private func stopLoading() {
+        loader.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
+    
     @objc private func tapSaveButton() {
         presenter.didTapSave(
             name: nameTextView.text,
@@ -286,6 +300,17 @@ extension ProfileEditViewController: ProfileEditViewProtocol {
         saveButton.isHidden = true
     }
     
+    func showSaveErrorAlert(retryAction: @escaping () -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            self?.presentErrorRetry(retryAction)
+        }
+    }
+    
+    func setLoading(_ isLoading: Bool) {
+        DispatchQueue.main.async {
+            isLoading ? self.startLoading() : self.stopLoading()
+        }
+    }
 }
 
 extension ProfileEditViewController: UITextViewDelegate {

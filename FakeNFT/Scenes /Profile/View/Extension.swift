@@ -16,6 +16,24 @@ extension UIViewController {
             .foregroundColor: UIColor.blackApp
         ]
     }
+    
+    func presentErrorRetry (_ retryAction: @escaping () -> Void) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(
+                title: NSLocalizedString("Error.network" , comment: ""),
+                message: nil,
+                preferredStyle: .alert
+            )
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Error.repeat" , comment: ""), style: .default) { _ in
+                retryAction()
+            })
+            
+            alert.addAction(UIAlertAction(title: NSLocalizedString("ProfileCancel" , comment: "alert"), style: .cancel))
+            
+            self.present(alert, animated: true)
+        }
+    }
 }
 
 // MARK: - UIImageView
@@ -166,10 +184,17 @@ extension UIBarButtonItem {
 // MARK: - UIActivityIndicatorView
 
 extension UIActivityIndicatorView {
-    static func baseLoader(style: UIActivityIndicatorView.Style = .large) -> UIActivityIndicatorView {
-        let loader = UIActivityIndicatorView(style: .large)
+    static func baseLoader(style: UIActivityIndicatorView.Style = .large, in view: UIView) -> UIActivityIndicatorView {
+        let loader = UIActivityIndicatorView(style: style)
         loader.hidesWhenStopped = true
         loader.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(loader)
+        
+        NSLayoutConstraint.activate([
+            loader.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loader.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
         return loader
     }
 }

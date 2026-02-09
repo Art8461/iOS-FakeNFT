@@ -40,10 +40,18 @@ final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
     
     func didTapLike(nftId: String) {
         profileService.removeLike(nftId: nftId) { [weak self] result in
-            guard let self else { return }
-            if case .success = result {
-                self.favoritesNFTs.removeAll { $0.id == nftId }
-                self.view?.showNFTs(self.favoritesNFTs)
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self.favoritesNFTs.removeAll { $0.id == nftId }
+                    self.view?.showNFTs(self.favoritesNFTs)
+                case .failure(let error):
+                    print("Ошибка удаления лайка:", error)
+                    self.view?.showErrorRetry { [weak self] in
+                        self?.didTapLike(nftId: nftId)
+                    }
+                }
             }
         }
     }
@@ -54,8 +62,12 @@ final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
             switch result {
             case .success(let profile):
                 self.loadNFTs(ids: profile.likes)
-            case . failure(let error):
-                print("Ошибка закгрузки likes: \(error)")
+            case .failure:
+                DispatchQueue.main.async {
+                    self.view?.showErrorRetry { [weak self] in
+                        self?.viewDidLoad()
+                    }
+                }
             }
         }
     }
@@ -69,8 +81,12 @@ final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
                 DispatchQueue.main.async {
                     self.view?.showNFTs(self.favoritesNFTs)
                 }
-            case .failure(let error):
-                print("Ошибка NFT:", error)
+            case .failure:
+                DispatchQueue.main.async {
+                    self.view?.showErrorRetry { [weak self] in
+                        self?.loadNFTs(ids: ids)
+                    }
+                }
             }
         }
     }

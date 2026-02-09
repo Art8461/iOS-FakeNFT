@@ -12,6 +12,8 @@ import Kingfisher
 
 protocol ProfileViewProtocol: AnyObject {
     func updateProfile(_ profile: ProfileResponse)
+    func showErrorRetry(_ retryAction: @escaping () -> Void)
+    func showLoading(_ isLoading: Bool)
 }
 
 // MARK: - ProfileViewController
@@ -30,7 +32,7 @@ final class ProfileViewController: UIViewController {
     
     // MARK: - UI
     
-    private lazy var loader = UIActivityIndicatorView.baseLoader()
+    private lazy var loader: UIActivityIndicatorView = .baseLoader(in: view)
     
     private lazy var editButton: UIBarButtonItem = {
         let image = UIImage(resource: .squareAndPencil)
@@ -129,7 +131,7 @@ final class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         showLoading(true)
-        presenter.viewDidLoad()
+        presenter.viewWillAppear()
     }
     
     // MARK: - Setup
@@ -139,14 +141,12 @@ final class ProfileViewController: UIViewController {
     }
     
     private func addSubviews() {
-        [loader, bigStack, profileTableView].forEach { view.addSubview($0) }
+        [bigStack, profileTableView].forEach { view.addSubview($0) }
     }
     
     private func setupConstraints() {
-        [loader, bigStack, profileTableView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [bigStack, profileTableView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
-            loader.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loader.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             bigStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             bigStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -178,23 +178,10 @@ final class ProfileViewController: UIViewController {
         }
     }
     
-    private func showLoading(_ isLoading: Bool) {
-        if isLoading {
-            loader.startAnimating()
-            bigStack.isHidden = true
-            profileTableView.isHidden = true
-        } else {
-            loader.stopAnimating()
-            bigStack.isHidden = false
-            profileTableView.isHidden = false
-        }
-    }
-    
     // MARK: - Actions
     
     @objc private func tapEditButton() {
         presenter.didTapEdit()
-        print("переход к экрану редактирования профиля")
     }
     
     @objc private func tapWebSiteLabel() {
@@ -238,10 +225,8 @@ extension ProfileViewController: UITableViewDelegate {
         switch item.type {
         case .myNFT:
             presenter.openMyNFTs()
-            print("Переход к экрану Мои NFT")
         case .myFavorites:
             presenter.openFavoritesNFT()
-            print("Переход к экрану Избранные NFT")
         }
     }
 }
@@ -265,5 +250,20 @@ extension ProfileViewController: ProfileViewProtocol {
         ]
         profileTableView.reloadData()
     }
-
+    
+    func showLoading(_ isLoading: Bool) {
+        if isLoading {
+            loader.startAnimating()
+            bigStack.isHidden = true
+            profileTableView.isHidden = true
+        } else {
+            loader.stopAnimating()
+            bigStack.isHidden = false
+            profileTableView.isHidden = false
+        }
+    }
+    
+    func showErrorRetry(_ retryAction: @escaping () -> Void) {
+        self.presentErrorRetry(retryAction)
+    }
 }
