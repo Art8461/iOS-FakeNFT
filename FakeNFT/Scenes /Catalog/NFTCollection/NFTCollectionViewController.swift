@@ -41,6 +41,9 @@ final class NFTCollectionViewController: UIViewController {
     private let descriptionLabel = UILabel()
     private let collectionView: UICollectionView
     private let activityIndicator = UIActivityIndicatorView(style: .large)
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    private var collectionHeightConstraint: NSLayoutConstraint?
     
     private let collection: Catalog
     
@@ -82,7 +85,7 @@ final class NFTCollectionViewController: UIViewController {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -101,11 +104,31 @@ final class NFTCollectionViewController: UIViewController {
         output?.viewDidLoad()
     }
     
+    private func updateCollectionHeight() {
+        collectionView.layoutIfNeeded()
+        collectionHeightConstraint?.constant = collectionView.collectionViewLayout.collectionViewContentSize.height
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateCollectionHeight()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+
     private func applyCollectionHeader() {
         titleLabel.text = collection.name
         descriptionLabel.text = collection.description
         coverImageView.image = UIImage(named: collection.cover)
-
+        
         configureAuthorLabels(with: collection.author)
     }
     
@@ -131,80 +154,103 @@ final class NFTCollectionViewController: UIViewController {
         stack.spacing = CollectionLayout.authorSpacing
         return stack
     }()
-
-
-
+    
+    
+    
     // MARK: - Setup
     private func setupViews() {
         backButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
         backButton.tintColor = .label
         backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
-        
+
         coverImageView.contentMode = .scaleAspectFill
         coverImageView.clipsToBounds = true
-        
+
         titleLabel.font = .systemFont(ofSize: 22, weight: .bold)
-        
+
         authorLabel.font = .systemFont(ofSize: 13, weight: .regular)
         authorLabel.textColor = .blackUniversal
-        
+
         webLabel.font = .systemFont(ofSize: 15, weight: .regular)
         webLabel.textColor = .blueUniversal
         webLabel.isUserInteractionEnabled = true
-        
+
         descriptionLabel.font = .systemFont(ofSize: 13, weight: .regular)
         descriptionLabel.textColor = .blackUniversal
         descriptionLabel.numberOfLines = 0
-        
+
         activityIndicator.hidesWhenStopped = true
-       
+
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.alwaysBounceVertical = true
+        view.addSubview(scrollView)
+
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+
         [backButton,
          coverImageView,
          titleLabel,
          authorStack,
          descriptionLabel,
-         collectionView,
-         activityIndicator
+         collectionView
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0)
+            contentView.addSubview($0)
         }
+
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(activityIndicator)
     }
 
-    
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: CollectionLayout.backButtonTop),
-            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CollectionLayout.backButtonLeading),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
+
+            backButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: CollectionLayout.backButtonTop),
+            backButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CollectionLayout.backButtonLeading),
             backButton.widthAnchor.constraint(equalToConstant: CollectionLayout.backButtonSize),
             backButton.heightAnchor.constraint(equalToConstant: CollectionLayout.backButtonSize),
-            
+
             coverImageView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 8),
-            coverImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            coverImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            coverImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            coverImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             coverImageView.heightAnchor.constraint(equalToConstant: CollectionLayout.coverImageHeight),
-            
+
             titleLabel.topAnchor.constraint(equalTo: coverImageView.bottomAnchor, constant: CollectionLayout.titleTop),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CollectionLayout.titleLeading),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: CollectionLayout.titeTrailing),
-            
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CollectionLayout.titleLeading),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: CollectionLayout.titeTrailing),
+
             authorStack.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: CollectionLayout.authorTop),
-                   authorStack.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-                   authorStack.trailingAnchor.constraint(lessThanOrEqualTo: titleLabel.trailingAnchor),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: CollectionLayout.descriptionTop),
+            authorStack.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            authorStack.trailingAnchor.constraint(lessThanOrEqualTo: titleLabel.trailingAnchor),
+
+            descriptionLabel.topAnchor.constraint(equalTo: authorStack.bottomAnchor, constant: CollectionLayout.descriptionTop),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            
+
             collectionView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: CollectionLayout.collectionTop),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: CollectionLayout.collectionLeading),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: CollectionLayout.collectionTrailing),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: CollectionLayout.collectionBottom),
-            
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: CollectionLayout.collectionLeading),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: CollectionLayout.collectionTrailing),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: CollectionLayout.collectionBottom),
+
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+
+        collectionHeightConstraint = collectionView.heightAnchor.constraint(equalToConstant: 1)
+        collectionHeightConstraint?.isActive = true
     }
+
     
     private func setupCollection() {
         collectionView.backgroundColor = .clear
@@ -315,6 +361,7 @@ extension NFTCollectionViewController: NFTCollectionViewInput {
     func updateNfts(_ nfts: [Nft]) {
         self.nfts = nfts
         collectionView.reloadData()
+        updateCollectionHeight()
     }
     
     func updateFavorites(_ favorites: [String]) {
@@ -327,6 +374,7 @@ extension NFTCollectionViewController: NFTCollectionViewInput {
         collectionView.reloadData()
     }
 }
+
 
 
 
