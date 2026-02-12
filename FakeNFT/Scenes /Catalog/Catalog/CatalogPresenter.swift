@@ -1,16 +1,18 @@
-import Foundation
+import UIKit
 
 final class CatalogPresenter {
-    private weak var view: CatalogViewInput?
-   
+    weak var view: CatalogViewInput?
     private let catalogProvider: CatalogProviderProtocol
+    private let router: CatalogRouterInput
     
     private var catalog: [Catalog] = []
     
-    init(view: CatalogViewInput,
-         catalogProvider: CatalogProviderProtocol) {
-        self.view = view
+    init(
+        catalogProvider: CatalogProviderProtocol,
+        router: CatalogRouterInput
+    ) {
         self.catalogProvider = catalogProvider
+        self.router = router
     }
 }
 
@@ -31,15 +33,15 @@ extension CatalogPresenter: CatalogViewOutput {
     }
     
     func didSelectItem(at index: Int) {
-//        let item = catalog[index]
-       
+        let item = catalog[index]
+        router.openCollection(item)
     }
 }
+
 
 // MARK: - Private Methods
 private extension CatalogPresenter {
     
-    // CatalogPresenter.swift
     func loadData() {
         view?.setLoading(true)
         
@@ -54,6 +56,44 @@ private extension CatalogPresenter {
         } catch {
             self.view?.showError(error)
         }
+    }
+}
+
+// MARK: - Catalog Router
+final class CatalogRouter: CatalogRouterInput {
+    weak var viewController: UIViewController?
+    private let servicesAssembly: ServicesAssembly
+
+    init(servicesAssembly: ServicesAssembly) {
+        self.servicesAssembly = servicesAssembly
+    }
+
+    func openCollection(_ collection: Catalog) {
+        let builder = NFTCollectionModuleBuilder(servicesAssembly: servicesAssembly)
+        let collectionVC = builder.build(with: collection)
+        viewController?.navigationController?.pushViewController(collectionVC, animated: true)
+    }
+}
+
+// MARK: - Catalog Assembly
+final class CatalogAssembly {
+    private let servicesAssembly: ServicesAssembly
+
+    init(servicesAssembly: ServicesAssembly) {
+        self.servicesAssembly = servicesAssembly
+    }
+
+    func build() -> UIViewController {
+        let router = CatalogRouter(servicesAssembly: servicesAssembly)
+        let presenter = CatalogPresenter(
+            catalogProvider: servicesAssembly.catalogProvider,
+            router: router
+        )
+        let viewController = CatalogViewController(output: presenter)
+        presenter.view = viewController
+        router.viewController = viewController
+
+        return viewController
     }
 }
 

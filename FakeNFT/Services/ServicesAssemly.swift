@@ -17,6 +17,15 @@ final class ServicesAssembly {
             storage: nftStorage
         )
     }
-    var catalogProvider: CatalogProviderProtocol { CatalogMockProvider() }
-
+    var catalogProvider: CatalogProviderProtocol {
+        CatalogMockProvider()
+    }
+    
+    var favoriteNftProvider: FavoriteNftProvider {
+          FavoriteNftMockProvider()
+      }
+    
+    var orderNftProvider: OrderNftProvider {
+        OrderNftMockProvider()
+    }
 }
