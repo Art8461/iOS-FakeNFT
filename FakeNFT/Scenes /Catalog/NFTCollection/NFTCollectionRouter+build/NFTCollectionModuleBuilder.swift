@@ -19,12 +19,13 @@ final class NFTCollectionModuleBuilder {
         )
         let presenter = NFTCollectionPresenter(
             view: viewController,
-            nftService: NftListMockService(),
+            nftService: servicesAssembly.nftListService,
             favoriteService: FavoriteNftMockService(storage: servicesAssembly.favoriteNftProvider),
             orderService: OrderNftMockService(storage: servicesAssembly.orderNftProvider),
             router: router,
             nftIds: collection.nfts
         )
+
         viewController.output = presenter
         return viewController
     }

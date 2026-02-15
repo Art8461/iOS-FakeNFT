@@ -68,7 +68,7 @@ final class NFTCollectionCell: UICollectionViewCell {
         let isFavorite: Bool
         let inCart: Bool
         let image: UIImage?
-        let rating: Int 
+        let rating: Int
     }
     
     func configure(with viewModel: ViewModel) {
@@ -171,5 +171,3 @@ final class NFTCollectionCell: UICollectionViewCell {
         delegate?.nftCellDidTapCart(self)
     }
 }
-
-#warning("Цена НФТ в ячейке будет правильно расположена, когда будут подключены сетевые данные (Сейчас из за мок данных цена сьехала). Если я ошибаюсь, то скажите в гидхабе как лечше исправить")

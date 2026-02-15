@@ -12,11 +12,13 @@ final class ServicesAssembly {
     }
 
     var nftService: NftService {
-        NftServiceImpl(
-            networkClient: networkClient,
-            storage: nftStorage
-        )
+        NftServiceImpl(client: networkClient)
     }
+    
+    var nftListService: NftListService {
+        NftListNetworkService(networkClient: networkClient)
+    }
+
     var catalogProvider: CatalogProviderProtocol {
         CatalogMockProvider()
     }

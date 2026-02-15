@@ -56,6 +56,9 @@ final class NFTCollectionViewController: UIViewController {
     private var nfts: [Nft] = []
     private var favorites: Set<String> = []
     private var itemsInCart: Set<String> = []
+    private var imageCache: [String: UIImage] = [:]
+    private var imageLoading: Set<String> = []
+
     
     // MARK: - Init
     init(collection: Catalog) {
@@ -174,6 +177,7 @@ final class NFTCollectionViewController: UIViewController {
         webLabel.font = .systemFont(ofSize: 15, weight: .regular)
         webLabel.textColor = .blueUniversal
         webLabel.isUserInteractionEnabled = true
+        webLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(webTapped)))
 
         descriptionLabel.font = .systemFont(ofSize: 13, weight: .regular)
         descriptionLabel.textColor = .blackUniversal
@@ -263,6 +267,18 @@ final class NFTCollectionViewController: UIViewController {
     @objc private func backTapped() {
         output?.didTapBack()
     }
+    
+    @objc private func webTapped() {
+        if let url = URL(string: "https://practicum.yandex.ru/catalog/programming/?from=main_programming_card&searchText=ios") {
+            let vc = WebViewController(url: url)
+
+            let nav = UINavigationController(rootViewController: vc)
+            nav.modalPresentationStyle = .fullScreen
+            (tabBarController ?? self).present(nav, animated: true)
+        }
+    }
+
+    
 }
 
 // MARK: - UICollectionViewDataSource
@@ -285,21 +301,44 @@ extension NFTCollectionViewController: UICollectionViewDataSource {
         let nft = nfts[indexPath.item]
         let isFavorite = favorites.contains(nft.id)
         let inCart = itemsInCart.contains(nft.id)
-        
+
         let viewModel = NFTCollectionCell.ViewModel(
             title: nft.name,
             author: nft.author,
-            priceText:  String(nft.price),
+            priceText: String(format: "%.2f", nft.price),
             isFavorite: isFavorite,
             inCart: inCart,
-            image: Self.makeImage(from: nft.images.first),
+            image: imageCache[nft.id],
             rating: nft.rating
         )
-        
+
         cell.configure(with: viewModel)
         cell.delegate = self
+
+        loadImageIfNeeded(for: nft, at: indexPath)
+
         return cell
     }
+    
+    private func loadImageIfNeeded(for nft: Nft, at indexPath: IndexPath) {
+        guard imageCache[nft.id] == nil else { return }
+        guard imageLoading.insert(nft.id).inserted else { return }
+        guard let first = nft.images.first, let url = URL(string: first) else {
+            imageLoading.remove(nft.id)
+            return
+        }
+
+        ImageLoader.shared.load(url) { [weak self] image in
+            guard let self else { return }
+            self.imageLoading.remove(nft.id)
+
+            if let image {
+                self.imageCache[nft.id] = image
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+        }
+    }
+
 }
 
 private extension NFTCollectionViewController {
