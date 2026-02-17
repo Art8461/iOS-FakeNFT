@@ -74,9 +74,10 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
             nfts.sort { $0.name < $1.name }
         }
         DispatchQueue.main.async {
-            self.view?.showNFTs(self.nfts,
-                                likedIds: Array(self.likedIds),
-                                currentSorting: self.currentSorting)
+            self.view?.showNFTs(
+                self.nfts,
+                likedIds: Array(self.likedIds),
+                currentSorting: self.currentSorting)
         }
     }
     
@@ -105,9 +106,10 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
             likedIds.insert(nftId)
         }
         DispatchQueue.main.async {
-            self.view?.showNFTs(self.nfts,
-                                likedIds: Array(self.likedIds),
-                                currentSorting: self.currentSorting)
+            self.view?.showNFTs(
+                self.nfts,
+                likedIds: Array(self.likedIds),
+                currentSorting: self.currentSorting)
         }
         let completion: (Result<ProfileResponse, ProfileNetworkError>) -> Void = { [weak self] result in
             guard let self = self else { return }
@@ -121,9 +123,10 @@ final class MyNFTsPresenter: MyNFTsPresenterProtocol {
                     } else {
                         self.likedIds.remove(nftId)
                     }
-                    self.view?.showNFTs(self.nfts,
-                                        likedIds: Array(self.likedIds),
-                                        currentSorting: self.currentSorting)
+                    self.view?.showNFTs(
+                        self.nfts,
+                        likedIds: Array(self.likedIds),
+                        currentSorting: self.currentSorting)
                     self.view?.showErrorRetry { [weak self] in
                         self?.didTapLike(nftId: nftId)
                     }

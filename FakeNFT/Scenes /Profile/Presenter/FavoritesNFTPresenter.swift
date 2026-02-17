@@ -40,7 +40,7 @@ final class FavoritesNFTPresenter: FavoritesNFTPresenterProtocol {
     
     func didTapLike(nftId: String) {
         profileService.removeLike(nftId: nftId) { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .success:

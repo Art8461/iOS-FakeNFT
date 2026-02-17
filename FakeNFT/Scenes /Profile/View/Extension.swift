@@ -17,7 +17,7 @@ extension UIViewController {
         ]
     }
     
-    func presentErrorRetry (_ retryAction: @escaping () -> Void) {
+    func presentErrorRetry(_ retryAction: @escaping () -> Void) {
         DispatchQueue.main.async {
             let alert = UIAlertController(
                 title: NSLocalizedString("Error.network" , comment: ""),
