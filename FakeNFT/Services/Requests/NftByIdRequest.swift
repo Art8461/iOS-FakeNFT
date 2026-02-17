@@ -10,7 +10,7 @@ struct NFTRequest: NetworkRequest {
 
 struct NftListRequest: NetworkRequest {
     var endpoint: URL? { URL(string: "\(RequestConstants.baseURL)/api/v1/nft") }
-    var dto: Dto? 
+    var dto: Dto?
 }
 
 struct NftByIdRequest: NetworkRequest {

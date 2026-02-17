@@ -33,6 +33,8 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+
+    private var currentImageURL: URL?
     
     //MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -73,13 +75,23 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
     //MARK: - Methods
     override func prepareForReuse() {
         super.prepareForReuse()
+        currentImageURL = nil
         catalogImage.image = nil
         catalogLabel.text = nil
     }
     
-    func configure(imageName: String, text: String, numberOfNfts: Int) {
-        catalogImage.image = UIImage(named: imageName)
+    func configure(imageURLString: String, text: String, numberOfNfts: Int) {
         catalogLabel.text = "\(text.capitalized) (\(numberOfNfts))"
+
+        guard let url = URL(string: imageURLString) else {
+            catalogImage.image = nil
+            return
+        }
+
+        currentImageURL = url
+        ImageLoader.shared.load(url) { [weak self] image in
+            guard let self, self.currentImageURL == url else { return }
+            self.catalogImage.image = image
+        }
     }
 }
-

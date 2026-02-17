@@ -14,7 +14,7 @@ protocol CatalogViewOutput: AnyObject {
 }
 
 protocol CatalogProviderProtocol {
-    func loadCatalog() throws -> [Catalog]
+    func loadCatalog(completion: @escaping (Result<[Catalog], Error>) -> Void)
 }
 
 protocol CatalogRouterInput: AnyObject {

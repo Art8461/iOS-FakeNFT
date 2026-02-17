@@ -129,7 +129,7 @@ final class CatalogViewController: UIViewController {
         }
         
         let item = items[indexPath.row]
-        cell.configure(imageName: item.cover, text: item.name, numberOfNfts: item.nfts.count)
+        cell.configure(imageURLString: item.cover, text: item.name, numberOfNfts: item.nfts.count)
         
         return cell
     }

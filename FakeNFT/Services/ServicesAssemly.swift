@@ -20,14 +20,15 @@ final class ServicesAssembly {
     }
 
     var catalogProvider: CatalogProviderProtocol {
-        CatalogMockProvider()
+        let catalogsService = CatalogsServiceImpl(client: networkClient)
+        return CatalogNetworkProvider(service: catalogsService)
     }
     
-    var favoriteNftProvider: FavoriteNftProvider {
-          FavoriteNftMockProvider()
-      }
-    
-    var orderNftProvider: OrderNftProvider {
-        OrderNftMockProvider()
+    var favoriteNftService: FavoriteNftService {
+        FavoriteNftNetworkService(networkClient: networkClient)
+    }
+
+    var orderNftService: OrderNftService {
+        OrderNftNetworkService(networkClient: networkClient)
     }
 }

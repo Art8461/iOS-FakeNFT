@@ -1,6 +1,6 @@
 struct CatalogMockProvider: CatalogProviderProtocol {
-    func loadCatalog() throws -> [Catalog] {
-        [
+    func loadCatalog(completion: @escaping (Result<[Catalog], Error>) -> Void) {
+        completion(.success([
             Catalog(
                 createdAt: "",
                 name: "Neo City",
@@ -31,7 +31,7 @@ struct CatalogMockProvider: CatalogProviderProtocol {
                 website: "",
                 id: "collection_3"
             )
-        ]
+        ]))
     }
 }
 

@@ -44,17 +44,18 @@ private extension CatalogPresenter {
     
     func loadData() {
         view?.setLoading(true)
-        
-        defer {
-            view?.setLoading(false)
-        }
-        
-        do {
-            let catalogData = try catalogProvider.loadCatalog()
-            self.catalog = catalogData
-            self.view?.showCatalog(catalogData)
-        } catch {
-            self.view?.showError(error)
+        catalogProvider.loadCatalog { [weak self] result in
+            guard let self else { return }
+            DispatchQueue.main.async {
+                self.view?.setLoading(false)
+                switch result {
+                case .success(let catalogData):
+                    self.catalog = catalogData
+                    self.view?.showCatalog(catalogData)
+                case .failure(let error):
+                    self.view?.showError(error)
+                }
+            }
         }
     }
 }
@@ -96,6 +97,5 @@ final class CatalogAssembly {
         return viewController
     }
 }
-
 
 

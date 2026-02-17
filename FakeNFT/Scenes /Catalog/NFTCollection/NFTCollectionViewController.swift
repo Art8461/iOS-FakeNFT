@@ -130,17 +130,22 @@ final class NFTCollectionViewController: UIViewController {
     private func applyCollectionHeader() {
         titleLabel.text = collection.name
         descriptionLabel.text = collection.description
-        coverImageView.image = UIImage(named: collection.cover)
-        
         configureAuthorLabels(with: collection.author)
+
+        guard let url = URL(string: collection.cover) else {
+            return
+        }
+        ImageLoader.shared.load(url) { image in
+            self.coverImageView.image = image
+        }
     }
     
     private func configureAuthorLabels(with text: String) {
         let components = text.components(separatedBy: ":")
         
         guard components.count >= 2 else {
-            authorLabel.text = text
-            webLabel.text = nil
+            authorLabel.text = "Автор коллекции: "
+            webLabel.text = text
             return
         }
         

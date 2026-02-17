@@ -27,7 +27,7 @@ final class NFTCollectionCell: UICollectionViewCell {
         static let priceTopSpacing: CGFloat = 2
         static let labelToCartSpacing: CGFloat = -8
         
-        static let bottomPadding: CGFloat = -20
+        static let bottomPadding: CGFloat = -8
         
         static let cartButtonWidth: CGFloat = 40
         static let cartButtonHeight: CGFloat = 40
@@ -80,9 +80,8 @@ final class NFTCollectionCell: UICollectionViewCell {
             favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
             favoriteButton.tintColor = .redUniversal
         } else {
-            
             favoriteButton.setImage(UIImage(named: "LikeNoActive"), for: .normal)
-            favoriteButton.tintColor = .clear
+            favoriteButton.tintColor = .white
         }
         
         let cartImageName = viewModel.inCart ? "BasketDel" : "BasketAdd"
@@ -171,3 +170,4 @@ final class NFTCollectionCell: UICollectionViewCell {
         delegate?.nftCellDidTapCart(self)
     }
 }
+
