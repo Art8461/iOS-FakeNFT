@@ -99,6 +99,7 @@ final class NFTCollectionCell: UICollectionViewCell {
         contentView.clipsToBounds = true
         
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 12
         imageView.clipsToBounds = true
         
         titleLabel.font = .systemFont(ofSize: 14, weight: .semibold)

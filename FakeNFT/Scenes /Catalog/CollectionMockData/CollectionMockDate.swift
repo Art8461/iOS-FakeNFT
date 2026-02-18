@@ -43,38 +43,6 @@ final class OrderNftMockProvider: OrderNftProvider {
     }
 }
 
-// MARK: - Мок-сервисы
-//final class NftListMockService: NftListService {
-//    func loadNfts(ids: [String], completion: @escaping (Result<[Nft], Error>) -> Void) {
-//        let nfts = ids.map { id in
-//            Nft(
-//                name: "NFT \(id)",
-//                images: [Self.makeImageUrl(for: id)],
-//                rating: 4,
-//                description: "Mock NFT for catalog demo.",
-//                price: 1.0,
-//                author: "Demo Author123",
-//                id: id
-//            )
-//        }
-//        completion(.success(nfts))
-//    }
-//
-//    private static func makeImageUrl(for id: String) -> URL {
-//        // Моки используют asset://, обработка в view.
-//        let assetName: String
-//        switch id {
-//        case "nft_1", "nft_2", "nft_3":
-//            assetName = "Catalog"
-//        case "nft_4", "nft_5":
-//            assetName = "StarsActive"
-//        default:
-//            assetName = "Basket"
-//        }
-//        return URL(string: "asset://\(assetName)") ?? URL(fileURLWithPath: "/")
-//    }
-//}
-
 final class FavoriteNftMockService: FavoriteNftService {
     private let storage: FavoriteNftProvider
     private var favorites: [String]

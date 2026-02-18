@@ -1,11 +1,18 @@
 import UIKit
 
+enum SortType: Int {
+    case name = 0
+    case count = 1
+}
+
 final class CatalogPresenter {
     weak var view: CatalogViewInput?
     private let catalogProvider: CatalogProviderProtocol
     private let router: CatalogRouterInput
     
     private var catalog: [Catalog] = []
+    
+    private let sortTypeKey = "CatalogSortType"
     
     init(
         catalogProvider: CatalogProviderProtocol,
@@ -14,23 +21,50 @@ final class CatalogPresenter {
         self.catalogProvider = catalogProvider
         self.router = router
     }
+    
+    private func applySavedSorting() {
+        guard let savedSortTypeRaw = UserDefaults.standard.object(forKey: sortTypeKey) as? Int,
+              let savedSortType = SortType(rawValue: savedSortTypeRaw) else {
+            return
+        }
+        
+        switch savedSortType {
+        case .name:
+            sortByName()
+        case .count:
+            sortByCount()
+        }
+    }
 }
 
 // MARK: - CatalogViewOutput
 extension CatalogPresenter: CatalogViewOutput {
     func viewDidLoad() {
         loadData()
+        applySavedSorting()
     }
     
     func didTapSortByName() {
-        catalog = catalog.sorted { $0.name < $1.name }
-        view?.showCatalog(catalog)
+        sortByName()
+        
+        UserDefaults.standard.set(SortType.name.rawValue, forKey: sortTypeKey)
     }
     
     func didTapSortByCount() {
-        catalog = catalog.sorted { $0.nfts.count > $1.nfts.count }
-        view?.showCatalog(catalog)
+        sortByCount()
+        
+        UserDefaults.standard.set(SortType.count.rawValue, forKey: sortTypeKey)
     }
+    
+    private func sortByName() {
+           catalog = catalog.sorted { $0.name < $1.name }
+           view?.showCatalog(catalog)
+       }
+       
+       private func sortByCount() {
+           catalog = catalog.sorted { $0.nfts.count > $1.nfts.count }
+           view?.showCatalog(catalog)
+       }
     
     func didSelectItem(at index: Int) {
         let item = catalog[index]
