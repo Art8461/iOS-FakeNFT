@@ -23,7 +23,6 @@
 		0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB7482A7808900009A829 /* TestCatalogController.swift */; };
 		0CFCB74B2A780EA80009A829 /* UIView+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB74A2A780EA80009A829 /* UIView+Constraints.swift */; };
 		0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFCB74D2A7817DC0009A829 /* NftStorage.swift */; };
-		285F11E92F34B74800D6F068 /* StarRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285F11E82F34B74600D6F068 /* StarRatingView.swift */; };
 		281C7F762F27E74A009F9CE3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 281C7F752F27E74A009F9CE3 /* FirebaseAuth */; };
 		281C7F782F27E74A009F9CE3 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 281C7F772F27E74A009F9CE3 /* FirebaseCore */; };
 		281C7F7A2F27E893009F9CE3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 281C7F792F27E893009F9CE3 /* GoogleService-Info.plist */; };
@@ -109,7 +108,6 @@
 		0CFCB7482A7808900009A829 /* TestCatalogController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCatalogController.swift; sourceTree = "<group>"; };
 		0CFCB74A2A780EA80009A829 /* UIView+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Constraints.swift"; sourceTree = "<group>"; };
 		0CFCB74D2A7817DC0009A829 /* NftStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftStorage.swift; sourceTree = "<group>"; };
-		285F11E82F34B74600D6F068 /* StarRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingView.swift; sourceTree = "<group>"; };
 		281C7F792F27E893009F9CE3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		287AB19C2F20A8DF0064446E /* BasketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketViewController.swift; sourceTree = "<group>"; };
 		287AB19E2F20A8DF0064446E /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -230,7 +228,6 @@
 		0CF2C2DF2A784C5600FDC837 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				285F11E82F34B74600D6F068 /* StarRatingView.swift */,
 				0CF2C2E02A784C7000FDC837 /* LinePageControl.swift */,
 			);
 			path = Views;
@@ -678,7 +675,6 @@
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
 				287AB2AA2F2229BC0064446E /* Order.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
-				285F11E92F34B74800D6F068 /* StarRatingView.swift in Sources */,
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
 				28F47F432F265C000070F809 /* PaymentResponse.swift in Sources */,
