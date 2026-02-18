@@ -12,10 +12,23 @@
       }
     },
     "Error.close" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
     },
     "Error.network" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A network error has occurred"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25,13 +38,33 @@
       }
     },
     "Error.partial" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to load part of the NFT"
+          }
+        }
+      }
     },
     "Error.paymentFailed" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to make payment"
+          }
+        }
+      }
     },
     "Error.repeat" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -42,6 +75,12 @@
     },
     "Error.title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -52,6 +91,12 @@
     },
     "Error.unknown" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An unknown error has occurred"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -431,22 +476,70 @@
       }
     },
     "Вернуться" : {
-      "comment" : "cancel button"
+      "comment" : "cancel button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        }
+      }
     },
     "Вернуться в корзину" : {
-      "comment" : "return to basket button"
+      "comment" : "return to basket button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Return to basket"
+          }
+        }
+      }
     },
     "Вы уверены, что хотите \nудалить объект из корзины?" : {
-      "comment" : "Confirmation title"
+      "comment" : "Confirmation title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Are you sure you want to remove the item from the Trash?"
+          }
+        }
+      }
     },
     "Выберите способ оплаты" : {
-      "comment" : "payment title"
+      "comment" : "payment title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select payment method"
+          }
+        }
+      }
     },
     "Закрыть" : {
-      "comment" : "cancel sort"
+      "comment" : "cancel sort",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
     },
     "К оплате" : {
-      "comment" : "button for pay"
+      "comment" : "button for pay",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For payment"
+          }
+        }
+      }
     },
     "Каталог" : {
       "comment" : "tab title for catalog",
@@ -471,25 +564,81 @@
       }
     },
     "Корзина пуста" : {
-      "comment" : "basket is empty state"
+      "comment" : "basket is empty state",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basket is empty state"
+          }
+        }
+      }
     },
     "Оплатить" : {
-      "comment" : "pay button"
+      "comment" : "pay button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pay"
+          }
+        }
+      }
     },
     "По названию" : {
-      "comment" : "sort by name"
+      "comment" : "sort by name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By name"
+          }
+        }
+      }
     },
     "По рейтингу" : {
-      "comment" : "sort by rating"
+      "comment" : "sort by rating",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By rating"
+          }
+        }
+      }
     },
     "По цене" : {
-      "comment" : "sort by price"
+      "comment" : "sort by price",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By price"
+          }
+        }
+      }
     },
     "Пользовательского соглашения" : {
-      "comment" : "user agreement"
+      "comment" : "user agreement",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Agreement"
+          }
+        }
+      }
     },
     "Пользовательское соглашение" : {
-      "comment" : "title user agreement"
+      "comment" : "title user agreement",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Agreement"
+          }
+        }
+      }
     },
     "Профиль" : {
       "comment" : "tab title for profile",
@@ -503,10 +652,26 @@
       }
     },
     "Совершая покупку, вы соглашаетесь с условиями" : {
-      "comment" : "text agreement"
+      "comment" : "text agreement",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By making a purchase, you agree to the terms and conditions"
+          }
+        }
+      }
     },
     "Сортировка" : {
-      "comment" : "sort action sheet title"
+      "comment" : "sort action sheet title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sorting"
+          }
+        }
+      }
     },
     "Статистика" : {
       "comment" : "tab title for statistics",
@@ -520,13 +685,37 @@
       }
     },
     "Удалить" : {
-      "comment" : "delete button"
+      "comment" : "delete button",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        }
+      }
     },
     "Успех! Оплата прошла,\nпоздравляем с покупкой!" : {
-      "comment" : "payment success text"
+      "comment" : "payment success text",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Success! The payment went through\nCongratulations on your purchase!"
+          }
+        }
+      }
     },
     "Цена" : {
-      "comment" : "price title"
+      "comment" : "price title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Price"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
