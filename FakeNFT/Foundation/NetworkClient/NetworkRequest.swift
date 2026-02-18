@@ -21,3 +21,7 @@ extension NetworkRequest {
     var httpMethod: HttpMethod { .get }
     var dto: Dto? { nil }
 }
+
+extension Dto {
+    func asQueryItems() -> [URLQueryItem] { [] }
+}
