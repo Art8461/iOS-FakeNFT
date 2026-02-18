@@ -36,9 +36,5 @@ final class ServicesAssembly {
         MyNFTsService(networkClient: networkClient)
     }
 
-
-    var authService: AuthService {
-        AuthServiceImpl()
-    }
 }
 

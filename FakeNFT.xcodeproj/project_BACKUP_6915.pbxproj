@@ -66,6 +66,7 @@
 		3FC8C39129D2453B0081F015 /* ExamplePutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39029D2453B0081F015 /* ExamplePutRequest.swift */; };
 		3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */; };
 		558E39E72C68CE0A00FB86AC /* NftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558E39E62C68CE0900FB86AC /* NftService.swift */; };
+<<<<<<< HEAD
 		CB07BA212F2A325400E989D0 /* WebViewProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB07BA202F2A31E000E989D0 /* WebViewProfile.swift */; };
 		CB07BA232F2A43EB00E989D0 /* WebViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB07BA222F2A43E900E989D0 /* WebViewPresenter.swift */; };
 		CB07BA252F2A461F00E989D0 /* Sorting+UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB07BA242F2A461500E989D0 /* Sorting+UserDefaults.swift */; };
@@ -91,11 +92,13 @@
 		CBBB01972F2D00EC00558576 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBB01962F2D00E300558576 /* ProfileService.swift */; };
 		CBBB01992F2D089900558576 /* ProfileEditModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBB01982F2D086600558576 /* ProfileEditModel.swift */; };
 		CBBB019C2F2D08D900558576 /* ProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBB019B2F2D08D000558576 /* ProfileRequest.swift */; };
+=======
 		A0B1C2D3E4F5A6B7C8D9E0F1 /* AuthAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E101 /* AuthAssembly.swift */; };
 		A0B1C2D3E4F5A6B7C8D9E0F2 /* AuthPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E102 /* AuthPresenter.swift */; };
 		A0B1C2D3E4F5A6B7C8D9E0F3 /* AuthRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E103 /* AuthRouter.swift */; };
 		A0B1C2D3E4F5A6B7C8D9E0F4 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E104 /* AuthViewController.swift */; };
 		A0B1C2D3E4F5A6B7C8D9E0F5 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B1C2D3E4F5A6B7C8D9E105 /* AuthService.swift */; };
+>>>>>>> ArtemCart
 		E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */; };
 		E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */; };
 /* End PBXBuildFile section */
@@ -177,6 +180,7 @@
 		3FC8C39029D2453B0081F015 /* ExamplePutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplePutRequest.swift; sourceTree = "<group>"; };
 		3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatters+Presets.swift"; sourceTree = "<group>"; };
 		558E39E62C68CE0900FB86AC /* NftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftService.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		CB07BA202F2A31E000E989D0 /* WebViewProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewProfile.swift; sourceTree = "<group>"; };
 		CB07BA222F2A43E900E989D0 /* WebViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenter.swift; sourceTree = "<group>"; };
 		CB07BA242F2A461500E989D0 /* Sorting+UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sorting+UserDefaults.swift"; sourceTree = "<group>"; };
@@ -202,11 +206,13 @@
 		CBBB01962F2D00E300558576 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		CBBB01982F2D086600558576 /* ProfileEditModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditModel.swift; sourceTree = "<group>"; };
 		CBBB019B2F2D08D000558576 /* ProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRequest.swift; sourceTree = "<group>"; };
+=======
 		A0B1C2D3E4F5A6B7C8D9E101 /* AuthAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthAssembly.swift; sourceTree = "<group>"; };
 		A0B1C2D3E4F5A6B7C8D9E102 /* AuthPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthPresenter.swift; sourceTree = "<group>"; };
 		A0B1C2D3E4F5A6B7C8D9E103 /* AuthRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRouter.swift; sourceTree = "<group>"; };
 		A0B1C2D3E4F5A6B7C8D9E104 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		A0B1C2D3E4F5A6B7C8D9E105 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+>>>>>>> ArtemCart
 		E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		E1CD40D92A96BE7D00BE7FE8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -376,8 +382,11 @@
 				3F6806C729CBBC5B00B4F915 /* Scenes  */,
 				3F6806C629CBBC4E00B4F915 /* Services */,
 				3F6806A429CBBAF200B4F915 /* Info.plist */,
+<<<<<<< HEAD
 				CB9F331D2F292FE1001DEF76 /* docs */,
+=======
 				281C7F792F27E893009F9CE3 /* GoogleService-Info.plist */,
+>>>>>>> ArtemCart
 			);
 			path = FakeNFT;
 			sourceTree = "<group>";
@@ -496,6 +505,7 @@
 			path = Requests;
 			sourceTree = "<group>";
 		};
+<<<<<<< HEAD
 		CB1A31EF2F23AE4800737B09 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -571,8 +581,7 @@
 				CBBB019B2F2D08D000558576 /* ProfileRequest.swift */,
 			);
 			path = NetworkModel;
-			sourceTree = "<group>";
-		};
+=======
 		A0B1C2D3E4F5A6B7C8D9E110 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -582,6 +591,7 @@
 				A0B1C2D3E4F5A6B7C8D9E104 /* AuthViewController.swift */,
 			);
 			path = Auth;
+>>>>>>> ArtemCart
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
@@ -733,8 +743,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F6806A329CBBAF200B4F915 /* LaunchScreen.storyboard in Resources */,
+<<<<<<< HEAD
 				CB1A32062F2808AD00737B09 /* DecompositionProfile.md in Resources */,
+=======
 				281C7F7A2F27E893009F9CE3 /* GoogleService-Info.plist in Resources */,
+>>>>>>> ArtemCart
 				287AB1AF2F20B5810064446E /* Localizable.xcstrings in Resources */,
 				3F6806A029CBBAF200B4F915 /* Assets.xcassets in Resources */,
 			);

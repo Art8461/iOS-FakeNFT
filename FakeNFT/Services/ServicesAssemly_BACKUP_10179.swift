@@ -28,6 +28,7 @@ final class ServicesAssembly {
         PaymentServiceImpl(networkClient: networkClient)
     }
 
+<<<<<<< HEAD
     var profileService: ProfileServiceProtocol {
         ProfileService(networkClient: networkClient)
     }
@@ -36,9 +37,10 @@ final class ServicesAssembly {
         MyNFTsService(networkClient: networkClient)
     }
 
-
+=======
     var authService: AuthService {
         AuthServiceImpl()
     }
+>>>>>>> ArtemCart
 }
 
