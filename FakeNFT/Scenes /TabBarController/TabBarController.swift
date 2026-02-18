@@ -70,9 +70,8 @@ final class TabBarController: UITabBarController {
             servicesAssembly: servicesAssembly
         )
         
-        let basketVC = BasketViewController(
-            servicesAssembly: servicesAssembly
-        )
+        let basketVC = BasketAssembly(servicesAssembly: servicesAssembly).build()
+        let basketNav = UINavigationController(rootViewController: basketVC)
         
         let statitisticsVC = StatsViewController(
             servicesAssembly: servicesAssembly
@@ -84,7 +83,7 @@ final class TabBarController: UITabBarController {
         basketNav.tabBarItem = basketTabBarItem
         statitisticsVC.tabBarItem = statTabBarItem
         
-        viewControllers = [profileNavController, catalogVC, basketVC, statitisticsVC]
+        viewControllers = [profileNavController, catalogVC, basketNav, statitisticsVC]
         
         view.backgroundColor = .systemBackground
         setupTabBarAppearance()

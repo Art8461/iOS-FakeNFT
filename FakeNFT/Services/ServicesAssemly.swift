@@ -27,8 +27,6 @@ final class ServicesAssembly {
     var paymentService: PaymentService {
         PaymentServiceImpl(networkClient: networkClient)
     }
-        NftServiceImpl(networkClient: networkClient, storage: nftStorage)
-    }
 
     var profileService: ProfileServiceProtocol {
         ProfileService(networkClient: networkClient)
