@@ -64,10 +64,8 @@ final class TabBarController: UITabBarController {
             servicesAssembly: servicesAssembly
         )
         
-        let catalogVC = CatalogViewController(
-            catalogProvider: servicesAssembly.catalogProvider
-
-        )
+        // MVP: каталог собирается отдельной сборкой, не внутри view.
+        let catalogVC = CatalogAssembly(servicesAssembly: servicesAssembly).build()
         
         let basketVC = BasketViewController(
             servicesAssembly: servicesAssembly

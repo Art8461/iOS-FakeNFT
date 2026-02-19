@@ -6,7 +6,6 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
         return String(describing: self)
     }
     
-    // Описание констант для layout ячейки
     private enum CatalogCellLayout {
         static let imageTop: CGFloat = 20
         static let imageHeight: CGFloat = 140
@@ -16,31 +15,32 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
     }
     
     //MARK: - UI
-    // Обложка коллекции
     private lazy var catalogImage: UIImageView = {
         let image = UIImageView()
         image.layer.cornerRadius = CatalogCellLayout.imageCornerRadius
         image.layer.masksToBounds = true
         image.translatesAutoresizingMaskIntoConstraints = false
-        image.backgroundColor = .whiteApp
+        image.backgroundColor = .whiteUniversal
         image.contentMode = .scaleAspectFill
         return image
     }()
     
-    // Название и количество NFT
     private lazy var catalogLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.bodyBold
-        label.textColor = .blackApp
+        label.textColor = .blackUniversal
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+
+    private var currentImageURL: URL?
     
     //MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = .backgroundUniversal // Цвет будет изменен после добавления картинок НФТ
+        selectionStyle = .none
+        contentView.backgroundColor = .clear
         setupImage()
         setupLabel()
     }
@@ -61,7 +61,6 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
         ])
     }
     
-    // Настройка лейбла
     private func setupLabel() {
         contentView.addSubview(catalogLabel)
         
@@ -76,14 +75,23 @@ final class CatalogCell: UITableViewCell, ReuseIdentifying {
     //MARK: - Methods
     override func prepareForReuse() {
         super.prepareForReuse()
+        currentImageURL = nil
         catalogImage.image = nil
         catalogLabel.text = nil
     }
     
-    // Метод конфигурации ячейки
-    func configure(imageName: String, text: String, numberOfNfts: Int) {
-        catalogImage.image = UIImage(named: imageName)
+    func configure(imageURLString: String, text: String, numberOfNfts: Int) {
         catalogLabel.text = "\(text.capitalized) (\(numberOfNfts))"
+
+        guard let url = URL(string: imageURLString) else {
+            catalogImage.image = nil
+            return
+        }
+
+        currentImageURL = url
+        ImageLoader.shared.load(url) { [weak self] image in
+            guard let self, self.currentImageURL == url else { return }
+            self.catalogImage.image = image
+        }
     }
 }
-
