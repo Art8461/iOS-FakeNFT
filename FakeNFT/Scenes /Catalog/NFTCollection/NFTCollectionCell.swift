@@ -27,7 +27,7 @@ final class NFTCollectionCell: UICollectionViewCell {
         static let priceTopSpacing: CGFloat = 2
         static let labelToCartSpacing: CGFloat = -8
         
-        static let bottomPadding: CGFloat = -20
+        static let bottomPadding: CGFloat = -8
         
         static let cartButtonWidth: CGFloat = 40
         static let cartButtonHeight: CGFloat = 40
@@ -68,7 +68,7 @@ final class NFTCollectionCell: UICollectionViewCell {
         let isFavorite: Bool
         let inCart: Bool
         let image: UIImage?
-        let rating: Int 
+        let rating: Int
     }
     
     func configure(with viewModel: ViewModel) {
@@ -80,9 +80,8 @@ final class NFTCollectionCell: UICollectionViewCell {
             favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
             favoriteButton.tintColor = .redUniversal
         } else {
-            
             favoriteButton.setImage(UIImage(named: "LikeNoActive"), for: .normal)
-            favoriteButton.tintColor = .clear
+            favoriteButton.tintColor = .white
         }
         
         let cartImageName = viewModel.inCart ? "BasketDel" : "BasketAdd"
@@ -100,6 +99,7 @@ final class NFTCollectionCell: UICollectionViewCell {
         contentView.clipsToBounds = true
         
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 12
         imageView.clipsToBounds = true
         
         titleLabel.font = .systemFont(ofSize: 14, weight: .semibold)
@@ -172,4 +172,3 @@ final class NFTCollectionCell: UICollectionViewCell {
     }
 }
 
-#warning("Цена НФТ в ячейке будет правильно расположена, когда будут подключены сетевые данные (Сейчас из за мок данных цена сьехала). Если я ошибаюсь, то скажите в гидхабе как лечше исправить")

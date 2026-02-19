@@ -128,4 +128,3 @@ private extension NFTCollectionPresenter {
         }
     }
 }
-
