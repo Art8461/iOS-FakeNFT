@@ -1,6 +1,6 @@
 import Foundation
 
-struct ProfileRequest: NetworkRequest {
+struct FavoritesProfileRequest: NetworkRequest {
     var endpoint: URL? { URL(string: "\(RequestConstants.baseURL)/api/v1/profile/1") }
     var httpMethod: HttpMethod { .get }
 }
@@ -15,10 +15,8 @@ struct UpdateProfileLikesRequest: NetworkRequest {
 private struct LikesDto: Dto {
     let likes: [String]
 
-    func asDictionary() -> [String : String] {
-        [
-            "likes": likes.joined(separator: ",")
-        ]
+    func asQueryItems() -> [URLQueryItem] {
+        likes.map { URLQueryItem(name: "likes", value: $0) }
     }
 }
 

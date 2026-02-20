@@ -97,7 +97,7 @@ final class NFTCollectionViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .whiteApp
         navigationItem.hidesBackButton = true
         setupViews()
         setupLayout()
@@ -177,7 +177,7 @@ final class NFTCollectionViewController: UIViewController {
         titleLabel.font = .systemFont(ofSize: 22, weight: .bold)
 
         authorLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        authorLabel.textColor = .blackUniversal
+        authorLabel.textColor = .blackApp
 
         webLabel.font = .systemFont(ofSize: 15, weight: .regular)
         webLabel.textColor = .blueUniversal
@@ -185,7 +185,7 @@ final class NFTCollectionViewController: UIViewController {
         webLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(webTapped)))
 
         descriptionLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        descriptionLabel.textColor = .blackUniversal
+        descriptionLabel.textColor = .blackApp
         descriptionLabel.numberOfLines = 0
 
         activityIndicator.hidesWhenStopped = true
@@ -309,7 +309,7 @@ extension NFTCollectionViewController: UICollectionViewDataSource {
 
         let viewModel = NFTCollectionCell.ViewModel(
             title: nft.name,
-            author: nft.author,
+            author: nft.author ?? "",
             priceText: String(format: "%.2f", nft.price),
             isFavorite: isFavorite,
             inCart: inCart,
@@ -328,7 +328,7 @@ extension NFTCollectionViewController: UICollectionViewDataSource {
     private func loadImageIfNeeded(for nft: Nft, at indexPath: IndexPath) {
         guard imageCache[nft.id] == nil else { return }
         guard imageLoading.insert(nft.id).inserted else { return }
-        guard let first = nft.images.first, let url = URL(string: first) else {
+        guard let url = nft.images.first else {
             imageLoading.remove(nft.id)
             return
         }

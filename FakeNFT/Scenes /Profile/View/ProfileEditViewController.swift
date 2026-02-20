@@ -108,8 +108,8 @@ final class ProfileEditViewController: UIViewController {
     private lazy var saveButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString("ProfileSave" , comment: "edit"), for: .normal)
-        button.backgroundColor = .black
-        button.tintColor = .white
+        button.backgroundColor = .blackApp
+        button.tintColor = .whiteApp
         button.layer.cornerRadius = 16
         button.isHidden = true
         button.addTarget(self, action: #selector(tapSaveButton), for: .touchUpInside)

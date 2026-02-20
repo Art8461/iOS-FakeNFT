@@ -8,6 +8,7 @@ protocol CatalogViewInput: AnyObject {
 
 protocol CatalogViewOutput: AnyObject {
     func viewDidLoad()
+    func viewWillAppear()
     func didTapSortByName()
     func didTapSortByCount()
     func didSelectItem(at index: Int)
@@ -20,4 +21,3 @@ protocol CatalogProviderProtocol {
 protocol CatalogRouterInput: AnyObject {
     func openCollection(_ collection: Catalog)
 }
-

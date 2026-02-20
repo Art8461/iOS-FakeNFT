@@ -25,3 +25,4 @@ struct CompleteOrderDto: Dto {
         return items
     }
 }
+

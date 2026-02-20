@@ -1,5 +1,5 @@
 //
-//  WebViewController.swift
+//  WebViewPayment.swift
 //  FakeNFT
 //
 //  Created by Artem Kuzmenko on 25.01.2026.
@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-final class WebViewController: UIViewController {
+final class WebViewPayment: UIViewController {
     private let url: URL
     private lazy var webView = WKWebView()
 

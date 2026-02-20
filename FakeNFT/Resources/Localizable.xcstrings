@@ -162,7 +162,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "My NFTs"
           }
         },
@@ -234,7 +234,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Delete a photo"
           }
         },
@@ -288,7 +288,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "You don't have any NFT favorites yet"
           }
         },
@@ -360,7 +360,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Name"
           }
         },
@@ -378,7 +378,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Profile Photo"
           }
         },
@@ -396,7 +396,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Save"
           }
         },
@@ -453,6 +453,12 @@
             "state" : "translated",
             "value" : "By price"
           }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "По цене"
+          }
         }
       }
     },
@@ -462,7 +468,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "By rating"
           }
         },
@@ -480,7 +486,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "To stay"
           }
         },
@@ -742,7 +748,7 @@
       }
     },
     "Ок" : {
-      "comment" : "Ок",
+      "comment" : "ok button\nОк",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -759,6 +765,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pay"
+          }
+        }
+      }
+    },
+    "Отмена" : {
+      "comment" : "cancel sort",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "Ошибка" : {
+      "comment" : "error alert title",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
           }
         }
       }
@@ -792,6 +820,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Password must be minimum 6 characters"
+          }
+        }
+      }
+    },
+    "По имени" : {
+      "comment" : "sort by name",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By name"
+          }
+        }
+      }
+    },
+    "По количеству NFT" : {
+      "comment" : "sort by nft count",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By NFT quantity"
           }
         }
       }

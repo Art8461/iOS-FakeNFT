@@ -11,6 +11,7 @@ final class CatalogPresenter {
     private let router: CatalogRouterInput
     
     private var catalog: [Catalog] = []
+    private var isLoading = false
     
     private let sortTypeKey = "CatalogSortType"
     
@@ -22,10 +23,11 @@ final class CatalogPresenter {
         self.router = router
     }
     
-    private func applySavedSorting() {
+    @discardableResult
+    private func applySavedSorting() -> Bool {
         guard let savedSortTypeRaw = UserDefaults.standard.object(forKey: sortTypeKey) as? Int,
               let savedSortType = SortType(rawValue: savedSortTypeRaw) else {
-            return
+            return false
         }
         
         switch savedSortType {
@@ -34,14 +36,17 @@ final class CatalogPresenter {
         case .count:
             sortByCount()
         }
+        return true
     }
 }
 
 // MARK: - CatalogViewOutput
 extension CatalogPresenter: CatalogViewOutput {
     func viewDidLoad() {
+    }
+
+    func viewWillAppear() {
         loadData()
-        applySavedSorting()
     }
     
     func didTapSortByName() {
@@ -77,15 +82,20 @@ extension CatalogPresenter: CatalogViewOutput {
 private extension CatalogPresenter {
     
     func loadData() {
+        guard !isLoading else { return }
+        isLoading = true
         view?.setLoading(true)
         catalogProvider.loadCatalog { [weak self] result in
             guard let self else { return }
             DispatchQueue.main.async {
+                self.isLoading = false
                 self.view?.setLoading(false)
                 switch result {
                 case .success(let catalogData):
                     self.catalog = catalogData
-                    self.view?.showCatalog(catalogData)
+                    if !self.applySavedSorting() {
+                        self.view?.showCatalog(catalogData)
+                    }
                 case .failure(let error):
                     self.view?.showError(error)
                 }
@@ -131,5 +141,3 @@ final class CatalogAssembly {
         return viewController
     }
 }
-
-

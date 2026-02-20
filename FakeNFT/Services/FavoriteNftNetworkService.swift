@@ -8,7 +8,7 @@ final class FavoriteNftNetworkService: FavoriteNftService {
     }
 
     func getFavorites(completion: @escaping (Result<[String], Error>) -> Void) {
-        let request = ProfileRequest()
+        let request = FavoritesProfileRequest()
         networkClient.send(request: request, type: Profile.self, onResponse: { result in
             switch result {
             case .success(let profile):
@@ -44,4 +44,3 @@ final class FavoriteNftNetworkService: FavoriteNftService {
         }
     }
 }
-

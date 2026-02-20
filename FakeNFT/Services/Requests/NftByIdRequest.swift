@@ -29,3 +29,4 @@ struct CatalogByIdRequest: NetworkRequest {
     var endpoint: URL? { URL(string: "\(RequestConstants.baseURL)/api/v1/collections/\(id)") }
     var dto: Dto? = nil
 }
+

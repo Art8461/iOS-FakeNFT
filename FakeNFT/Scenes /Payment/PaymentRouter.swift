@@ -18,7 +18,7 @@ final class PaymentRouter: PaymentRouting {
     weak var viewController: UIViewController?
 
     func showUserAgreement(url: URL) {
-        let vc = WebViewController(url: url)
+        let vc = WebViewPayment(url: url)
         vc.title = NSLocalizedString("Пользовательское соглашение", comment: "title user agreement")
         if let nav = viewController?.navigationController {
             nav.pushViewController(vc, animated: true)

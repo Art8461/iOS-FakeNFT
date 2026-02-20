@@ -5,13 +5,14 @@ struct PageDto: Dto {
     let size: Int
     let sortBy: String?
 
-    func asDictionary() -> [String : String] {
-        var dict: [String: String] = [
-            "page": String(page),
-            "size": String(size)
+    func asQueryItems() -> [URLQueryItem] {
+        var items: [URLQueryItem] = [
+            URLQueryItem(name: "page", value: String(page)),
+            URLQueryItem(name: "size", value: String(size))
         ]
-        if let sortBy { dict["sortBy"] = sortBy }
-        return dict
+        if let sortBy {
+            items.append(URLQueryItem(name: "sortBy", value: sortBy))
+        }
+        return items
     }
 }
-

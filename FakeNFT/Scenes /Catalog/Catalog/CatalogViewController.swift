@@ -32,12 +32,17 @@ final class CatalogViewController: UIViewController {
         setupUI()
         output.viewDidLoad()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        output.viewWillAppear()
+    }
 }
 
-    // MARK: - Setup UI
-    private extension CatalogViewController {
+// MARK: - Setup UI
+private extension CatalogViewController {
     func setupUI() {
-        view.backgroundColor = .whiteUniversal
+        view.backgroundColor = .whiteApp
         
         setupTableView()
         setupActivityIndicator()
@@ -84,27 +89,36 @@ final class CatalogViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = sortButton
         
-        sortButton.tintColor = .blackUniversal
+        sortButton.tintColor = .blackApp
     }
     
     @objc
     func showSortOptions() {
-        
         let alert = UIAlertController(
-            title: "Сортировка",
+            title: NSLocalizedString("Сортировка", comment: "sort action sheet title"),
             message: nil,
             preferredStyle: .actionSheet
         )
         
-        let sortByNameAction = UIAlertAction(title: "По имени", style: .default) { [weak self] _ in
+        let sortByNameAction = UIAlertAction(
+            title: NSLocalizedString("По имени", comment: "sort by name"),
+            style: .default
+        ) { [weak self] _ in
             self?.output.didTapSortByName()
         }
         
-        let sortByCountAction = UIAlertAction(title: "По количеству NFT", style: .default) { [weak self] _ in
+        let sortByCountAction = UIAlertAction(
+            title: NSLocalizedString("По количеству NFT", comment: "sort by nft count"),
+            style: .default
+        ) { [weak self] _ in
             self?.output.didTapSortByCount()
         }
         
-        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+        let cancelAction = UIAlertAction(
+            title: NSLocalizedString("Отмена", comment: "cancel sort"),
+            style: .cancel
+        )
+        
         alert.addAction(sortByNameAction)
         alert.addAction(sortByCountAction)
         alert.addAction(cancelAction)
@@ -113,8 +127,8 @@ final class CatalogViewController: UIViewController {
     }
 }
 
-    // MARK: - UITableViewDataSource
-    extension CatalogViewController: UITableViewDataSource {
+// MARK: - UITableViewDataSource
+extension CatalogViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
@@ -135,8 +149,9 @@ final class CatalogViewController: UIViewController {
     }
 }
 
-    // MARK: - UITableViewDelegate
-    extension CatalogViewController: UITableViewDelegate {
+
+// MARK: - UITableViewDelegate
+extension CatalogViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView,
                    didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -144,8 +159,8 @@ final class CatalogViewController: UIViewController {
     }
 }
 
-    // MARK: - CatalogViewInput
-    extension CatalogViewController: CatalogViewInput {
+// MARK: - CatalogViewInput
+extension CatalogViewController: CatalogViewInput {
     
     func setLoading(_ isLoading: Bool) {
         if isLoading {
@@ -156,10 +171,15 @@ final class CatalogViewController: UIViewController {
     }
     
     func showError(_ error: Error) {
-        let alert = UIAlertController(title: "Ошибка",
-                                      message: error.localizedDescription,
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ок", style: .default))
+        let alert = UIAlertController(
+            title: NSLocalizedString("Ошибка", comment: "error alert title"),
+            message: error.localizedDescription,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(
+            title: NSLocalizedString("Ок", comment: "ok button"),
+            style: .default
+        ))
         present(alert, animated: true)
     }
     
@@ -168,9 +188,4 @@ final class CatalogViewController: UIViewController {
         tableView.reloadData()
     }
 }
-
-
-
-
-
 

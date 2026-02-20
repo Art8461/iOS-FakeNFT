@@ -94,7 +94,7 @@ final class NFTCollectionCell: UICollectionViewCell {
     
     // MARK: - Setup
     private func setupViews() {
-        contentView.backgroundColor = .whiteUniversal
+        contentView.backgroundColor = .whiteApp
         contentView.layer.cornerRadius = NFTCellLayout.cornerRadius
         contentView.clipsToBounds = true
         
@@ -109,7 +109,7 @@ final class NFTCollectionCell: UICollectionViewCell {
         
         favoriteButton.tintColor = .redUniversal
 
-        cartButton.tintColor = .blackUniversal
+        cartButton.tintColor = .blackApp
         
         [imageView, titleLabel, priceLabel, favoriteButton, cartButton, ratingView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false

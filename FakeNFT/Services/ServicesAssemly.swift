@@ -11,7 +11,7 @@ final class ServicesAssembly {
     // MARK: - Services
 
     var nftService: NftService {
-        NftServiceImpl(client: networkClient)
+        NftServiceImpl(networkClient: networkClient, storage: nftStorage)
     }
     
     var nftListService: NftListService {

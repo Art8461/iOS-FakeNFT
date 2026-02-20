@@ -13,6 +13,14 @@ struct UpdateOrderRequest: NetworkRequest {
     var endpoint: URL? {
         URL(string: "\(RequestConstants.baseURL)/api/v1/orders/1")
     }
+
+    init(dto: Dto?) {
+        self.dto = dto
+    }
+
+    init(nfts: [String], orderId: String = "1") {
+        self.dto = UpdateOrderDto(id: orderId, nfts: nfts)
+    }
 }
 
 struct UpdateOrderDto: Dto {

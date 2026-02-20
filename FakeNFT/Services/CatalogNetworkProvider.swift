@@ -11,4 +11,3 @@ final class CatalogNetworkProvider: CatalogProviderProtocol {
         service.loadCatalogs(page: 0, size: 50, sortBy: nil, completion: completion)
     }
 }
-
