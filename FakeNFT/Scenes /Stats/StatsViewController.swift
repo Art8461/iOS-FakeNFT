@@ -18,7 +18,7 @@ final class StatsViewController: UIViewController, ErrorView {
     private lazy var signOutButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(NSLocalizedString("Выйти", comment: "sign out button"), for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.whiteApp, for: .normal)
         button.backgroundColor = .blackApp
         button.layer.cornerRadius = 16
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)

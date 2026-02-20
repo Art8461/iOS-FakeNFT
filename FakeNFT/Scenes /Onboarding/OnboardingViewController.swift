@@ -55,7 +55,7 @@ final class OnboardingViewController: UIViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
-        button.setTitle("Что внутри?", for: .normal)
+        button.setTitle(NSLocalizedString("Что внутри?", comment: "onboarding action"), for: .normal)
         button.backgroundColor = UIColor(resource: .blackUniversal)
         button.setTitleColor(UIColor(resource: .whiteUniversal), for: .normal)
         button.layer.cornerRadius = 16
