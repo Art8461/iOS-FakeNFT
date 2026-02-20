@@ -121,19 +121,40 @@ struct DefaultNetworkClient: NetworkClient {
             assertionFailure("Empty endpoint")
             return nil
         }
-        
+
+        let dtoQueryItems = request.dto?.asQueryItems() ?? []
+        let allQueryItems = request.queryItems + dtoQueryItems
+
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
-        
-        urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
-        
-        if let queryItems = request.dto?.asQueryItems(), !queryItems.isEmpty {
-            var urlComponents = URLComponents()
-            urlComponents.queryItems = queryItems
-            urlRequest.httpBody = urlComponents.query?.data(using: .utf8)
-            urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+
+        for (header, value) in request.headers {
+            urlRequest.setValue(value, forHTTPHeaderField: header)
         }
-        
+
+        if !allQueryItems.isEmpty {
+            if request.httpMethod == .get {
+                guard var components = URLComponents(url: endpoint, resolvingAgainstBaseURL: false) else {
+                    assertionFailure("Invalid endpoint URL components")
+                    return nil
+                }
+                var existingItems = components.queryItems ?? []
+                existingItems.append(contentsOf: allQueryItems)
+                components.queryItems = existingItems
+                guard let urlWithQuery = components.url else {
+                    assertionFailure("Failed to build URL with query items")
+                    return nil
+                }
+                urlRequest.url = urlWithQuery
+            } else {
+                var components = URLComponents()
+                components.queryItems = allQueryItems
+                urlRequest.httpBody = components.percentEncodedQuery?.data(using: .utf8)
+                urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            }
+        }
+
         return urlRequest
     }
 
@@ -218,6 +239,14 @@ struct DefaultNetworkClient: NetworkClient {
             completionQueue.async {
                 onResponse(result)
             }
+        }
+    }
+
+    private func logResponse(_ response: HTTPURLResponse, data: Data?) {
+        let urlString = response.url?.absoluteString ?? "nil"
+        print("[Network][Response] \(response.statusCode) \(urlString)")
+        if let data, let body = String(data: data, encoding: .utf8), !body.isEmpty {
+            print("[Network][ResponseBody] \(body)")
         }
     }
 }

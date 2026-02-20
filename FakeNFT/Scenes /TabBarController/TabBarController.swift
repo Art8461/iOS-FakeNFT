@@ -42,6 +42,7 @@ final class TabBarController: UITabBarController {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor(resource: .whiteApp)
+        appearance.shadowColor = .clear
         
         // Неактивное состояние
         let unselectedColor = UIColor(resource: .blackApp)
@@ -54,6 +55,7 @@ final class TabBarController: UITabBarController {
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: selectedColor]
         
         tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
         
     }
     
@@ -66,9 +68,9 @@ final class TabBarController: UITabBarController {
             navigationController: profileNavController)
         router.showProfile()
         
-        let catalogVC = TestCatalogViewController(
-            servicesAssembly: servicesAssembly
-        )
+        // MVP: каталог собирается отдельной сборкой, не внутри view.
+        let catalogVC = CatalogAssembly(servicesAssembly: servicesAssembly).build()
+        let catalogNav = UINavigationController(rootViewController: catalogVC)
         
         let basketVC = BasketAssembly(servicesAssembly: servicesAssembly).build()
         let basketNav = UINavigationController(rootViewController: basketVC)
@@ -79,15 +81,14 @@ final class TabBarController: UITabBarController {
         
         profileNavController.tabBarItem = profileTabBarItem
         
-        catalogVC.tabBarItem = catalogTabBarItem
+        catalogNav.tabBarItem = catalogTabBarItem
         basketNav.tabBarItem = basketTabBarItem
         statitisticsVC.tabBarItem = statTabBarItem
         
-        viewControllers = [profileNavController, catalogVC, basketNav, statitisticsVC]
+        viewControllers = [profileNavController, catalogNav, basketNav, statitisticsVC]
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .whiteApp
         setupTabBarAppearance()
         
     }
 }
-
