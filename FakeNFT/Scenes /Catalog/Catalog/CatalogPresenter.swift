@@ -137,7 +137,6 @@ final class CatalogAssembly {
         let viewController = CatalogViewController(output: presenter)
         presenter.view = viewController
         router.viewController = viewController
-
         return viewController
     }
 }

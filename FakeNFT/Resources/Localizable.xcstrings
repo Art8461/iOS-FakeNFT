@@ -604,6 +604,9 @@
         }
       }
     },
+    "Выйти" : {
+      "comment" : "sign out button"
+    },
     "Забыли пароль?" : {
       "comment" : "forgot password",
       "localizations" : {
@@ -1078,7 +1081,7 @@
       }
     },
     "Статистика" : {
-      "comment" : "tab title for statistics",
+      "comment" : "statistics screen title\ntab title for statistics",
       "localizations" : {
         "en" : {
           "stringUnit" : {
