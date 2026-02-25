@@ -40,7 +40,12 @@ struct DefaultNetworkClient: NetworkClient {
     private let session: URLSession
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
-
+    
+    private let parsingQueue = DispatchQueue(
+        label: "network-parsing-queue",
+        qos: .userInitiated
+    )
+    
     init(session: URLSession = URLSession.shared,
          decoder: JSONDecoder = JSONDecoder(),
          encoder: JSONEncoder = JSONEncoder()) {
@@ -48,7 +53,7 @@ struct DefaultNetworkClient: NetworkClient {
         self.decoder = decoder
         self.encoder = encoder
     }
-
+    
     @discardableResult
     func send(
         request: NetworkRequest,
@@ -61,18 +66,20 @@ struct DefaultNetworkClient: NetworkClient {
             }
         }
         guard let urlRequest = create(request: request) else { return nil }
-
+        logRequest(urlRequest)
+        
         let task = session.dataTask(with: urlRequest) { data, response, error in
+            self.logResponse(request: urlRequest, response: response, data: data, error: error)
             guard let response = response as? HTTPURLResponse else {
                 onResponse(.failure(NetworkClientError.urlSessionError))
                 return
             }
-
+            
             guard 200 ..< 300 ~= response.statusCode else {
                 onResponse(.failure(NetworkClientError.httpStatusCode(response.statusCode)))
                 return
             }
-
+            
             if let data = data {
                 onResponse(.success(data))
                 return
@@ -84,12 +91,12 @@ struct DefaultNetworkClient: NetworkClient {
                 return
             }
         }
-
+        
         task.resume()
-
+        
         return DefaultNetworkTask(dataTask: task)
     }
-
+    
     @discardableResult
     func send<T: Decodable>(
         request: NetworkRequest,
@@ -100,50 +107,146 @@ struct DefaultNetworkClient: NetworkClient {
         return send(request: request, completionQueue: completionQueue) { result in
             switch result {
             case let .success(data):
-                self.parse(data: data, type: type, onResponse: onResponse)
+                self.parse(data: data, type: type, completionQueue: completionQueue, onResponse: onResponse)
             case let .failure(error):
                 onResponse(.failure(error))
             }
         }
     }
-
+    
     // MARK: - Private
-
+    
     private func create(request: NetworkRequest) -> URLRequest? {
         guard let endpoint = request.endpoint else {
             assertionFailure("Empty endpoint")
             return nil
         }
 
+        let dtoQueryItems = request.dto?.asQueryItems() ?? []
+        let allQueryItems = request.queryItems + dtoQueryItems
+
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
+        urlRequest.setValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
 
-        urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
-
-        if let dtoDictionary = request.dto?.asDictionary() {
-            var urlComponents = URLComponents()
-            let queryItems = dtoDictionary.map { field in
-                URLQueryItem(
-                    name: field.key,
-                    value: field.value
-                    )
-            }
-            urlComponents.queryItems = queryItems
-            urlRequest.httpBody = urlComponents.query?.data(using: .utf8)
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        for (header, value) in request.headers {
+            urlRequest.setValue(value, forHTTPHeaderField: header)
         }
 
-        urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        if !allQueryItems.isEmpty {
+            if request.httpMethod == .get {
+                guard var components = URLComponents(url: endpoint, resolvingAgainstBaseURL: false) else {
+                    assertionFailure("Invalid endpoint URL components")
+                    return nil
+                }
+                var existingItems = components.queryItems ?? []
+                existingItems.append(contentsOf: allQueryItems)
+                components.queryItems = existingItems
+                guard let urlWithQuery = components.url else {
+                    assertionFailure("Failed to build URL with query items")
+                    return nil
+                }
+                urlRequest.url = urlWithQuery
+            } else {
+                var components = URLComponents()
+                components.queryItems = allQueryItems
+                urlRequest.httpBody = components.percentEncodedQuery?.data(using: .utf8)
+                urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            }
+        }
 
         return urlRequest
     }
 
-    private func parse<T: Decodable>(data: Data, type _: T.Type, onResponse: @escaping (Result<T, Error>) -> Void) {
-        do {
-            let response = try decoder.decode(T.self, from: data)
-            onResponse(.success(response))
-        } catch {
-            onResponse(.failure(NetworkClientError.parsingError))
+    private func logRequest(_ request: URLRequest) {
+#if DEBUG
+        let method = request.httpMethod ?? "UNKNOWN"
+        let urlString = request.url?.absoluteString ?? "<no url>"
+        var headers = request.allHTTPHeaderFields ?? [:]
+        if headers["X-Practicum-Mobile-Token"] != nil {
+            headers["X-Practicum-Mobile-Token"] = "<redacted>"
+        }
+        let body: String
+        if let data = request.httpBody {
+            if data.isEmpty {
+                body = "<empty>"
+            } else if let bodyString = String(data: data, encoding: .utf8) {
+                body = bodyString
+            } else {
+                body = "<non-utf8 body: \(data.count) bytes>"
+            }
+        } else {
+            body = "<none>"
+        }
+        print("""
+        [Network] Request
+        \(method) \(urlString)
+        Headers: \(headers)
+        Body: \(body)
+        """)
+#endif
+    }
+
+    private func logResponse(request: URLRequest, response: URLResponse?, data: Data?, error: Error?) {
+#if DEBUG
+        let method = request.httpMethod ?? "UNKNOWN"
+        let urlString = request.url?.absoluteString ?? "<no url>"
+        let statusCode = (response as? HTTPURLResponse)?.statusCode
+        let errorText = error.map { String(describing: $0) } ?? "<none>"
+        let bodyText: String
+        if let data = data {
+            if data.isEmpty {
+                bodyText = "<empty>"
+            } else if let bodyString = String(data: data, encoding: .utf8) {
+                let limit = 1000
+                if bodyString.count > limit {
+                    let idx = bodyString.index(bodyString.startIndex, offsetBy: limit)
+                    bodyText = "\(bodyString[..<idx])... <truncated>"
+                } else {
+                    bodyText = bodyString
+                }
+            } else {
+                bodyText = "<non-utf8 body: \(data.count) bytes>"
+            }
+        } else {
+            bodyText = "<none>"
+        }
+        print("""
+        [Network] Response
+        \(method) \(urlString)
+        Status: \(statusCode.map(String.init) ?? "nil")
+        Error: \(errorText)
+        Body: \(bodyText)
+        """)
+#endif
+    }
+    
+    private func parse<T: Decodable>(
+        data: Data,
+        type _: T.Type,
+        completionQueue: DispatchQueue,
+        onResponse: @escaping (Result<T, Error>) -> Void
+    ) {
+        parsingQueue.async { [decoder] in
+            let result: Result<T, Error>
+            do {
+                let response = try decoder.decode(T.self, from: data)
+                result = .success(response)
+            } catch {
+                result = .failure(NetworkClientError.parsingError)
+            }
+            
+            completionQueue.async {
+                onResponse(result)
+            }
+        }
+    }
+
+    private func logResponse(_ response: HTTPURLResponse, data: Data?) {
+        let urlString = response.url?.absoluteString ?? "nil"
+        print("[Network][Response] \(response.statusCode) \(urlString)")
+        if let data, let body = String(data: data, encoding: .utf8), !body.isEmpty {
+            print("[Network][ResponseBody] \(body)")
         }
     }
 }
